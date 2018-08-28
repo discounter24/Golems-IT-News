@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Golem News</string>
+    <string name="action_reload">Reload</string>
+</resources>
