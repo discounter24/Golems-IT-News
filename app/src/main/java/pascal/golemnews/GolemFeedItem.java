@@ -45,6 +45,7 @@ public class GolemFeedItem {
         String search = "<a href=";
         if (description.contains(search)){
             this.description = description.substring(0, description.indexOf(search)-1);
+            this.description.trim();
         }
     }
 
