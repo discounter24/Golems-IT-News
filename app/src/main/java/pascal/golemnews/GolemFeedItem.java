@@ -5,7 +5,9 @@ import android.graphics.BitmapFactory;
 
 import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.Locale;
 
 public class GolemFeedItem {
 
@@ -72,10 +74,10 @@ public class GolemFeedItem {
 
     public void setPubDate(String pubDate) {
         try{
-            SimpleDateFormat sdf = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss Z");
+            SimpleDateFormat sdf = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss Z", Locale.US);
             this.pubDate = sdf.parse(pubDate);
         } catch (Exception ex){
-            //ignore
+            ex.printStackTrace();
         }
 
     }

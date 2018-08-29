@@ -8,7 +8,6 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
 
 import java.text.SimpleDateFormat;
 
@@ -54,12 +53,19 @@ public class GolemFeedAdapter extends BaseAdapter {
         description.setText(data[position].getDescription());
         preview.setImageBitmap(data[position].getImage());
 
-        SimpleDateFormat day = new SimpleDateFormat("dd:MM:yyyy");
+        SimpleDateFormat day = new SimpleDateFormat("dd.MM.yyyy");
         SimpleDateFormat time = new SimpleDateFormat("HH:mm");
 
-        String datum = "Veröffentlicht am " + day.format(data[position].getPubDate()) + " um " + time.format(data[position].getPubDate()) + " Uhr";
 
-        dateView.setText(datum);
+        try{
+            String datum = "Veröffentlicht am " + day.format(data[position].getPubDate()) + " um " + time.format(data[position].getPubDate()) + " Uhr";
+            dateView.setText(datum);
+        } catch (Exception ex){
+            //ignore
+        }
+
+
+
 
         return vi;
     }
