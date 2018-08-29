@@ -62,7 +62,7 @@ public class GolemFeedLoadTask extends AsyncTask<Void, Void, Boolean> {
             XmlPullParser parser = factory.newPullParser();
             parser.setInput(new StringReader(rss));
 
-            GolemFeedItem item = new GolemFeedItem();
+            GolemFeedItem item = new GolemFeedItem(updateHandler);
             String tag = "";
             String text = "";
 
@@ -74,7 +74,7 @@ public class GolemFeedLoadTask extends AsyncTask<Void, Void, Boolean> {
                 switch (event) {
                     case XmlPullParser.START_TAG:
                         if (tag.equalsIgnoreCase("item")) {
-                            item = new GolemFeedItem();
+                            item = new GolemFeedItem(updateHandler);
                         }
                         break;
                     case XmlPullParser.TEXT:

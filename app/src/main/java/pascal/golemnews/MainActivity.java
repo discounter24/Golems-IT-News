@@ -42,6 +42,8 @@ public class MainActivity extends AppCompatActivity {
                     progressBar.setVisibility(View.INVISIBLE);
                     swipeRefreshLayout.setRefreshing(false);
                     break;
+                case 2:
+                    adapter.notifyDataSetChanged();
                 default:
                     break;
             }

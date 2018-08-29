@@ -2,15 +2,18 @@ package pascal.golemnews;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
+import android.os.Handler;
+import android.os.Message;
 
 import java.net.URL;
 import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Locale;
 
 public class GolemFeedItem {
 
+    private Handler imageLoadedHandler;
     private String title;
     private String link;
     private String description;
@@ -59,13 +62,7 @@ public class GolemFeedItem {
 
     public void setImageLink(String imageLink) {
         this.imageLink = imageLink;
-        try{
-
-            URL url = new URL(imageLink);
-            image = BitmapFactory.decodeStream(url.openStream());
-        } catch (Exception ex){
-            //Ignore
-        }
+        loadImage(imageLink).execute();
     }
 
     public Date getPubDate() {
@@ -99,8 +96,28 @@ public class GolemFeedItem {
     }
 
 
+    public AsyncTask<Void,Void,Void> loadImage(final String link){
+        return new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... voids) {
+                try{
+                    URL url = new URL(link);
+                    image = BitmapFactory.decodeStream(url.openStream());
+                    Message m = new Message();
+                    m.what=2;
+                    m.obj = this;
+                    imageLoadedHandler.sendMessage(m);
+                } catch (Exception ex){
+                    //ignore
+                }
+                return null;
+            }
+        };
+    }
 
-    public GolemFeedItem(){
 
+
+    public GolemFeedItem(Handler imageLoadedHandler){
+        this.imageLoadedHandler = imageLoadedHandler;
     }
 }
