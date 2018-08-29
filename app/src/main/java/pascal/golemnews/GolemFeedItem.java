@@ -4,6 +4,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
 import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class GolemFeedItem {
 
@@ -11,7 +13,7 @@ public class GolemFeedItem {
     private String link;
     private String description;
     private String imageLink;
-    private String pubDate;
+    private Date pubDate;
     private String guid;
     private String content;
 
@@ -64,12 +66,18 @@ public class GolemFeedItem {
         }
     }
 
-    public String getPubDate() {
+    public Date getPubDate() {
         return pubDate;
     }
 
     public void setPubDate(String pubDate) {
-        this.pubDate = pubDate;
+        try{
+            SimpleDateFormat sdf = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss Z");
+            this.pubDate = sdf.parse(pubDate);
+        } catch (Exception ex){
+            //ignore
+        }
+
     }
 
     public String getGuid() {
