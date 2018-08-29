@@ -20,6 +20,8 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
+import java.io.Serializable;
+
 public class MainActivity extends AppCompatActivity {
 
     private GolemFeedAdapter adapter;
@@ -80,11 +82,20 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(MainActivity.this, ArticleActivity.class);
+                GolemFeedItem clicked = adapter.data[position];
+
+                intent.putExtra("title",clicked.getTitle());
+                intent.putExtra("description",clicked.getDescription());
+                intent.putExtra("article_link",clicked.getLink());
+                intent.putExtra("image_link",clicked.getImageLink());
+                intent.putExtra("pubDate",clicked.getPubDate());
+
                 startActivity(intent);
             }
         });
 
         feed = new GolemFeed(GolemFeedUpdate);
+
 
         adapter = new GolemFeedAdapter(this,  new GolemFeedItem[]{});
         listView.setAdapter(adapter);
