@@ -13,7 +13,7 @@ public class ArticleActivity extends AppCompatActivity {
     private String title;
     private String description;
     private String article_link;
-    private String image_link;
+    private String image_link;+--+
     private String pubDate;
 
 
