@@ -44,7 +44,7 @@ public class GolemFeedAdapter extends BaseAdapter {
         View vi = convertView;
         if (vi == null) vi = inflater.inflate(R.layout.feedviewitem, null);
 
-        TextView title = (TextView) vi.findViewById(R.id.itemtitle);
+        TextView title = (TextView) vi.findViewById(R.id.articleTitle);
         TextView description = (TextView) vi.findViewById(R.id.itemdescription);
         ImageView preview = (ImageView) vi.findViewById(R.id.preview);
         TextView dateView = (TextView) vi.findViewById(R.id.dateView);

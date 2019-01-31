@@ -3,5 +3,6 @@
     <color name="colorPrimary">#080e33</color>
     <color name="colorPrimaryDark">#080e33</color>
     <color name="colorAccent">#FF4081</color>
-    <color name="dateColor">#808080</color>
+    <color name="dateColor">#000000</color>
+    <color name="descriptionColor">#444444</color>
 </resources>

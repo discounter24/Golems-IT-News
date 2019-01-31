@@ -7,12 +7,13 @@
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/itemtitle"
+        android:id="@+id/articleTitle"
         android:layout_width="match_parent"
-        android:layout_height="52dp"
-        android:layout_alignParentEnd="true"
+        android:layout_height="47dp"
         android:layout_alignTop="@+id/preview"
+        android:layout_alignParentEnd="true"
         android:layout_marginRight="2dp"
+        android:autoSizeTextType="uniform"
         android:ellipsize="end"
         android:maxLines="2"
         android:text="Title"
@@ -47,7 +48,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="78dp"
                 android:layout_alignParentEnd="true"
-                android:layout_below="@+id/itemtitle"
+                android:layout_below="@+id/articleTitle"
                 android:layout_marginRight="2dp"
                 android:layout_marginTop="2dp"
                 android:ellipsize="end"

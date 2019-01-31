@@ -122,4 +122,8 @@ public class GolemFeedItem {
     public GolemFeedItem(Handler imageLoadedHandler){
         this.imageLoadedHandler = imageLoadedHandler;
     }
+
+    public GolemFeedItem(){
+
+    }
 }

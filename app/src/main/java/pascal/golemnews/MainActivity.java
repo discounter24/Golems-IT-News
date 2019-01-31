@@ -87,10 +87,10 @@ public class MainActivity extends AppCompatActivity {
 
                 Bundle b = new Bundle();
                 b.putString("title",clicked.getTitle());
-                b.putString("description",clicked.getTitle());
-                b.putString("article_link",clicked.getTitle());
-                b.putString("image_link",clicked.getTitle());
-                b.putString("pubDate",clicked.getTitle());
+                b.putString("description",clicked.getDescription());
+                b.putString("article_link",clicked.getLink());
+                b.putString("image_link",clicked.getImageLink());
+                b.putString("pubDate",clicked.getPubDate().toString());
 
                 intent.putExtras(b);
                 startActivity(intent);
