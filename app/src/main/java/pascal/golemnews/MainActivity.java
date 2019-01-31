@@ -13,6 +13,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -84,12 +85,14 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainActivity.this, ArticleActivity.class);
                 GolemFeedItem clicked = adapter.data[position];
 
-                intent.putExtra("title",clicked.getTitle());
-                intent.putExtra("description",clicked.getDescription());
-                intent.putExtra("article_link",clicked.getLink());
-                intent.putExtra("image_link",clicked.getImageLink());
-                intent.putExtra("pubDate",clicked.getPubDate());
+                Bundle b = new Bundle();
+                b.putString("title",clicked.getTitle());
+                b.putString("description",clicked.getTitle());
+                b.putString("article_link",clicked.getTitle());
+                b.putString("image_link",clicked.getTitle());
+                b.putString("pubDate",clicked.getTitle());
 
+                intent.putExtras(b);
                 startActivity(intent);
             }
         });
