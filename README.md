@@ -7,4 +7,5 @@ Die Artikel und Bilder werden durch den offiziellen RSS-Feed und den Artikel Sei
 
 
 Melde einen Fehler unter: https://github.com/discounter24/Golems-IT-News/issues
+
 Finde die App im PlayStore: https://play.google.com/store/apps/details?id=pascal.golemnews
