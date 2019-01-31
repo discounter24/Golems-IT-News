@@ -1,4 +1,4 @@
-package pascal.golemnews;
+package dtss.golemnews;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

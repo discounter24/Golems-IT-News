@@ -1,4 +1,4 @@
-package pascal.golemnews;
+package dtss.golemnews;
 
 import android.content.Context;
 import android.view.LayoutInflater;

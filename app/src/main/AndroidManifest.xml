@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="pascal.golemnews">
+    package="dtss.golemnews">
 
     <uses-permission android:name="android.permission.INTERNET"/>
 
@@ -16,7 +16,7 @@
 
 
 
-        <activity android:name=".MainActivity">
+        <activity android:name=".golemnews.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -25,7 +25,7 @@
         </activity>
 
 
-        <activity android:name=".ArticleActivity" android:parentActivityName=".ArticleActivity">
+        <activity android:name=".golemnews.ArticleActivity" android:parentActivityName=".golemnews.ArticleActivity">
             <intent-filter>
                 <action android:name="android.intent.action.DEFAULT" />
             </intent-filter>

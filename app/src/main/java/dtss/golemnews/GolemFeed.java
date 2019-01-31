@@ -1,15 +1,6 @@
-package pascal.golemnews;
-import android.os.AsyncTask;
+package dtss.golemnews;
 import android.os.Handler;
-import android.util.Log;
 
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserException;
-import org.xmlpull.v1.XmlPullParserFactory;
-
-import java.net.*;
-import java.io.*;
-import java.nio.charset.StandardCharsets;
 import java.util.LinkedList;
 
 public class GolemFeed {

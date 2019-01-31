@@ -1,4 +1,4 @@
-package pascal.golemnews;
+package dtss.golemnews;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -9,7 +9,9 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 public class ArticleActivity extends AppCompatActivity {
@@ -91,6 +93,9 @@ public class ArticleActivity extends AppCompatActivity {
                 case 1:
                     TextView articleText = findViewById(R.id.articleText);
                     articleText.setText((String) msg.obj);
+                    ProgressBar bar = findViewById(R.id.progressBar);
+                    bar.setVisibility(View.INVISIBLE);
+
                     break;
                 default:
                     break;

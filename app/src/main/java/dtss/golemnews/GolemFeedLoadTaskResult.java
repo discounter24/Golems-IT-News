@@ -1,4 +1,4 @@
-package pascal.golemnews;
+package dtss.golemnews;
 
 import java.util.LinkedList;
 

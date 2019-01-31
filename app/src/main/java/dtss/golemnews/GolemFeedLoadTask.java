@@ -1,4 +1,4 @@
-package pascal.golemnews;
+package dtss.golemnews;
 
 import android.os.AsyncTask;
 import android.os.Handler;

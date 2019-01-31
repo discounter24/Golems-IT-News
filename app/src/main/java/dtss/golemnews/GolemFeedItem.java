@@ -1,12 +1,10 @@
-package pascal.golemnews;
+package dtss.golemnews;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Message;
-import android.os.Parcel;
-import android.os.Parcelable;
 
 import java.net.URL;
 import java.text.SimpleDateFormat;

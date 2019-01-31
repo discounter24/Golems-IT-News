@@ -1,5 +1,4 @@
-package pascal.golemnews;
-import android.util.Log;
+package dtss.golemnews;
 
 import org.jsoup.*;
 import org.jsoup.nodes.Document;
