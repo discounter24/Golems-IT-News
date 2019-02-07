@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -9,13 +8,14 @@
     <TextView
         android:id="@+id/articleTitle"
         android:layout_width="match_parent"
-        android:layout_height="47dp"
+        android:layout_height="match_parent"
         android:layout_alignTop="@+id/preview"
         android:layout_alignParentEnd="true"
         android:layout_marginRight="2dp"
-        android:autoSizeTextType="uniform"
-        android:ellipsize="end"
+
+        android:minLines="1"
         android:maxLines="2"
+        android:ellipsize="end"
         android:text="Title"
         android:textAlignment="textStart"
         android:textAppearance="@style/TextAppearance.AppCompat.Title"

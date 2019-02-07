@@ -1,20 +1,26 @@
 package dtss.golemnews;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-public class ArticleActivity extends AppCompatActivity {
+import dtss.golemnews.utils.IImageLoadHandler;
+
+public class ArticleActivity extends AppCompatActivity implements IImageLoadHandler {
 
 
     private String title;
@@ -22,7 +28,7 @@ public class ArticleActivity extends AppCompatActivity {
     private String article_link;
     private String image_link;
     private String pubDate;
-
+    private GolemArticle article;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,23 +47,27 @@ public class ArticleActivity extends AppCompatActivity {
             pubDate = (String) b.get("pubDate");
         }
 
-        LinearLayout root = findViewById(R.id.mainLayout);
+        LinearLayout root = (LinearLayout) findViewById(R.id.mainLayout);
 
         //Snackbar bar = Snackbar.make(root,article_link, Snackbar.LENGTH_LONG);
         //bar.show();
 
-        GolemFeedItem item = new GolemFeedItem();
+        GolemFeedItem item = new GolemFeedItem(ArticleReceivedHandler);
+
         item.setTitle(title);
         item.setDescription(description);
         item.setLink(article_link);
         item.setImageLink(image_link);
         item.setPubDate(pubDate);
 
-        GolemArticle article = new GolemArticle(item);
+
+        article =  new GolemArticle(item,this);
 
 
-        TextView articleTitle = findViewById(R.id.articleTitle);
+        TextView articleTitle = (TextView) findViewById(R.id.articleTitle);
         articleTitle.setText(title);
+
+
 
         TextView articleDesc = findViewById(R.id.articleDescription);
         articleDesc.setText(description);
@@ -65,6 +75,8 @@ public class ArticleActivity extends AppCompatActivity {
 
         article.receive(ArticleReceivedHandler);
     }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -84,7 +96,14 @@ public class ArticleActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-
+    public void ImageLoaded(String ID, Bitmap image){
+        if (ID.equalsIgnoreCase("previewImage")){
+            Message m = new Message();
+            m.what = 3;
+            m.obj = image;
+            ArticleReceivedHandler.sendMessage(m);
+        }
+    }
 
     private Handler ArticleReceivedHandler = new Handler() {
         @Override
@@ -96,6 +115,15 @@ public class ArticleActivity extends AppCompatActivity {
                     ProgressBar bar = findViewById(R.id.progressBar);
                     bar.setVisibility(View.INVISIBLE);
 
+                    break;
+
+                case 3:
+                    Bitmap previewImage = (Bitmap) msg.obj;
+                    if (previewImage!=null){
+                        ImageView articlePictureView = findViewById(R.id.previewImage);
+                        articlePictureView.setImageBitmap(previewImage);
+                        articlePictureView.setVisibility(View.VISIBLE);
+                    }
                     break;
                 default:
                     break;
