@@ -4,7 +4,7 @@ android {
     compileSdkVersion 28
     defaultConfig {
         applicationId "pascal.golemnews"
-        minSdkVersion 23
+        minSdkVersion 24
         targetSdkVersion 28
         versionName '1.1'
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
