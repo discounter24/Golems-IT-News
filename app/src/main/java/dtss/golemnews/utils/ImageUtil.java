@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import java.io.InputStream;
 import java.net.URL;
 
 public class ImageUtil {
@@ -25,7 +26,9 @@ public class ImageUtil {
     public static Bitmap loadImage(final String link){
         try {
             URL url = new URL(link);
-            Bitmap image = BitmapFactory.decodeStream(url.openStream());
+            InputStream stream = url.openStream();
+            Bitmap image = BitmapFactory.decodeStream(stream);
+            stream.close();
             return image;
         } catch (Exception ex){
             return null;
