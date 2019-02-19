@@ -6,53 +6,92 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
-import android.os.Handler;
-import android.os.Message;
 
 import java.io.IOException;
 import java.util.HashMap;
 
-import dtss.golemnews.utils.IImageLoadHandler;
 import dtss.golemnews.utils.ImageUtil;
 
-public class GolemArticle implements IImageLoadHandler{
+public class GolemArticle{
 
 
-    public GolemFeedItem item;
-    public IImageLoadHandler imageLoadHandler;
-    private Handler receivedHandler;
+    private GolemFeedItem item;
+    private IFeedArticleLoadHandler articleHandler;
+    public Bitmap PreviewImage;
+    public String Text;
     public HashMap<String,Bitmap> HeroImages;
 
 
-    public GolemArticle(GolemFeedItem item, IImageLoadHandler imageLoadHandler) {
-        this.HeroImages = new HashMap<String,Bitmap>();
+    public GolemArticle(GolemFeedItem item, IFeedArticleLoadHandler articleHandler) {
+        this.HeroImages = new HashMap<>();
         this.item = item;
-        this.imageLoadHandler = imageLoadHandler;
+        this.articleHandler = articleHandler;
     }
 
 
-    public void receive(Handler handler){
-        this.receivedHandler = handler;
-        new ArticleParseTask().execute(this);
+    public void get(){
+        new ArticleParseHeroImagesTask(articleHandler).execute(this);
+        new ArticleParseTextTask(articleHandler).execute(this);
     }
 
-    public void ImageLoaded(String ID, Bitmap image){
-        if (ID.equalsIgnoreCase("previewImage")){
-            HeroImages.put(ID,image);
-            imageLoadHandler.ImageLoaded(ID,image);
+    private class ArticleParseHeroImagesTask extends AsyncTask<GolemArticle, Void, Bitmap> {
+
+        private IFeedArticleLoadHandler articleHandler;
+        private GolemArticle article;
+
+        public ArticleParseHeroImagesTask(IFeedArticleLoadHandler articleHandler){
+            this.articleHandler = articleHandler;
+        }
+
+        protected Bitmap doInBackground(GolemArticle... articles) {
+            this.article = articles[0];
+            try {
+                Document d = Jsoup.connect(article.item.getLink()).get();
+
+                Elements heroes = d.getElementsByClass("hero");
+                Element hero = heroes.first();
+                if (hero != null){
+                    Elements images = hero.getElementsByTag("img");
+                    Element image = images.first();
+                    if (image != null){
+                        String imageLink = image.attr("src");
+                        Bitmap map = ImageUtil.loadImage(imageLink);
+                        return map;
+                    }
+                }
+
+            } catch (IOException ex) {
+                //NoInternet
+            } catch (Exception ex) {
+                //Unknown
+            }
+            return null;
+        }
+
+        protected void onPostExecute(Bitmap result) {
+            article.PreviewImage = result;
+            if (articleHandler != null){
+                articleHandler.ArticleImageLoaded(article.item,result);
+            }
         }
     }
 
+    private class ArticleParseTextTask extends AsyncTask<GolemArticle, Void, String> {
 
-    private class ArticleParseTask extends AsyncTask<GolemArticle, Void, String> {
+        private IFeedArticleLoadHandler articleHandler;
+        private GolemArticle article;
+
+        public ArticleParseTextTask(IFeedArticleLoadHandler articleHandler){
+            this.articleHandler = articleHandler;
+        }
 
         protected String doInBackground(GolemArticle... articles) {
             String text = "";
+            this.article = articles[0];
 
             try {
-                Document d = Jsoup.connect(item.getLink()).get();
+                Document d = Jsoup.connect(article.item.getLink()).get();
 
                 int part  = 1;
                 Element element = d.getElementById("gpar" + part);
@@ -66,18 +105,6 @@ public class GolemArticle implements IImageLoadHandler{
                     element = d.getElementById("gpar" + part);
                 }
 
-                Elements heroes = d.getElementsByClass("hero");
-                Element hero = heroes.first();
-                if (hero != null){
-                    Elements images = hero.getElementsByTag("img");
-                    Element image = images.first();
-                    if (image != null){
-                        String imageLink = image.attr("src");
-                        Bitmap map = ImageUtil.loadImage(imageLink);
-                        articles[0].ImageLoaded("previewImage", map);
-                    }
-                }
-
             } catch (IOException ex) {
                 text = "IO_ERROR\n";
                 text += ex.toString();
@@ -89,15 +116,12 @@ public class GolemArticle implements IImageLoadHandler{
             return text;
         }
 
-
-
         protected void onPostExecute(String result) {
-            Message msg = new Message();
-            msg.what = 1;
-            msg.obj = result;
-            receivedHandler.sendMessage(msg);
+            article.Text = result;
+            if (articleHandler != null) {
+                articleHandler.ArticleTextReceived(article.item,result);
+            }
         }
-
     }
 
 

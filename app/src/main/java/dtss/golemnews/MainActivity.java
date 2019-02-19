@@ -1,9 +1,7 @@
 package dtss.golemnews;
 
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
-import android.os.Handler;
-import android.os.Message;
+import android.graphics.Bitmap;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -15,35 +13,14 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements IFeedLoadHandler {
 
-    private GolemFeedAdapter adapter;
-    private GolemFeed feed;
+    private CustomFeedAdapter adapter;
+    public static GolemFeed feed;
 
     private ListView listView;
     private ProgressBar progressBar;
     private SwipeRefreshLayout swipeRefreshLayout;
-
-    private Handler GolemFeedUpdate = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case 1:
-                    GolemFeedLoadTaskResult result = (GolemFeedLoadTaskResult) msg.obj;
-                    GolemFeedItem[] values = (GolemFeedItem[]) result.FeedItems.toArray(new GolemFeedItem[result.FeedItems.size()]);
-                    adapter.data = values;
-                    adapter.notifyDataSetChanged();
-                    listView.setVisibility(View.VISIBLE);
-                    progressBar.setVisibility(View.INVISIBLE);
-                    swipeRefreshLayout.setRefreshing(false);
-                    break;
-                case 2:
-                    adapter.notifyDataSetChanged();
-                default:
-                    break;
-            }
-        }
-    };
 
 
     @Override
@@ -51,9 +28,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
-
-
+        //setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setLogo(R.mipmap.ic_launcher_round);
@@ -64,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                feed.Load();
+                feed.updateListItems();
             }
         });
 
@@ -78,21 +53,22 @@ public class MainActivity extends AppCompatActivity {
                 GolemFeedItem clicked = adapter.data[position];
 
                 Bundle b = new Bundle();
-                b.putString("title",clicked.getTitle());
+                /*b.putString("title",clicked.getTitle());
                 b.putString("description",clicked.getDescription());
                 b.putString("article_link",clicked.getLink());
-                b.putString("image_link",clicked.getImageLink());
+                b.putString("image_link",clicked.getPreviewImageLink());
                 b.putString("pubDate",clicked.getPubDate().toString());
-
+                */
+                b.putString("guid",clicked.getGuid());
                 intent.putExtras(b);
                 startActivity(intent);
             }
         });
 
-        feed = new GolemFeed(GolemFeedUpdate);
+        feed = new GolemFeed(this);
 
 
-        adapter = new GolemFeedAdapter(this,  new GolemFeedItem[]{});
+        adapter = new CustomFeedAdapter(this,  new GolemFeedItem[]{});
         listView.setAdapter(adapter);
 
         reload();
@@ -102,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
     public void reload(){
         listView.setVisibility(View.INVISIBLE);
         progressBar.setVisibility(View.VISIBLE);
-        feed.Load();
+        feed.updateListItems();
     }
 
     @Override
@@ -122,5 +98,19 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+
+    @Override
+    public void FeedItemListLoaded(GolemFeedLoadTask.GolemFeedLoadTaskResult result, GolemFeed feed) {
+        adapter.data = feed.getFeedItems().toArray(new GolemFeedItem[feed.getFeedItems().size()]);
+        adapter.notifyDataSetChanged();
+        listView.setVisibility(View.VISIBLE);
+        progressBar.setVisibility(View.INVISIBLE);
+        swipeRefreshLayout.setRefreshing(false);
+    }
+
+    @Override
+    public void FeedPreviewImageLoaded(GolemFeedItem sender, Bitmap image) {
+        adapter.notifyDataSetChanged();
+    }
 
 }

@@ -1,13 +1,9 @@
 package dtss.golemnews;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -18,17 +14,11 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import dtss.golemnews.utils.IImageLoadHandler;
 
-public class ArticleActivity extends AppCompatActivity implements IImageLoadHandler {
+public class ArticleActivity extends AppCompatActivity implements IFeedArticleLoadHandler {
 
 
-    private String title;
-    private String description;
-    private String article_link;
-    private String image_link;
-    private String pubDate;
-    private GolemArticle article;
+    private GolemFeedItem item;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,40 +30,25 @@ public class ArticleActivity extends AppCompatActivity implements IImageLoadHand
         Bundle b = getIntent().getExtras();
 
         if (b != null){
-            title = (String) b.get("title");
-            description = (String) b.get("description");
-            article_link = (String) b.get("article_link");
-            image_link = (String) b.get("image_link");
-            pubDate = (String) b.get("pubDate");
+            item = MainActivity.feed.getItemByGuid((String) b.get("guid"));
         }
 
         LinearLayout root = (LinearLayout) findViewById(R.id.mainLayout);
 
-        //Snackbar bar = Snackbar.make(root,article_link, Snackbar.LENGTH_LONG);
-        //bar.show();
 
-        GolemFeedItem item = new GolemFeedItem(ArticleReceivedHandler);
+        item.getArticle(this);
 
-        item.setTitle(title);
-        item.setDescription(description);
-        item.setLink(article_link);
-        item.setImageLink(image_link);
-        item.setPubDate(pubDate);
-
-
-        article =  new GolemArticle(item,this);
+        //article = new GolemArticle(item,this);
 
 
         TextView articleTitle = (TextView) findViewById(R.id.articleTitle);
-        articleTitle.setText(title);
-
-
+        articleTitle.setText(item.getTitle());
 
         TextView articleDesc = findViewById(R.id.articleDescription);
-        articleDesc.setText(description);
+        articleDesc.setText(item.getDescription());
 
 
-        article.receive(ArticleReceivedHandler);
+        //article.get();
     }
 
 
@@ -89,47 +64,28 @@ public class ArticleActivity extends AppCompatActivity implements IImageLoadHand
 
         switch (item.getItemId()) {
             case R.id.link:
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(article_link));
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(this.item.getLink()));
                 startActivity(browserIntent);
                 break;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    public void ImageLoaded(String ID, Bitmap image){
-        if (ID.equalsIgnoreCase("previewImage")){
-            Message m = new Message();
-            m.what = 3;
-            m.obj = image;
-            ArticleReceivedHandler.sendMessage(m);
-        }
+
+    @Override
+    public void ArticleTextReceived(GolemFeedItem item, String text) {
+        TextView articleText = findViewById(R.id.articleText);
+        articleText.setText(text);
+        ProgressBar bar = findViewById(R.id.progressBar);
+        bar.setVisibility(View.INVISIBLE);
     }
 
-    private Handler ArticleReceivedHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case 1:
-                    TextView articleText = findViewById(R.id.articleText);
-                    articleText.setText((String) msg.obj);
-                    ProgressBar bar = findViewById(R.id.progressBar);
-                    bar.setVisibility(View.INVISIBLE);
-
-                    break;
-
-                case 3:
-                    Bitmap previewImage = (Bitmap) msg.obj;
-                    if (previewImage!=null){
-                        ImageView articlePictureView = findViewById(R.id.previewImage);
-                        articlePictureView.setImageBitmap(previewImage);
-                        articlePictureView.setVisibility(View.VISIBLE);
-                    }
-                    break;
-                default:
-                    break;
-            }
+    @Override
+    public void ArticleImageLoaded(GolemFeedItem item, Bitmap image) {
+        if (image!=null){
+            ImageView articlePictureView = findViewById(R.id.previewImage);
+            articlePictureView.setImageBitmap(image);
+            articlePictureView.setVisibility(View.VISIBLE);
         }
-    };
-
-
+    }
 }
