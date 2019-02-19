@@ -14,7 +14,6 @@ public class ImageUtil {
         return new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... voids) {
-                //Log.d("IMAGE_LOADER",ID + link);
                 Bitmap image = loadImage(link);
                 handler.ImageLoaded(ID,image);
                 return null;

@@ -3,30 +3,37 @@ package dtss.golemnews;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
-import android.os.Handler;
-import android.os.Message;
 
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.Locale;
 
-public class GolemFeedItem {
+public class GolemFeedItem implements IFeedArticleLoadHandler {
 
-    private Handler imageLoadedHandler;
+    private IFeedLoadHandler feedLoadHandler;
+
     private String title;
     private String link;
     private String description;
-    private String imageLink;
+
+    private String previewImageLink;
+    private Bitmap previewImage;
+
     private Date pubDate;
     private String guid;
-    private String content;
+    private GolemArticle article;
 
-    public Bitmap getImage() {
-        return image;
+    private LinkedList<IFeedArticleLoadHandler> waitingImageHandlers = new LinkedList<>();
+    private LinkedList<IFeedArticleLoadHandler> waitingTextHandlers = new LinkedList<>();
+
+
+    public Bitmap getPreviewImage() {
+        return previewImage;
     }
 
-    private Bitmap image;
+
 
     public String getTitle() {
         return title;
@@ -56,13 +63,13 @@ public class GolemFeedItem {
         }
     }
 
-    public String getImageLink() {
-        return imageLink;
+    public String getPreviewImageLink() {
+        return previewImageLink;
     }
 
-    public void setImageLink(String imageLink) {
-        this.imageLink = imageLink;
-        loadImage(imageLink).execute();
+    public void setPreviewImageLink(String previewImageLink) {
+        this.previewImageLink = previewImageLink;
+        loadImage(previewImageLink).execute();
     }
 
     public Date getPubDate() {
@@ -87,41 +94,89 @@ public class GolemFeedItem {
         this.guid = guid;
     }
 
-    public String getContent() {
-        return content;
+    public void getArticle(IFeedArticleLoadHandler articleHandler) {
+
+
+
+        if (article == null || article.Text == null || article.PreviewImage == null) {
+
+            if (waitingImageHandlers.size() == 0 ) {
+                waitingImageHandlers.add(articleHandler);
+                waitingTextHandlers.add(articleHandler);
+                GolemArticle tmp = new GolemArticle(this, this);
+                tmp.get();
+                this.article = tmp;
+
+            } else {
+                waitingImageHandlers.add(articleHandler);
+                waitingTextHandlers.add(articleHandler);
+            }
+
+        } else {
+            if (articleHandler!= null){
+                articleHandler.ArticleImageLoaded(this,article.PreviewImage);
+                articleHandler.ArticleTextReceived(this,article.Text);
+            }
+        }
     }
 
-    public void setContent(String content) {
-        this.content = content;
+
+
+    @Override
+    public void ArticleTextReceived(GolemFeedItem item, String text) {
+        for(IFeedArticleLoadHandler articleHandler : waitingTextHandlers){
+            if (articleHandler != null){
+                articleHandler.ArticleTextReceived(this,article.Text);
+            }
+        }
+        waitingTextHandlers.clear();
+    }
+
+    @Override
+    public void ArticleImageLoaded(GolemFeedItem item, Bitmap image) {
+        for(IFeedArticleLoadHandler articleHandler : waitingImageHandlers){
+            if (articleHandler != null){
+                articleHandler.ArticleImageLoaded(this,article.PreviewImage);
+            }
+        }
+        waitingImageHandlers.clear();
     }
 
 
-    public AsyncTask<Void,Void,Void> loadImage(final String link){
-        return new AsyncTask<Void, Void, Void>() {
+
+
+    public AsyncTask<Void,Void,Bitmap> loadImage(final String link){
+        final GolemFeedItem sender = this;
+
+        return new AsyncTask<Void, Void, Bitmap>() {
             @Override
-            protected Void doInBackground(Void... voids) {
+            protected Bitmap doInBackground(Void... voids) {
                 try{
                     URL url = new URL(link);
-                    image = BitmapFactory.decodeStream(url.openStream());
-                    Message m = new Message();
-                    m.what=2;
-                    m.obj = this;
-                    imageLoadedHandler.sendMessage(m);
+                    previewImage = BitmapFactory.decodeStream(url.openStream());
+                    return previewImage;
                 } catch (Exception ex){
-                    //ignore
+                    return null;
                 }
-                return null;
+            }
+
+            protected void onPostExecute(Bitmap image){
+                if (feedLoadHandler!=null){
+                    feedLoadHandler.FeedPreviewImageLoaded(sender, image);
+                }
             }
         };
     }
 
 
 
-    public GolemFeedItem(Handler imageLoadedHandler){
-        this.imageLoadedHandler = imageLoadedHandler;
+    public GolemFeedItem(IFeedLoadHandler feedLoadHandler){
+        this.feedLoadHandler = feedLoadHandler;
     }
 
     public GolemFeedItem(){
 
     }
+
+
 }

@@ -1,8 +1,6 @@
 package dtss.golemnews;
 
 import android.os.AsyncTask;
-import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -16,41 +14,48 @@ import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 import java.util.LinkedList;
 
-public class GolemFeedLoadTask extends AsyncTask<Void, Void, Boolean> {
+public class GolemFeedLoadTask extends AsyncTask<GolemFeed, Void, HashMap<GolemFeed, GolemFeedLoadTask.GolemFeedLoadTaskResult>> {
+    private IFeedLoadHandler handler;
 
 
-    public Handler updateHandler;
-
-    public GolemFeedLoadTask(Handler updateHandler) {
-        this.updateHandler = updateHandler;
+    public GolemFeedLoadTask(IFeedLoadHandler handler) {
+        this.handler = handler;
     }
 
-    protected Boolean doInBackground(Void... params) {
+    protected HashMap<GolemFeed, GolemFeedLoadTaskResult> doInBackground(GolemFeed... feeds) {
 
-        GolemFeedLoadTaskResult result = new GolemFeedLoadTaskResult();
+        HashMap<GolemFeed, GolemFeedLoadTaskResult> results = new HashMap<>();
 
-        try {
-            String rss = getRSS("https://rss.golem.de/rss.php?feed=RSS2.0");
-            if (rss != null) {
-                result.FeedItems = getItemsFromRSS(rss);
+        for (GolemFeed feed : feeds ) {
+            GolemFeedLoadTaskResult result;
+
+            try {
+                String rss = getRSS(feed.getFeedUrl());
+                if (rss != null) {
+                    LinkedList<GolemFeedItem> items = getItemsFromRSS(rss);
+                    feed.addItems(items);
+                }
+                result = GolemFeedLoadTaskResult.OK;
+            } catch (IOException ex) {
+                result = GolemFeedLoadTaskResult.InternetError;
+                ex.printStackTrace();
+            } catch (Exception ex) {
+                result  = GolemFeedLoadTaskResult.UnknownError;
+                ex.printStackTrace();
             }
-        } catch (IOException ex) {
-            result.Type = GolemFeedLoadTaskResultType.InternetError;
-            ex.printStackTrace();
-        } catch (Exception ex) {
-            result.Type = result.Type = GolemFeedLoadTaskResultType.UnknownError;
-            ex.printStackTrace();
+
+            results.put(feed,result);
         }
+        return results;
+    }
 
-        Message message = new Message();
-        message.obj = result;
-        message.what = 1;
-
-        updateHandler.sendMessage(message);
-
-        return true;
+    protected void onPostExecute(HashMap<GolemFeed, GolemFeedLoadTaskResult> results){
+        for (GolemFeed feed : results.keySet()) {
+            handler.FeedItemListLoaded(results.get(feed),feed);
+        }
     }
 
 
@@ -62,7 +67,7 @@ public class GolemFeedLoadTask extends AsyncTask<Void, Void, Boolean> {
             XmlPullParser parser = factory.newPullParser();
             parser.setInput(new StringReader(rss));
 
-            GolemFeedItem item = new GolemFeedItem(updateHandler);
+            GolemFeedItem item = new GolemFeedItem(handler);
             String tag = "";
             String text = "";
 
@@ -74,7 +79,7 @@ public class GolemFeedLoadTask extends AsyncTask<Void, Void, Boolean> {
                 switch (event) {
                     case XmlPullParser.START_TAG:
                         if (tag.equalsIgnoreCase("item")) {
-                            item = new GolemFeedItem(updateHandler);
+                            item = new GolemFeedItem(handler);
                         }
                         break;
                     case XmlPullParser.TEXT:
@@ -94,7 +99,7 @@ public class GolemFeedLoadTask extends AsyncTask<Void, Void, Boolean> {
                         } else if (tag.equalsIgnoreCase("guid")) {
                             item.setGuid(text);
                         } else if (tag.equalsIgnoreCase("encoded")) {
-                            item.setImageLink(text.substring(text.indexOf("src='") + 11, text.indexOf("jpg") + 3));
+                            item.setPreviewImageLink(text.substring(text.indexOf("src='") + 11, text.indexOf("jpg") + 3));
                         }
 
                         break;
@@ -125,6 +130,13 @@ public class GolemFeedLoadTask extends AsyncTask<Void, Void, Boolean> {
             }
         } while (line != null);
         return rss;
+    }
+
+
+
+
+    public enum GolemFeedLoadTaskResult {
+        OK, InternetError, UnknownError
     }
 
 }

@@ -11,14 +11,14 @@ import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
 
-public class GolemFeedAdapter extends BaseAdapter {
+public class CustomFeedAdapter extends BaseAdapter {
 
 
     Context context;
     GolemFeedItem[] data;
     private  static LayoutInflater inflater = null;
 
-    public GolemFeedAdapter(Context context, GolemFeedItem[] data){
+    public CustomFeedAdapter(Context context, GolemFeedItem[] data){
         this.context=context;
         this.data=data;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -36,7 +36,7 @@ public class GolemFeedAdapter extends BaseAdapter {
 
     @Override
     public long getItemId(int position) {
-        return  position;
+        return position;
     }
 
     @Override
@@ -51,7 +51,8 @@ public class GolemFeedAdapter extends BaseAdapter {
 
         title.setText(data[position].getTitle());
         description.setText(data[position].getDescription());
-        preview.setImageBitmap(data[position].getImage());
+
+        preview.setImageBitmap(data[position].getPreviewImage());
 
         SimpleDateFormat day = new SimpleDateFormat("dd.MM.yyyy");
         SimpleDateFormat time = new SimpleDateFormat("HH:mm");
@@ -63,10 +64,6 @@ public class GolemFeedAdapter extends BaseAdapter {
         } catch (Exception ex){
             //ignore
         }
-
-
-
-
         return vi;
     }
 }
