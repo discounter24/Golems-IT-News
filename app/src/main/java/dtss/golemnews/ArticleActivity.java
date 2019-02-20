@@ -6,13 +6,18 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.Objects;
 
@@ -89,5 +94,35 @@ public class ArticleActivity extends AppCompatActivity implements IFeedArticleLo
             articlePictureView.setImageBitmap(image);
             articlePictureView.setVisibility(View.VISIBLE);
         }
+    }
+
+    @Override
+    public void ArticleVideoFound(GolemFeedItem sender, String embedUrl) {
+        Toast t = Toast.makeText(getApplicationContext(),embedUrl,Toast.LENGTH_SHORT);
+        t.show();
+
+        final LinearLayout layout = findViewById(R.id.mainLayout);
+
+
+
+        final WebView web = new WebView(this);
+        web.getSettings().setJavaScriptEnabled(true);
+        final LinearLayout.LayoutParams webViewParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 800);
+
+        web.loadUrl(embedUrl);
+        web.getSettings().setJavaScriptEnabled(true);
+        //web.setInitialScale(1);
+        //web.getSettings().setUseWideViewPort(true);
+        //web.getSettings().setLoadWithOverviewMode(true);
+        layout.addView(web,webViewParams);
+
+        web.setOnTouchListener(new View.OnTouchListener() {
+
+            public boolean onTouch(View arg0, MotionEvent arg1) {
+                return false;
+            }
+        });
+        //web.setLayoutParams(webViewParams);
+
     }
 }

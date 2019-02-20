@@ -10,6 +10,7 @@ import android.os.AsyncTask;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.LinkedList;
 
 import dtss.golemnews.utils.ImageUtil;
 
@@ -19,20 +20,41 @@ class GolemArticle{
     private final GolemFeedItem item;
     private final IFeedArticleLoadHandler articleHandler;
     public Bitmap PreviewImage;
-    public String Text;
-    private HashMap<String,Bitmap> HeroImages;
+
+    public void setHtml(String html) {  this.html = html; }
+
+    private String html = "";
+
+
+    private LinkedList<String> chapter = new LinkedList<>();
+
+    public LinkedList<String> getVideos() { return videos; }
+
+    private LinkedList<String> videos = new LinkedList<>();
+
+    private HashMap<String,Bitmap> HeroImages = new HashMap<>();
 
 
     public GolemArticle(GolemFeedItem item, IFeedArticleLoadHandler articleHandler) {
-        this.HeroImages = new HashMap<>();
         this.item = item;
         this.articleHandler = articleHandler;
     }
 
+    public String getHtml() { return html; }
+    public LinkedList<String> getChapter() { return chapter; }
+
+    public String getText(){
+        String text = "";
+        for(String chapter : getChapter()){
+            text += chapter + "\n\n";
+        }
+        return text;
+    }
 
     public void get(){
         new ArticleParseHeroImagesTask(articleHandler).execute(this);
         new ArticleParseTextTask(articleHandler).execute(this);
+        new ArticleParseVideosTask(articleHandler).execute(this);
     }
 
     private class ArticleParseHeroImagesTask extends AsyncTask<GolemArticle, Void, Bitmap> {
@@ -47,7 +69,13 @@ class GolemArticle{
         protected Bitmap doInBackground(GolemArticle... articles) {
             this.article = articles[0];
             try {
-                Document d = Jsoup.connect(article.item.getLink()).get();
+                Document d;
+                if (article.getHtml().isEmpty()){
+                    d = Jsoup.connect(article.item.getLink()).get();
+                    html = d.html();
+                } else {
+                    d = Jsoup.parse(article.getHtml());
+                }
 
                 Elements heroes = d.getElementsByClass("hero");
                 Element hero = heroes.first();
@@ -86,11 +114,19 @@ class GolemArticle{
         }
 
         protected String doInBackground(GolemArticle... articles) {
-            String text = "";
+
             this.article = articles[0];
+            article.chapter.clear();
+            String text = "";
 
             try {
-                Document d = Jsoup.connect(article.item.getLink()).get();
+                Document d;
+                if (article.getHtml().isEmpty()){
+                    d = Jsoup.connect(article.item.getLink()).get();
+                    html = d.html();
+                } else {
+                    d = Jsoup.parse(article.getHtml());
+                }
 
                 int part  = 1;
                 Element element = d.getElementById("gpar" + part);
@@ -98,14 +134,13 @@ class GolemArticle{
 
                 while(element != null){
 
-                    text += element.text() + "\n\n";
+                    chapter.add(element.text());
 
                     part++;
                     element = d.getElementById("gpar" + part);
                 }
 
             } catch (IOException ex) {
-
                 text = "Can't connect to golem.de\n\n";
                 text += ex.toString();
             } catch (Exception ex) {
@@ -117,9 +152,58 @@ class GolemArticle{
         }
 
         protected void onPostExecute(String result) {
-            article.Text = result;
             if (articleHandler != null) {
                 articleHandler.ArticleTextReceived(article.item,result);
+            }
+        }
+    }
+
+    private class ArticleParseVideosTask extends AsyncTask<GolemArticle, Void, Void> {
+
+        private final IFeedArticleLoadHandler articleHandler;
+        private GolemArticle article;
+
+        ArticleParseVideosTask(IFeedArticleLoadHandler articleHandler){
+            this.articleHandler = articleHandler;
+        }
+
+        protected Void doInBackground(GolemArticle... articles) {
+
+            this.article = articles[0];
+
+            try {
+                Document d;
+                if (article.getHtml().isEmpty()){
+                    d = Jsoup.connect(article.item.getLink()).get();
+                    html = d.html();
+                } else {
+                    d = Jsoup.parse(article.getHtml());
+                }
+
+
+                Elements elements = d.getElementsByClass("gvideofig");
+
+                for (Element videoElement : elements){
+                    try{
+                        String id = videoElement.id().substring(7);
+                        article.videos.add("https://video.golem.de/amp-iframe.php?fileid=" + id);
+                    } catch (Exception ex){
+                        //Invalid video tag
+                    }
+                }
+            } catch (IOException ex) {
+                //Internet failure
+            } catch (Exception ex) {
+                //Unexpected failure
+            }
+            return null;
+        }
+
+        protected void onPostExecute(Void v) {
+            if (articleHandler != null) {
+                for(String video : article.videos){
+                    articleHandler.ArticleVideoFound(article.item,video);
+                }
             }
         }
     }
