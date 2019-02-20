@@ -13,14 +13,14 @@ import java.util.HashMap;
 
 import dtss.golemnews.utils.ImageUtil;
 
-public class GolemArticle{
+class GolemArticle{
 
 
-    private GolemFeedItem item;
-    private IFeedArticleLoadHandler articleHandler;
+    private final GolemFeedItem item;
+    private final IFeedArticleLoadHandler articleHandler;
     public Bitmap PreviewImage;
     public String Text;
-    public HashMap<String,Bitmap> HeroImages;
+    private HashMap<String,Bitmap> HeroImages;
 
 
     public GolemArticle(GolemFeedItem item, IFeedArticleLoadHandler articleHandler) {
@@ -37,10 +37,10 @@ public class GolemArticle{
 
     private class ArticleParseHeroImagesTask extends AsyncTask<GolemArticle, Void, Bitmap> {
 
-        private IFeedArticleLoadHandler articleHandler;
+        private final IFeedArticleLoadHandler articleHandler;
         private GolemArticle article;
 
-        public ArticleParseHeroImagesTask(IFeedArticleLoadHandler articleHandler){
+        ArticleParseHeroImagesTask(IFeedArticleLoadHandler articleHandler){
             this.articleHandler = articleHandler;
         }
 
@@ -56,8 +56,7 @@ public class GolemArticle{
                     Element image = images.first();
                     if (image != null){
                         String imageLink = image.attr("src");
-                        Bitmap map = ImageUtil.loadImage(imageLink);
-                        return map;
+                        return ImageUtil.loadImage(imageLink);
                     }
                 }
 
@@ -79,10 +78,10 @@ public class GolemArticle{
 
     private class ArticleParseTextTask extends AsyncTask<GolemArticle, Void, String> {
 
-        private IFeedArticleLoadHandler articleHandler;
+        private final IFeedArticleLoadHandler articleHandler;
         private GolemArticle article;
 
-        public ArticleParseTextTask(IFeedArticleLoadHandler articleHandler){
+        ArticleParseTextTask(IFeedArticleLoadHandler articleHandler){
             this.articleHandler = articleHandler;
         }
 
@@ -106,7 +105,8 @@ public class GolemArticle{
                 }
 
             } catch (IOException ex) {
-                text = "IO_ERROR\n";
+
+                text = "Can't connect to golem.de\n\n";
                 text += ex.toString();
             } catch (Exception ex) {
                 text = "UNKNOWN_ERROR\n";

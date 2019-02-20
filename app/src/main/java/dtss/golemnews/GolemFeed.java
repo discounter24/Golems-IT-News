@@ -8,7 +8,7 @@ public class GolemFeed {
 
     private final String feedUrl = "https://rss.golem.de/rss.php?feed=RSS2.0";
     private LinkedList<GolemFeedItem> Items;
-    private IFeedLoadHandler FeedItemsUpdatedCallbackHandler;
+    private final IFeedLoadHandler FeedItemsUpdatedCallbackHandler;
 
 
     public GolemFeed(IFeedLoadHandler feedHandler){
@@ -20,13 +20,9 @@ public class GolemFeed {
         return Items;
     }
 
-    public void setFeedItems(LinkedList<GolemFeedItem> items){
-        this.Items = items;
-    }
-
     public void addItems(LinkedList<GolemFeedItem> items){
         for(GolemFeedItem newItem : items){
-            Boolean existing = false;
+            boolean existing = false;
             for(GolemFeedItem existingItem : this.Items){
                 if (newItem.getLink().equals(existingItem.getLink())){
                     existing = true;

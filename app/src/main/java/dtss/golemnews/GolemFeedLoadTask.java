@@ -18,7 +18,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 
 public class GolemFeedLoadTask extends AsyncTask<GolemFeed, Void, HashMap<GolemFeed, GolemFeedLoadTask.GolemFeedLoadTaskResult>> {
-    private IFeedLoadHandler handler;
+    private final IFeedLoadHandler handler;
 
 
     public GolemFeedLoadTask(IFeedLoadHandler handler) {

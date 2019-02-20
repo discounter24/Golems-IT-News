@@ -14,6 +14,8 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import java.util.Objects;
+
 
 public class ArticleActivity extends AppCompatActivity implements IFeedArticleLoadHandler {
 
@@ -25,7 +27,7 @@ public class ArticleActivity extends AppCompatActivity implements IFeedArticleLo
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_article);
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(actionBar).setDisplayHomeAsUpEnabled(true);
 
         Bundle b = getIntent().getExtras();
 
@@ -33,7 +35,7 @@ public class ArticleActivity extends AppCompatActivity implements IFeedArticleLo
             item = MainActivity.feed.getItemByGuid((String) b.get("guid"));
         }
 
-        LinearLayout root = (LinearLayout) findViewById(R.id.mainLayout);
+        LinearLayout root = findViewById(R.id.mainLayout);
 
 
         item.getArticle(this);
@@ -41,7 +43,7 @@ public class ArticleActivity extends AppCompatActivity implements IFeedArticleLo
         //article = new GolemArticle(item,this);
 
 
-        TextView articleTitle = (TextView) findViewById(R.id.articleTitle);
+        TextView articleTitle = findViewById(R.id.articleTitle);
         articleTitle.setText(item.getTitle());
 
         TextView articleDesc = findViewById(R.id.articleDescription);

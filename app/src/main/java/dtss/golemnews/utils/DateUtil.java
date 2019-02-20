@@ -4,9 +4,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class DateUtil {
+class DateUtil {
 
-    public static final SimpleDateFormat rfc822DateFormats[] = new SimpleDateFormat[] {
+    private static final SimpleDateFormat[] rfc822DateFormats = new SimpleDateFormat[] {
             new SimpleDateFormat("EEE, d MMM yyyy HH:mm z"),
             new SimpleDateFormat("EEE, d MMM yyyy HH:mm z"),
             new SimpleDateFormat("EEE, d MMM yy HH:mm:ss z"),

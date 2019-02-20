@@ -11,10 +11,10 @@ import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
 
-public class CustomFeedAdapter extends BaseAdapter {
+class CustomFeedAdapter extends BaseAdapter {
 
 
-    Context context;
+    final Context context;
     GolemFeedItem[] data;
     private  static LayoutInflater inflater = null;
 
@@ -44,10 +44,10 @@ public class CustomFeedAdapter extends BaseAdapter {
         View vi = convertView;
         if (vi == null) vi = inflater.inflate(R.layout.feedviewitem, null);
 
-        TextView title = (TextView) vi.findViewById(R.id.articleTitle);
-        TextView description = (TextView) vi.findViewById(R.id.itemdescription);
-        ImageView preview = (ImageView) vi.findViewById(R.id.preview);
-        TextView dateView = (TextView) vi.findViewById(R.id.dateView);
+        TextView title = vi.findViewById(R.id.articleTitle);
+        TextView description = vi.findViewById(R.id.itemdescription);
+        ImageView preview = vi.findViewById(R.id.preview);
+        TextView dateView = vi.findViewById(R.id.dateView);
 
         title.setText(data[position].getTitle());
         description.setText(data[position].getDescription());

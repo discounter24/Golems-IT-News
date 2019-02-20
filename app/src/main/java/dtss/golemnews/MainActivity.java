@@ -31,11 +31,12 @@ public class MainActivity extends AppCompatActivity implements IFeedLoadHandler 
         //setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
 
         ActionBar actionBar = getSupportActionBar();
+        assert actionBar != null;
         actionBar.setLogo(R.mipmap.ic_launcher_round);
         actionBar.setDisplayUseLogoEnabled(true);
         actionBar.setDisplayShowHomeEnabled(true);
 
-        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefresh);
+        swipeRefreshLayout = findViewById(R.id.swipeRefresh);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -43,9 +44,9 @@ public class MainActivity extends AppCompatActivity implements IFeedLoadHandler 
             }
         });
 
-        progressBar = (ProgressBar) findViewById((R.id.AnimationLoader));
+        progressBar = findViewById((R.id.AnimationLoader));
 
-        listView = (ListView) findViewById(R.id.FeedView);
+        listView = findViewById(R.id.FeedView);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -75,7 +76,7 @@ public class MainActivity extends AppCompatActivity implements IFeedLoadHandler 
     }
 
 
-    public void reload(){
+    private void reload(){
         listView.setVisibility(View.INVISIBLE);
         progressBar.setVisibility(View.VISIBLE);
         feed.updateListItems();

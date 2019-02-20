@@ -25,8 +25,8 @@ public class GolemFeedItem implements IFeedArticleLoadHandler {
     private String guid;
     private GolemArticle article;
 
-    private LinkedList<IFeedArticleLoadHandler> waitingImageHandlers = new LinkedList<>();
-    private LinkedList<IFeedArticleLoadHandler> waitingTextHandlers = new LinkedList<>();
+    private final LinkedList<IFeedArticleLoadHandler> waitingImageHandlers = new LinkedList<>();
+    private final LinkedList<IFeedArticleLoadHandler> waitingTextHandlers = new LinkedList<>();
 
 
     public Bitmap getPreviewImage() {
@@ -126,7 +126,9 @@ public class GolemFeedItem implements IFeedArticleLoadHandler {
     public void ArticleTextReceived(GolemFeedItem item, String text) {
         for(IFeedArticleLoadHandler articleHandler : waitingTextHandlers){
             if (articleHandler != null){
-                articleHandler.ArticleTextReceived(this,article.Text);
+                //Sync with image loaded
+                    articleHandler.ArticleTextReceived(this,article.Text);
+
             }
         }
         waitingTextHandlers.clear();
@@ -145,7 +147,7 @@ public class GolemFeedItem implements IFeedArticleLoadHandler {
 
 
 
-    public AsyncTask<Void,Void,Bitmap> loadImage(final String link){
+    private AsyncTask<Void,Void,Bitmap> loadImage(final String link){
         final GolemFeedItem sender = this;
 
         return new AsyncTask<Void, Void, Bitmap>() {
@@ -172,10 +174,6 @@ public class GolemFeedItem implements IFeedArticleLoadHandler {
 
     public GolemFeedItem(IFeedLoadHandler feedLoadHandler){
         this.feedLoadHandler = feedLoadHandler;
-    }
-
-    public GolemFeedItem(){
-
     }
 
 
