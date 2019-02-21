@@ -3,12 +3,10 @@ package dtss.golemnews;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -39,6 +37,8 @@ public class ArticleActivity extends AppCompatActivity implements IFeedArticleLo
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_article);
+
+
         ActionBar actionBar = getSupportActionBar();
         Objects.requireNonNull(actionBar).setDisplayHomeAsUpEnabled(true);
 
@@ -54,6 +54,7 @@ public class ArticleActivity extends AppCompatActivity implements IFeedArticleLo
 
         TextView articleTitle = findViewById(R.id.articleTitle);
         articleTitle.setText(item.getTitle());
+        setTitle(item.getTitle());
 
         TextView articleDesc = findViewById(R.id.articleDescription);
         articleDesc.setText(item.getDescription());
