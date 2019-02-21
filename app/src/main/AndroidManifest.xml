@@ -26,7 +26,10 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".ArticleActivity" android:parentActivityName=".ArticleActivity">
+        <activity
+            android:name=".ArticleActivity"
+            android:parentActivityName=".ArticleActivity"
+            android:configChanges="orientation|screenSize">
             <intent-filter>
                 <action android:name="android.intent.action.DEFAULT" />
             </intent-filter>

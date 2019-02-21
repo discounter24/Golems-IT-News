@@ -1,6 +1,8 @@
 package dtss.golemnews;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -13,7 +15,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
@@ -47,12 +48,8 @@ public class ArticleActivity extends AppCompatActivity implements IFeedArticleLo
             item = MainActivity.feed.getItemByGuid((String) b.get("guid"));
         }
 
-        LinearLayout root = findViewById(R.id.mainLayout);
-
 
         item.getArticle(this);
-
-        //article = new GolemArticle(item,this);
 
 
         TextView articleTitle = findViewById(R.id.articleTitle);
@@ -62,7 +59,6 @@ public class ArticleActivity extends AppCompatActivity implements IFeedArticleLo
         articleDesc.setText(item.getDescription());
 
 
-        //article.get();
     }
 
 
@@ -116,22 +112,25 @@ public class ArticleActivity extends AppCompatActivity implements IFeedArticleLo
 
         final LinearLayout layout = findViewById(R.id.mainLayout);
 
-        TextView view = new TextView(this);
-        view.setTextSize(17);
-        view.setPadding(5,0,5,0);
-        view.setText("Videos zum aktuellen Artikel:");
+        TextView textView = new TextView(this);
+        textView.setTextSize(17);
+        textView.setPadding(5,0,5,2);
+        textView.setText("Videos zum aktuellen Artikel:");
+        layout.addView(textView);
 
 
-        final VideoEnabledWebView web = new VideoEnabledWebView(this);
+
+        VideoEnabledWebView videoView = new VideoEnabledWebView(this);
         int height = (int)(getWindowManager().getDefaultDisplay().getWidth() * (9f/16));
         LinearLayout.LayoutParams webViewParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height);
+        webViewParams.bottomMargin = 20;
 
         final ViewGroup videoLayout = findViewById(R.id.videoLayout);
         final ViewGroup nonVideoLayout = findViewById(R.id.articleLayout);
 
-        View loadingView = getLayoutInflater().inflate(R.layout.view_loading_video, videoLayout);
+        View loadingView = getLayoutInflater().inflate(R.layout.view_loading_video, null);
 
-        VideoEnabledWebChromeClient webChromeClient = new VideoEnabledWebChromeClient(nonVideoLayout,videoLayout,loadingView,web);
+        final VideoEnabledWebChromeClient webChromeClient = new VideoEnabledWebChromeClient(nonVideoLayout,videoLayout,loadingView,videoView);
 
         webChromeClient.setOnToggledFullscreen(new VideoEnabledWebChromeClient.ToggledFullscreenCallback()
         {
@@ -141,7 +140,9 @@ public class ArticleActivity extends AppCompatActivity implements IFeedArticleLo
                 // Your code to handle the full-screen change, for example showing and hiding the title bar. Example:
                 if (fullscreen)
                 {
-                    videoLayout.setVisibility(View.VISIBLE);
+                    getSupportActionBar().hide();
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_USER);
+
                     WindowManager.LayoutParams attrs = getWindow().getAttributes();
                     attrs.flags |= WindowManager.LayoutParams.FLAG_FULLSCREEN;
                     attrs.flags |= WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON;
@@ -154,7 +155,8 @@ public class ArticleActivity extends AppCompatActivity implements IFeedArticleLo
                 }
                 else
                 {
-
+                    getSupportActionBar().show();
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
                     WindowManager.LayoutParams attrs = getWindow().getAttributes();
                     attrs.flags &= ~WindowManager.LayoutParams.FLAG_FULLSCREEN;
                     attrs.flags &= ~WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON;
@@ -169,21 +171,24 @@ public class ArticleActivity extends AppCompatActivity implements IFeedArticleLo
             }
         });
 
-        web.setOnTouchListener(new View.OnTouchListener() {
+        videoView.setOnTouchListener(new View.OnTouchListener() {
 
             public boolean onTouch(View arg0, MotionEvent arg1) {
                 return false;
             }
         });
 
-        web.setWebChromeClient(webChromeClient);
-        web.setWebViewClient(new InsideWebViewClient());
+        videoView.setWebChromeClient(webChromeClient);
+        videoView.setWebViewClient(new InsideWebViewClient());
 
-        web.getSettings().setJavaScriptEnabled(true);
-        web.loadUrl(embedUrl);
+        videoView.getSettings().setJavaScriptEnabled(true);
+        videoView.loadUrl(embedUrl);
 
 
-        layout.addView(web,webViewParams);
+        layout.addView(videoView,webViewParams);
+
+
+
     }
 
     private class InsideWebViewClient extends WebViewClient {
@@ -194,5 +199,10 @@ public class ArticleActivity extends AppCompatActivity implements IFeedArticleLo
             view.loadUrl(url);
             return true;
         }
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
     }
 }
