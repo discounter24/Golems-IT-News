@@ -103,7 +103,7 @@ public class GolemFeedItem implements IFeedArticleLoadHandler {
 
 
 
-        if (article == null || article.getText().isEmpty() || article.PreviewImage == null) {
+        if (article == null || article.getText().isEmpty() || article.getPreviewImage() == null) {
 
             if (waitingImageHandlers.size() == 0 ) {
                 waitingImageHandlers.add(articleHandler);
@@ -122,7 +122,7 @@ public class GolemFeedItem implements IFeedArticleLoadHandler {
 
         } else {
             if (articleHandler!= null) {
-                articleHandler.ArticleImageLoaded(this, article.PreviewImage);
+                articleHandler.ArticleImagesLoaded(this, article.getImages());
                 articleHandler.ArticleTextReceived(this, article.getText());
 
                 for (String video : videos){
@@ -145,10 +145,10 @@ public class GolemFeedItem implements IFeedArticleLoadHandler {
     }
 
     @Override
-    public void ArticleImageLoaded(GolemFeedItem item, Bitmap image) {
+    public void ArticleImagesLoaded(GolemFeedItem item, LinkedList<GolemArticle.GolemImage> images) {
         for(IFeedArticleLoadHandler articleHandler : waitingImageHandlers){
             if (articleHandler != null){
-                articleHandler.ArticleImageLoaded(this,article.PreviewImage);
+                articleHandler.ArticleImagesLoaded(this,images);
             }
         }
         waitingImageHandlers.clear();

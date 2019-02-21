@@ -9,7 +9,6 @@ import android.graphics.Bitmap;
 import android.os.AsyncTask;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.LinkedList;
 
 import dtss.golemnews.utils.ImageUtil;
@@ -19,7 +18,8 @@ class GolemArticle{
 
     private final GolemFeedItem item;
     private final IFeedArticleLoadHandler articleHandler;
-    public Bitmap PreviewImage;
+
+
 
     public void setHtml(String html) {  this.html = html; }
 
@@ -32,7 +32,12 @@ class GolemArticle{
 
     private LinkedList<String> videos = new LinkedList<>();
 
-    private HashMap<String,Bitmap> HeroImages = new HashMap<>();
+    public LinkedList<GolemImage> getImages() {
+        return Images;
+    }
+
+    private  LinkedList<GolemImage> Images = new LinkedList<>();
+
 
 
     public GolemArticle(GolemFeedItem item, IFeedArticleLoadHandler articleHandler) {
@@ -51,13 +56,20 @@ class GolemArticle{
         return text;
     }
 
+    public GolemImage getPreviewImage(){
+        if (!Images.isEmpty()){
+            return Images.get(0);
+        }
+        return null;
+    }
+
     public void get(){
         new ArticleParseHeroImagesTask(articleHandler).execute(this);
         new ArticleParseTextTask(articleHandler).execute(this);
         new ArticleParseVideosTask(articleHandler).execute(this);
     }
 
-    private class ArticleParseHeroImagesTask extends AsyncTask<GolemArticle, Void, Bitmap> {
+    private class ArticleParseHeroImagesTask extends AsyncTask<GolemArticle, Void, Void> {
 
         private final IFeedArticleLoadHandler articleHandler;
         private GolemArticle article;
@@ -66,7 +78,7 @@ class GolemArticle{
             this.articleHandler = articleHandler;
         }
 
-        protected Bitmap doInBackground(GolemArticle... articles) {
+        protected Void doInBackground(GolemArticle... articles) {
             this.article = articles[0];
             try {
                 Document d;
@@ -81,10 +93,19 @@ class GolemArticle{
                 Element hero = heroes.first();
                 if (hero != null){
                     Elements images = hero.getElementsByTag("img");
-                    Element image = images.first();
-                    if (image != null){
-                        String imageLink = image.attr("src");
-                        return ImageUtil.loadImage(imageLink);
+                    Element imageElement = images.first();
+                    if (imageElement != null){
+                        String imageLink = imageElement.attr("src");
+
+                        Bitmap image = ImageUtil.loadImage(imageLink);
+                        String description = imageElement.attr("alt");
+                        String author = "";
+                        for(Element authorElement : hero.getElementsByClass("big-image-lic")){
+                            author = authorElement.text();
+                        }
+
+                        GolemImage gi = new GolemImage(imageLink,author,description,image);
+                        article.getImages().add(gi);
                     }
                 }
 
@@ -96,10 +117,11 @@ class GolemArticle{
             return null;
         }
 
-        protected void onPostExecute(Bitmap result) {
-            article.PreviewImage = result;
+        protected void onPostExecute(Void v) {
             if (articleHandler != null){
-                articleHandler.ArticleImageLoaded(article.item,result);
+                if (!getImages().isEmpty()){
+                    articleHandler.ArticleImagesLoaded(article.item,article.getImages());
+                }
             }
         }
     }
@@ -197,7 +219,10 @@ class GolemArticle{
                 //Unexpected failure
             }
             return null;
+
+
         }
+
 
         protected void onPostExecute(Void v) {
             if (articleHandler != null) {
@@ -206,6 +231,42 @@ class GolemArticle{
                 }
             }
         }
+
+
+
+    }
+
+
+    public class GolemImage {
+        private String link;
+        private String author;
+        private String description;
+        private Bitmap image;
+
+        public GolemImage(String link, String author, String description, Bitmap image){
+            this.link = link;
+            this.author = author;
+            this.description = description;
+            this.image = image;
+        }
+
+        public String getLink() {
+            return link;
+        }
+
+        public String getAuthor() {
+            return author;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+
+        public Bitmap getImage() {
+            return image;
+        }
+
+
     }
 
 

@@ -12,14 +12,21 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.webkit.WebChromeClient;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.LinkedList;
 import java.util.Objects;
+
+import dtss.golemnews.utils.VideoEnabledWebChromeClient;
+import dtss.golemnews.utils.VideoEnabledWebView;
 
 
 public class ArticleActivity extends AppCompatActivity implements IFeedArticleLoadHandler {
@@ -84,37 +91,83 @@ public class ArticleActivity extends AppCompatActivity implements IFeedArticleLo
         TextView articleText = findViewById(R.id.articleText);
         articleText.setText(text);
         ProgressBar bar = findViewById(R.id.progressBar);
-        bar.setVisibility(View.INVISIBLE);
+        bar.setVisibility(View.GONE);
     }
 
     @Override
-    public void ArticleImageLoaded(GolemFeedItem item, Bitmap image) {
-        if (image!=null){
+    public void ArticleImagesLoaded(GolemFeedItem item, LinkedList<GolemArticle.GolemImage> images) {
+        if (!images.isEmpty()){
+            GolemArticle.GolemImage previewImage = images.get(0);
             ImageView articlePictureView = findViewById(R.id.previewImage);
-            articlePictureView.setImageBitmap(image);
+            articlePictureView.setImageBitmap(previewImage.getImage());
             articlePictureView.setVisibility(View.VISIBLE);
+            TextView subtitle = findViewById(R.id.previewImageSubtitle);
+            subtitle.setTextSize(12);
+            subtitle.setText(previewImage.getDescription() + " " + previewImage.getAuthor());
+            subtitle.setVisibility(View.VISIBLE);
         }
     }
 
     @Override
     public void ArticleVideoFound(GolemFeedItem sender, String embedUrl) {
-        Toast t = Toast.makeText(getApplicationContext(),embedUrl,Toast.LENGTH_SHORT);
-        t.show();
+        //Toast t = Toast.makeText(getApplicationContext(),embedUrl,Toast.LENGTH_SHORT);
+        //t.show();
+
 
         final LinearLayout layout = findViewById(R.id.mainLayout);
 
+        TextView view = new TextView(this);
+        view.setTextSize(17);
+        view.setPadding(5,0,5,0);
+        view.setText("Videos zum aktuellen Artikel:");
 
 
-        final WebView web = new WebView(this);
-        web.getSettings().setJavaScriptEnabled(true);
-        final LinearLayout.LayoutParams webViewParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 800);
+        final VideoEnabledWebView web = new VideoEnabledWebView(this);
+        int height = (int)(getWindowManager().getDefaultDisplay().getWidth() * (9f/16));
+        LinearLayout.LayoutParams webViewParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height);
 
-        web.loadUrl(embedUrl);
-        web.getSettings().setJavaScriptEnabled(true);
-        //web.setInitialScale(1);
-        //web.getSettings().setUseWideViewPort(true);
-        //web.getSettings().setLoadWithOverviewMode(true);
-        layout.addView(web,webViewParams);
+        final ViewGroup videoLayout = findViewById(R.id.videoLayout);
+        final ViewGroup nonVideoLayout = findViewById(R.id.articleLayout);
+
+        View loadingView = getLayoutInflater().inflate(R.layout.view_loading_video, videoLayout);
+
+        VideoEnabledWebChromeClient webChromeClient = new VideoEnabledWebChromeClient(nonVideoLayout,videoLayout,loadingView,web);
+
+        webChromeClient.setOnToggledFullscreen(new VideoEnabledWebChromeClient.ToggledFullscreenCallback()
+        {
+            @Override
+            public void toggledFullscreen(boolean fullscreen)
+            {
+                // Your code to handle the full-screen change, for example showing and hiding the title bar. Example:
+                if (fullscreen)
+                {
+                    videoLayout.setVisibility(View.VISIBLE);
+                    WindowManager.LayoutParams attrs = getWindow().getAttributes();
+                    attrs.flags |= WindowManager.LayoutParams.FLAG_FULLSCREEN;
+                    attrs.flags |= WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON;
+                    getWindow().setAttributes(attrs);
+                    if (android.os.Build.VERSION.SDK_INT >= 14)
+                    {
+                        //noinspection all
+                        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
+                    }
+                }
+                else
+                {
+
+                    WindowManager.LayoutParams attrs = getWindow().getAttributes();
+                    attrs.flags &= ~WindowManager.LayoutParams.FLAG_FULLSCREEN;
+                    attrs.flags &= ~WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON;
+                    getWindow().setAttributes(attrs);
+                    if (android.os.Build.VERSION.SDK_INT >= 14)
+                    {
+                        //noinspection all
+                        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
+                    }
+                }
+
+            }
+        });
 
         web.setOnTouchListener(new View.OnTouchListener() {
 
@@ -122,7 +175,24 @@ public class ArticleActivity extends AppCompatActivity implements IFeedArticleLo
                 return false;
             }
         });
-        //web.setLayoutParams(webViewParams);
 
+        web.setWebChromeClient(webChromeClient);
+        web.setWebViewClient(new InsideWebViewClient());
+
+        web.getSettings().setJavaScriptEnabled(true);
+        web.loadUrl(embedUrl);
+
+
+        layout.addView(web,webViewParams);
+    }
+
+    private class InsideWebViewClient extends WebViewClient {
+        @Override
+        // Force links to be opened inside WebView and not in Default Browser
+        // Thanks http://stackoverflow.com/a/33681975/1815624
+        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+            view.loadUrl(url);
+            return true;
+        }
     }
 }

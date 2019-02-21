@@ -1,12 +1,12 @@
 package dtss.golemnews;
 
-import android.graphics.Bitmap;
+import java.util.LinkedList;
 
 @SuppressWarnings("unused")
 interface IFeedArticleLoadHandler {
 
     void ArticleTextReceived(GolemFeedItem sender, String text);
-    void ArticleImageLoaded(GolemFeedItem sender, Bitmap image);
+    void ArticleImagesLoaded(GolemFeedItem sender, LinkedList<GolemArticle.GolemImage> images);
     void ArticleVideoFound(GolemFeedItem sender, String embedUrl);
 
 }
