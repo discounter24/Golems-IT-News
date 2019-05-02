@@ -21,6 +21,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.beans.IndexedPropertyChangeEvent;
 import java.util.LinkedList;
 import java.util.Objects;
 
@@ -46,6 +47,8 @@ public class ArticleActivity extends AppCompatActivity implements IFeedArticleLo
 
         if (b != null){
             item = MainActivity.feed.getItemByGuid((String) b.get("guid"));
+        } else {
+            finish();
         }
 
 
