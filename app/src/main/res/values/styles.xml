@@ -7,6 +7,7 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:colorBackground">@color/colorBackgroundLight</item>
         <item name="android:textColorPrimary">@color/descriptionColorLight</item>
+        <item name="android:textColorSecondary">@color/descriptionColorLight</item>
     </style>
 
 
@@ -16,7 +17,9 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:colorBackground">@color/colorBackgroundDark</item>
         <item name="android:textColorPrimary">@color/descriptionColorDark</item>
+        <item name="android:textColorSecondary">@color/descriptionColorDark</item>
         <item name="android:listDivider">@color/listDividerDark</item>
+
     </style>
 
 </resources>

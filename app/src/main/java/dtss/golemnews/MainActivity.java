@@ -83,13 +83,13 @@ public class MainActivity extends AppCompatActivity implements IFeedLoadHandler,
     @Override
     public void onResume() {
         super.onResume();
-        sharedPreferences.registerOnSharedPreferenceChangeListener(this);
+        //sharedPreferences.registerOnSharedPreferenceChangeListener(this);
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        sharedPreferences.unregisterOnSharedPreferenceChangeListener(this);
+        //sharedPreferences.unregisterOnSharedPreferenceChangeListener(this);
     }
 
     private void reload(){
@@ -138,7 +138,7 @@ public class MainActivity extends AppCompatActivity implements IFeedLoadHandler,
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         if (key.equals("appThemePref")) {
-            updateTheme(sharedPreferences);
+            recreate();
         }
     }
 
@@ -155,6 +155,7 @@ public class MainActivity extends AppCompatActivity implements IFeedLoadHandler,
                 setTheme(R.style.AppTheme);
                 break;
         }
+
     }
 
 }
