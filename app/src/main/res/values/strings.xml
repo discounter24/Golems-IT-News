@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Golem IT-News</string>
     <string name="action_reload">Reload</string>
+    <string name="generalSettings">General</string>
+    <string name="appTheme">App Theme</string>
+    <string name="appThemeSummury">Ändert das Appdesign</string>
 </resources>

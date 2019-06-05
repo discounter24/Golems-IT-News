@@ -1,7 +1,9 @@
 package dtss.golemnews;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.preference.PreferenceManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -13,7 +15,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
-public class MainActivity extends AppCompatActivity implements IFeedLoadHandler {
+public class MainActivity extends AppCompatActivity implements IFeedLoadHandler, SharedPreferences.OnSharedPreferenceChangeListener {
 
     private CustomFeedAdapter adapter;
     public static GolemFeed feed;
@@ -22,13 +24,19 @@ public class MainActivity extends AppCompatActivity implements IFeedLoadHandler 
     private ProgressBar progressBar;
     private SwipeRefreshLayout swipeRefreshLayout;
 
+    private SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this /* Activity context */);
+        sharedPreferences.registerOnSharedPreferenceChangeListener(this);
+        updateTheme(sharedPreferences);
+
 
         ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
@@ -54,12 +62,6 @@ public class MainActivity extends AppCompatActivity implements IFeedLoadHandler 
                 GolemFeedItem clicked = adapter.data[position];
 
                 Bundle b = new Bundle();
-                /*b.putString("title",clicked.getTitle());
-                b.putString("description",clicked.getDescription());
-                b.putString("article_link",clicked.getLink());
-                b.putString("image_link",clicked.getPreviewImageLink());
-                b.putString("pubDate",clicked.getPubDate().toString());
-                */
                 b.putString("guid",clicked.getGuid());
                 intent.putExtras(b);
                 startActivity(intent);
@@ -72,9 +74,23 @@ public class MainActivity extends AppCompatActivity implements IFeedLoadHandler 
         adapter = new CustomFeedAdapter(this,  new GolemFeedItem[]{});
         listView.setAdapter(adapter);
 
+
+
         reload();
     }
 
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        sharedPreferences.registerOnSharedPreferenceChangeListener(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        sharedPreferences.unregisterOnSharedPreferenceChangeListener(this);
+    }
 
     private void reload(){
         listView.setVisibility(View.INVISIBLE);
@@ -84,7 +100,7 @@ public class MainActivity extends AppCompatActivity implements IFeedLoadHandler 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        //getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
@@ -92,7 +108,11 @@ public class MainActivity extends AppCompatActivity implements IFeedLoadHandler 
     public boolean onOptionsItemSelected(MenuItem item) {
 
         switch (item.getItemId()) {
-            case R.id.reload:
+            case R.id.Settings:
+                Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.Reload:
                 reload();
                 break;
         }
@@ -112,6 +132,29 @@ public class MainActivity extends AppCompatActivity implements IFeedLoadHandler 
     @Override
     public void FeedPreviewImageLoaded(GolemFeedItem sender, Bitmap image) {
         adapter.notifyDataSetChanged();
+    }
+
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        if (key.equals("appThemePref")) {
+            updateTheme(sharedPreferences);
+        }
+    }
+
+    public void updateTheme(SharedPreferences sharedPreferences){
+        String appTheme = sharedPreferences.getString("appThemePref", "system");
+        //Toast.makeText(this,appTheme,Toast.LENGTH_LONG);
+        switch (appTheme){
+            case "system":
+                break;
+            case "dark":
+                setTheme(R.style.AppThemeDark);
+                break;
+            case "light":
+                setTheme(R.style.AppTheme);
+                break;
+        }
     }
 
 }

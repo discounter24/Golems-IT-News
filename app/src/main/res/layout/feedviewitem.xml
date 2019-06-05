@@ -3,7 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="?android:colorBackground"
+    >
 
     <TextView
         android:id="@+id/articleTitle"
@@ -70,7 +72,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Date"
-        android:textColor="@color/dateColor"
+        android:textColor="@color/dateColorDark"
         android:textSize="12sp"
         android:textStyle="italic" />
 

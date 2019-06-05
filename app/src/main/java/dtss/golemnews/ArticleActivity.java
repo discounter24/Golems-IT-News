@@ -1,10 +1,12 @@
 package dtss.golemnews;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -19,9 +21,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import java.beans.IndexedPropertyChangeEvent;
 import java.util.LinkedList;
 import java.util.Objects;
 
@@ -29,16 +28,20 @@ import dtss.golemnews.utils.VideoEnabledWebChromeClient;
 import dtss.golemnews.utils.VideoEnabledWebView;
 
 
-public class ArticleActivity extends AppCompatActivity implements IFeedArticleLoadHandler {
+public class ArticleActivity extends AppCompatActivity implements IFeedArticleLoadHandler, SharedPreferences.OnSharedPreferenceChangeListener {
 
 
     private GolemFeedItem item;
+    private SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_article);
 
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this /* Activity context */);
+        sharedPreferences.registerOnSharedPreferenceChangeListener(this);
+        updateTheme(sharedPreferences);
 
         ActionBar actionBar = getSupportActionBar();
         Objects.requireNonNull(actionBar).setDisplayHomeAsUpEnabled(true);
@@ -208,5 +211,39 @@ public class ArticleActivity extends AppCompatActivity implements IFeedArticleLo
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        sharedPreferences.registerOnSharedPreferenceChangeListener(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        sharedPreferences.unregisterOnSharedPreferenceChangeListener(this);
+    }
+
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        if (key.equals("appThemePref")) {
+            updateTheme(sharedPreferences);
+        }
+    }
+
+    public void updateTheme(SharedPreferences sharedPreferences){
+        String appTheme = sharedPreferences.getString("appThemePref", "system");
+        //Toast.makeText(this,appTheme,Toast.LENGTH_LONG);
+        switch (appTheme){
+            case "system":
+                break;
+            case "dark":
+                setTheme(R.style.AppThemeDark);
+                break;
+            case "light":
+                setTheme(R.style.AppTheme);
+                break;
+        }
     }
 }

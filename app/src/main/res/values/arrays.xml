@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="darkModeOptions">
+        <item>system</item>
+        <item>dark</item>
+        <item>light</item>
+    </string-array>
+
+    <string-array name="darkModeOptionValues">
+        <item>Set by system (default)</item>
+        <item>Dark Theme</item>
+        <item>Light Theme</item>
+    </string-array>
+</resources>

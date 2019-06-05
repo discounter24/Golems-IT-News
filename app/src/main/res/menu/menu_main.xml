@@ -4,10 +4,16 @@
 
 
     <item
-        android:id="@+id/reload"
-        android:title="@string/action_reload"
-        android:icon="@drawable/ic_reload_white"
-        app:showAsAction="always"
+        android:id="@+id/Settings"
+        android:title="Einstellungen"
+        android:icon="@drawable/ic_settings"
+        app:showAsAction="withText"
+        />
+    <item
+        android:id="@+id/Reload"
+        android:title="Neu laden"
+        android:icon="@drawable/ic_settings"
+        app:showAsAction="withText"
         />
 
 </menu>

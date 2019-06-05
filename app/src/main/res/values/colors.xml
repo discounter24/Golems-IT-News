@@ -1,8 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <!-- ALL base activity theme -->
+    <color name="colorAccent">#0D2083</color>
     <color name="colorPrimary">#080e33</color>
-    <color name="colorPrimaryDark">#080e33</color>
-    <color name="colorAccent">#FF4081</color>
-    <color name="dateColor">#000000</color>
-    <color name="descriptionColor">#444444</color>
+
+    <!-- Light base activity theme -->
+    <color name="colorBackgroundLight">#FFFFFF</color>
+    <color name="descriptionColorLight">#222222</color>
+    <color name="dateColorLight">#000000</color>
+
+
+
+    <!-- Dark base activity theme -->
+    <color name="colorBackgroundDark">#2C2C2C</color>
+    <color name="descriptionColorDark">#E9E9E9</color>
+    <color name="dateColorDark">#797979</color>
+    <color name="listDividerDark">#414141</color>
+
 </resources>
