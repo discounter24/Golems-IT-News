@@ -5,19 +5,19 @@
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:colorBackground">@color/colorBackgroundLight</item>
-        <item name="android:textColorPrimary">@color/descriptionColorLight</item>
-        <item name="android:textColorSecondary">@color/descriptionColorLight</item>
+        <item name="android:colorBackground">@color/colorBackground</item>
+        <item name="android:textColorPrimary">@color/textColorPrimary</item>
+        <item name="android:textColorSecondary">@color/textColorSecondary</item>
     </style>
 
 
-    <style name="AppThemeDark" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme.AppThemeDark">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorAccent">@color/colorAccentDark</item>
         <item name="android:colorBackground">@color/colorBackgroundDark</item>
-        <item name="android:textColorPrimary">@color/descriptionColorDark</item>
-        <item name="android:textColorSecondary">@color/descriptionColorDark</item>
+        <item name="android:textColorPrimary">@color/textColorPrimaryDark</item>
+        <item name="android:textColorSecondary">@color/textColorSecondaryDark</item>
         <item name="android:listDivider">@color/listDividerDark</item>
 
     </style>

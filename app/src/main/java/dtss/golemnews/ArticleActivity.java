@@ -6,11 +6,8 @@ import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -25,8 +22,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import java.util.LinkedList;
 import java.util.Objects;
-import android.support.v7.widget.ShareActionProvider;
 
+import dtss.golemnews.utils.ThemeUtils;
 import dtss.golemnews.utils.VideoEnabledWebChromeClient;
 import dtss.golemnews.utils.VideoEnabledWebView;
 
@@ -35,16 +32,17 @@ public class ArticleActivity extends AppCompatActivity implements IFeedArticleLo
 
 
     private GolemFeedItem item;
-    private SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        ThemeUtils.updateTheme(this);
+        ThemeUtils.sharedPreferences.registerOnSharedPreferenceChangeListener(this);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_article);
 
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this /* Activity context */);
-        sharedPreferences.registerOnSharedPreferenceChangeListener(this);
-        updateTheme(sharedPreferences);
+
 
         ActionBar actionBar = getSupportActionBar();
         Objects.requireNonNull(actionBar).setDisplayHomeAsUpEnabled(true);
@@ -76,7 +74,7 @@ public class ArticleActivity extends AppCompatActivity implements IFeedArticleLo
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_article, menu);
-        
+
 
         return true;
     }
@@ -224,6 +222,9 @@ public class ArticleActivity extends AppCompatActivity implements IFeedArticleLo
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
+        if (ThemeUtils.isSystemControlled()){
+            recreate();
+        }
     }
 
 
@@ -241,22 +242,7 @@ public class ArticleActivity extends AppCompatActivity implements IFeedArticleLo
 
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         if (key.equals("appThemePref")) {
-            updateTheme(sharedPreferences);
-        }
-    }
-
-    public void updateTheme(SharedPreferences sharedPreferences){
-        String appTheme = sharedPreferences.getString("appThemePref", "system");
-        //Toast.makeText(this,appTheme,Toast.LENGTH_LONG);
-        switch (appTheme){
-            case "system":
-                break;
-            case "dark":
-                setTheme(R.style.AppThemeDark);
-                break;
-            case "light":
-                setTheme(R.style.AppTheme);
-                break;
+            recreate();
         }
     }
 }

@@ -1,6 +1,9 @@
 package dtss.golemnews;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.ListPreference;
+import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.content.res.Configuration;
 import android.support.annotation.LayoutRes;
@@ -13,11 +16,24 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.preference.PreferenceActivity;
 
-public class SettingsActivity extends PreferenceActivity {
+import dtss.golemnews.utils.ThemeUtils;
+
+public class SettingsActivity extends PreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     private AppCompatDelegate mDelegate;
 
     protected void onCreate(Bundle savedInstanceState) {
+
+        ThemeUtils.updateTheme(this);
+        ThemeUtils.sharedPreferences.registerOnSharedPreferenceChangeListener(this);
+
+        Preference pref = findPreference("appThemePref");
+
+        if (pref instanceof ListPreference) {
+            ListPreference listPref = (ListPreference) pref;
+            pref.setSummary(listPref.getEntry());
+        }
+
         getDelegate().installViewFactory();
         getDelegate().onCreate(savedInstanceState);
 
@@ -26,7 +42,11 @@ public class SettingsActivity extends PreferenceActivity {
 
         getFragmentManager().beginTransaction().replace(android.R.id.content, new MainSettingsFragment()).commit();
 
+
+
     }
+
+
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
@@ -73,6 +93,9 @@ public class SettingsActivity extends PreferenceActivity {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         getDelegate().onConfigurationChanged(newConfig);
+        if (ThemeUtils.isSystemControlled()){
+            recreate();
+        }
     }
     @Override
     protected void onStop() {
@@ -100,8 +123,23 @@ public class SettingsActivity extends PreferenceActivity {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.preferences);
         }
-
     }
+
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        if (key.equals("appThemePref")) {
+            recreate();
+            Preference pref = findPreference(key);
+
+            if (pref instanceof ListPreference) {
+                ListPreference listPref = (ListPreference) pref;
+                pref.setSummary(listPref.getEntry());
+            }
+        }
+    }
+
+
 
 
 }

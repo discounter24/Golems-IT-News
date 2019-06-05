@@ -70,7 +70,7 @@
         android:layout_width="match_parent"
         android:layout_height="15dp"
         android:text="Date"
-        android:textColor="@color/dateColorDark"
+        android:textColor="?android:textColorSecondary"
         android:textSize="12sp"
         android:textStyle="italic"
         android:gravity="right"

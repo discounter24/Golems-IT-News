@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="pageBackground_TEST" format="reference" />
+    <attr name="articlePictureSubtitle" format="reference" />
+
+</resources>

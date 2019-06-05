@@ -19,10 +19,10 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity" android:configChanges="uiMode">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -30,7 +30,7 @@
         <activity
             android:name=".ArticleActivity"
             android:parentActivityName=".ArticleActivity"
-            android:configChanges="orientation|screenSize">
+            android:configChanges="orientation|screenSize|uiMode">
             <intent-filter>
                 <action android:name="android.intent.action.DEFAULT" />
             </intent-filter>
@@ -39,7 +39,9 @@
         <activity
             android:name=".SettingsActivity"
             android:parentActivityName=".SettingsActivity"
-            android:configChanges="orientation|screenSize">
+            android:configChanges="orientation|screenSize|uiMode"
+
+            >
             <intent-filter>
                 <action android:name="android.intent.action.DEFAULT" />
             </intent-filter>

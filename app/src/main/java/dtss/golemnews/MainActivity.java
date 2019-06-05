@@ -2,6 +2,7 @@ package dtss.golemnews;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.preference.PreferenceManager;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -15,6 +16,8 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
+import dtss.golemnews.utils.ThemeUtils;
+
 public class MainActivity extends AppCompatActivity implements IFeedLoadHandler, SharedPreferences.OnSharedPreferenceChangeListener {
 
     private CustomFeedAdapter adapter;
@@ -24,18 +27,24 @@ public class MainActivity extends AppCompatActivity implements IFeedLoadHandler,
     private ProgressBar progressBar;
     private SwipeRefreshLayout swipeRefreshLayout;
 
-    private SharedPreferences sharedPreferences;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
 
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this /* Activity context */);
-        sharedPreferences.registerOnSharedPreferenceChangeListener(this);
-        updateTheme(sharedPreferences);
+        if (ThemeUtils.sharedPreferences == null){
+            ThemeUtils.sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        }
+
+        ThemeUtils.updateTheme(this);
+        ThemeUtils.sharedPreferences.registerOnSharedPreferenceChangeListener(this);
+
+
+        ThemeUtils.updateTheme(this);
+        ThemeUtils.sharedPreferences.registerOnSharedPreferenceChangeListener(this);
 
 
         ActionBar actionBar = getSupportActionBar();
@@ -119,6 +128,13 @@ public class MainActivity extends AppCompatActivity implements IFeedLoadHandler,
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onConfigurationChanged(Configuration configuration) {
+        super.onConfigurationChanged(configuration);
+        if (ThemeUtils.isSystemControlled()){
+            recreate();
+        }
+    }
 
     @Override
     public void FeedItemListLoaded(GolemFeedLoadTask.GolemFeedLoadTaskResult result, GolemFeed feed) {
@@ -140,22 +156,6 @@ public class MainActivity extends AppCompatActivity implements IFeedLoadHandler,
         if (key.equals("appThemePref")) {
             recreate();
         }
-    }
-
-    public void updateTheme(SharedPreferences sharedPreferences){
-        String appTheme = sharedPreferences.getString("appThemePref", "system");
-        //Toast.makeText(this,appTheme,Toast.LENGTH_LONG);
-        switch (appTheme){
-            case "system":
-                break;
-            case "dark":
-                setTheme(R.style.AppThemeDark);
-                break;
-            case "light":
-                setTheme(R.style.AppTheme);
-                break;
-        }
-
     }
 
 }

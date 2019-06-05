@@ -2,20 +2,21 @@
 <resources>
 
     <!-- ALL base activity theme -->
-    <color name="colorAccent">#0D2083</color>
+
     <color name="colorPrimary">#080e33</color>
 
     <!-- Light base activity theme -->
-    <color name="colorBackgroundLight">#FFFFFF</color>
-    <color name="descriptionColorLight">#222222</color>
-    <color name="dateColorLight">#000000</color>
-
+    <color name="colorAccent">#0D2083</color>
+    <color name="colorBackground">#FFFFFF</color>
+    <color name="textColorPrimary">#000000</color>
+    <color name="textColorSecondary">#88272727</color>
 
 
     <!-- Dark base activity theme -->
-    <color name="colorBackgroundDark">#2C2C2C</color>
-    <color name="descriptionColorDark">#E9E9E9</color>
-    <color name="dateColorDark">#797979</color>
-    <color name="listDividerDark">#414141</color>
+    <color name="colorAccentDark">#03A9F4</color>
+    <color name="colorBackgroundDark">#131313</color>
+    <color name="textColorPrimaryDark">#E9E9E9</color>
+    <color name="textColorSecondaryDark">#CFCFCF</color>
+    <color name="listDividerDark">#2C2C2C</color>
 
 </resources>

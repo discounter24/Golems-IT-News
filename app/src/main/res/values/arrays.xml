@@ -7,8 +7,8 @@
     </string-array>
 
     <string-array name="darkModeOptionValues">
-        <item>Set by system (default)</item>
-        <item>Dark Theme</item>
-        <item>Light Theme</item>
+        <item>System (Standard)</item>
+        <item>Dunkel</item>
+        <item>Hell</item>
     </string-array>
 </resources>
