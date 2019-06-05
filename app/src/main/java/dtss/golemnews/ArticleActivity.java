@@ -7,8 +7,10 @@ import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -23,6 +25,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import java.util.LinkedList;
 import java.util.Objects;
+import android.support.v7.widget.ShareActionProvider;
 
 import dtss.golemnews.utils.VideoEnabledWebChromeClient;
 import dtss.golemnews.utils.VideoEnabledWebView;
@@ -73,6 +76,8 @@ public class ArticleActivity extends AppCompatActivity implements IFeedArticleLo
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_article, menu);
+        
+
         return true;
     }
 
@@ -83,6 +88,14 @@ public class ArticleActivity extends AppCompatActivity implements IFeedArticleLo
             case R.id.link:
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(this.item.getLink()));
                 startActivity(browserIntent);
+                break;
+            case R.id.share:
+                Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+                sharingIntent.setType("text/plain");
+                String shareBodyText = "Sieh dir mal diesen Artikel auf Golem.de an: " + this.item.getLink();
+                //sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT,"Subject");
+                sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBodyText);
+                startActivity(Intent.createChooser(sharingIntent, "Shearing Option"));
                 break;
         }
         return super.onOptionsItemSelected(item);

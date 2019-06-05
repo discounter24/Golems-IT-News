@@ -4,4 +4,6 @@
     <string name="generalSettings">General</string>
     <string name="appTheme">App Theme</string>
     <string name="appThemeSummury">Ändert das Appdesign</string>
+    <string name="link">Link</string>
+    <string name="share">Teilen</string>
 </resources>
