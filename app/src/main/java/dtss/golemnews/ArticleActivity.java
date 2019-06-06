@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
+import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -43,7 +44,6 @@ public class ArticleActivity extends AppCompatActivity implements IFeedArticleLo
         setContentView(R.layout.activity_article);
 
 
-
         ActionBar actionBar = getSupportActionBar();
         Objects.requireNonNull(actionBar).setDisplayHomeAsUpEnabled(true);
 
@@ -74,8 +74,6 @@ public class ArticleActivity extends AppCompatActivity implements IFeedArticleLo
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_article, menu);
-
-
         return true;
     }
 
@@ -129,6 +127,7 @@ public class ArticleActivity extends AppCompatActivity implements IFeedArticleLo
 
 
         final LinearLayout layout = findViewById(R.id.mainLayout);
+
 
         TextView textView = new TextView(this);
         textView.setTextSize(17);
@@ -206,8 +205,9 @@ public class ArticleActivity extends AppCompatActivity implements IFeedArticleLo
         layout.addView(videoView,webViewParams);
 
 
-
     }
+
+
 
     private class InsideWebViewClient extends WebViewClient {
         @Override

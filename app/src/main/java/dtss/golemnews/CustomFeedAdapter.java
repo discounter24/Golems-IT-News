@@ -2,6 +2,7 @@ package dtss.golemnews;
 
 import android.content.Context;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -15,10 +16,13 @@ class CustomFeedAdapter extends BaseAdapter {
 
 
     final Context context;
-    GolemFeedItem[] data;
+    public GolemFeedItem[] data;
     private  static LayoutInflater inflater = null;
+    public View.OnTouchListener touchListener;
 
-    public CustomFeedAdapter(Context context, GolemFeedItem[] data){
+
+    public CustomFeedAdapter(Context context, GolemFeedItem[] data, View.OnTouchListener touchListener){
+        this.touchListener = touchListener;
         this.context=context;
         this.data=data;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -48,6 +52,9 @@ class CustomFeedAdapter extends BaseAdapter {
         TextView description = vi.findViewById(R.id.itemdescription);
         ImageView preview = vi.findViewById(R.id.preview);
         TextView dateView = vi.findViewById(R.id.dateView);
+
+        //Funktioniert leider nicht so wie gedacht
+        //vi.setOnTouchListener(touchListener);
 
         title.setText(data[position].getTitle());
         description.setText(data[position].getDescription());

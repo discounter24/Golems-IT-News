@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
+import android.graphics.Rect;
 import android.preference.PreferenceManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
@@ -11,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -26,6 +28,7 @@ public class MainActivity extends AppCompatActivity implements IFeedLoadHandler,
     private ListView listView;
     private ProgressBar progressBar;
     private SwipeRefreshLayout swipeRefreshLayout;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,16 +80,44 @@ public class MainActivity extends AppCompatActivity implements IFeedLoadHandler,
             }
         });
 
+
         feed = new GolemFeed(this);
 
 
-        adapter = new CustomFeedAdapter(this,  new GolemFeedItem[]{});
-        listView.setAdapter(adapter);
+        adapter = new CustomFeedAdapter(this,  new GolemFeedItem[]{},new OnSwipeTouchListener(MainActivity.this) {
+            @Override
+            public void onSwipeRight(MotionEvent e1, MotionEvent e2) {
 
+
+                Rect rect = new Rect();
+                int childCount = listView.getChildCount();
+                int[] listViewCoords = new int[2];
+                listView.getLocationOnScreen(listViewCoords);
+                int x = (int) e1.getRawX() - listViewCoords[0];
+                int y = (int) e1.getRawY() - listViewCoords[1];
+                View touchedView = null;
+                View child;
+                for (int i = 0; i < childCount; i++) {
+                    child = listView.getChildAt(i);
+                    child.getHitRect(rect);
+                    if (rect.contains(x, y)) {
+                        touchedView = child; // This is your down view
+                        break;
+                    }
+                }
+
+                touchedView.callOnClick();
+
+            }
+
+        });
+        listView.setAdapter(adapter);
 
 
         reload();
     }
+
+
 
 
     @Override
@@ -143,6 +174,7 @@ public class MainActivity extends AppCompatActivity implements IFeedLoadHandler,
         listView.setVisibility(View.VISIBLE);
         progressBar.setVisibility(View.INVISIBLE);
         swipeRefreshLayout.setRefreshing(false);
+
     }
 
     @Override
