@@ -14,10 +14,13 @@ public abstract class ThemeUtils {
 
 
     public static boolean isSystemControlled(){
+        if (sharedPreferences == null) return  true;
+
         return sharedPreferences.getString("appThemePref", "system").equalsIgnoreCase("system");
     }
 
     public static boolean isNightMode(Activity activity){
+        if (sharedPreferences == null) return false;
         String appTheme = sharedPreferences.getString("appThemePref", "system");
         if (appTheme.equalsIgnoreCase("dark")){
             return true;
