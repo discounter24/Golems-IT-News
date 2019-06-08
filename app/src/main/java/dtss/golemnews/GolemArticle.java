@@ -9,14 +9,17 @@ import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.util.LinkedList;
-import java.util.function.Predicate;
 
 class GolemArticle{
     private final GolemFeedItem item;
 
     private boolean pagesSearchCompleted;
+    private boolean loading;
+    private boolean fullyLoaded;
 
     public LinkedList<GolemArticlePage> pages;
+    public LinkedList<ArticleFullyLoadedHandler> waitingForLoaded;
+
     private String html;
 
     public GolemArticle(GolemFeedItem item) {
@@ -25,6 +28,9 @@ class GolemArticle{
         this.pages.add(new GolemArticlePage(item.getLink()));
         this.html = "";
         this.pagesSearchCompleted = false;
+        this.fullyLoaded = false;
+        this.loading = false;
+        this.waitingForLoaded = new LinkedList<>();
     }
 
 
@@ -46,50 +52,76 @@ class GolemArticle{
     }
 
     public void loadAll(final ArticleFullyLoadedHandler handler){
-        searchArticlePages(new IArticlePageFound() {
+        if (fullyLoaded){
+            handler.onArticleLoaded();
+        } else {
+            waitingForLoaded.add(handler);
+            if (!loading){
+                loading = true;
+                searchArticlePages(new IArticlePageFound() {
 
-            @Override
-            public void onArticlePageFound(GolemArticlePage page) {
+                    @Override
+                    public void onArticlePageFound(GolemArticlePage page) {
 
-            }
+                    }
 
-            @Override
-            public void onPageSearchComplete() {
+                    @Override
+                    public void onPageSearchComplete() {
 
-                waitFor = 3 * getPages().size();
-                for (GolemArticlePage page : getPages()) {
-                    IPageHandler handler = new IPageHandler() {
-                        @Override
-                        public void onTextReceived(GolemArticlePage sender, String text) {
-                            loadComplete();
+                        waitFor = getPages().size();
+                        for (GolemArticlePage page : getPages()) {
+                            IPageHandler handler = new IPageHandler() {
+
+                                int waitFor = 3;
+                                @Override
+                                public void onTextReceived(GolemArticlePage sender, String text) {
+                                    loaded();
+                                }
+
+                                @Override
+                                public void onImagesReceived(GolemArticlePage sender, LinkedList<GolemImage> images) {
+                                    loaded();
+                                }
+
+                                @Override
+                                public void onVideosReceived(GolemArticlePage sender, LinkedList<String> videos) {
+                                    loaded();
+                                }
+
+                                private void loaded(){
+                                    waitFor--;
+                                    if (waitFor==0){
+                                        onArticleLoaded();
+                                    }
+                                }
+                            };
+
+                            page.requestVideos(handler);
+                            page.requestText(handler);
+                            page.requestImages(handler);
                         }
 
-                        @Override
-                        public void onImagesReceived(GolemArticlePage sender, LinkedList<GolemImage> images) {
-                            loadComplete();
+                    }
+
+                    int waitFor;
+                    private void onArticleLoaded(){
+                        waitFor--;
+                        if (waitFor == 0){
+                            fullyLoaded = true;
+                            loading = false;
+                            for(ArticleFullyLoadedHandler h : waitingForLoaded){
+                                h.onArticleLoaded();
+                            }
                         }
-
-                        @Override
-                        public void onVideosReceived(GolemArticlePage sender, LinkedList<String> videos) {
-                            loadComplete();
-                        }
-                    };
-
-                    page.requestVideos(handler);
-                    page.requestText(handler);
-                    page.requestImages(handler);
-                }
-
+                    }
+                });
             }
 
-            int waitFor;
-            private void loadComplete(){
-                waitFor--;
-                if (waitFor == 0){
-                    handler.onArticleLoaded();
-                }
-            }
-        });
+
+        }
+
+
+
     }
 
 

@@ -15,6 +15,16 @@
             android:entryValues="@array/darkModeOptions"
             />
 
+        <ListPreference
+            android:id="@+id/appPreloadPref"
+            android:key="appPreloadPref"
+            android:title="Artikel preloading"
+            android:summary="Artikel bereits beim Öffnen der App herunterladen"
+            android:defaultValue="wifi"
+            android:entries="@array/preloadOptionValues"
+            android:entryValues="@array/preloadOptions"
+            />
+
     </PreferenceCategory>
 
 

@@ -14,28 +14,61 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="303dp"
         android:indeterminate="false"
-        tools:visibility="visible" />
+        tools:visibility="gone"
+        android:progressTint="?attr/colorAccent"
+        />
 
 
-    <android.support.v4.widget.SwipeRefreshLayout
+    <TextView
+        android:id="@+id/loadingStateRSS"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:layout_below="@id/AnimationLoader"
+        android:layout_centerHorizontal="true"
+        android:visibility="gone"
+        />
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/swipeRefresh">
+        android:orientation="vertical">
 
-
-        <ListView
-            android:id="@+id/FeedView"
+        <TextView
+            android:id="@+id/loadingStateArticle"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginTop="0dp"
-            android:visibility="visible"
-            android:background="?android:colorBackground"
-            android:divider="?android:listDivider"
-            ></ListView>
+            android:layout_height="wrap_content"
+            android:text="" />
 
-    </android.support.v4.widget.SwipeRefreshLayout>
+        <ProgressBar
+            android:id="@+id/articlePreloadProgress"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="15dp"
+            android:max="100"
+            android:progress="0" />
+
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/swipeRefresh"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:visibility="visible">
+
+
+            <ListView
+                android:id="@+id/FeedView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="0dp"
+                android:layout_weight="5"
+                android:background="?android:colorBackground"
+                android:divider="?android:listDivider"
+                android:visibility="visible">
+
+            </ListView>
+
+        </android.support.v4.widget.SwipeRefreshLayout>
+    </LinearLayout>
 
 
 </RelativeLayout>

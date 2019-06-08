@@ -1,15 +1,19 @@
 package dtss.golemnews;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.preference.PreferenceManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -17,6 +21,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import dtss.golemnews.utils.ThemeUtils;
 
@@ -26,13 +31,16 @@ public class MainActivity extends AppCompatActivity implements IFeedLoadHandler,
     public static GolemFeed feed;
 
     private ListView listView;
-    private ProgressBar progressBar;
-    private SwipeRefreshLayout swipeRefreshLayout;
 
+    private ProgressBar progressBar;
+    private ProgressBar progressBarArticle;
+
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private TextView loadingStateRSS;
+    private TextView loadingStateArticle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
 
 
         super.onCreate(savedInstanceState);
@@ -56,11 +64,18 @@ public class MainActivity extends AppCompatActivity implements IFeedLoadHandler,
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                feed.updateListItems();
+                reload();
             }
         });
 
-        progressBar = findViewById((R.id.AnimationLoader));
+        progressBar = findViewById(R.id.AnimationLoader);
+        loadingStateRSS = findViewById(R.id.loadingStateRSS);
+
+        loadingStateArticle = findViewById(R.id.loadingStateArticle);
+        progressBarArticle = findViewById(R.id.articlePreloadProgress);
+
+        loadingStateArticle.setVisibility(View.GONE);
+        progressBarArticle.setVisibility(View.GONE);
 
         listView = findViewById(R.id.FeedView);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -131,6 +146,9 @@ public class MainActivity extends AppCompatActivity implements IFeedLoadHandler,
     private void reload(){
         listView.setVisibility(View.INVISIBLE);
         progressBar.setVisibility(View.VISIBLE);
+        loadingStateRSS.setVisibility(View.VISIBLE);
+        loadingStateRSS.setText("Lade RSS feed..");
+
         feed.updateListItems();
     }
 
@@ -164,14 +182,65 @@ public class MainActivity extends AppCompatActivity implements IFeedLoadHandler,
     }
 
     @Override
-    public void FeedItemListLoaded(GolemFeedLoadTask.GolemFeedLoadTaskResult result, GolemFeed feed) {
+    public void FeedItemListLoaded(GolemFeedLoadTask.GolemFeedLoadTaskResult result, final GolemFeed feed) {
         adapter.data = feed.getFeedItems().toArray(new GolemFeedItem[feed.getFeedItems().size()]);
         adapter.notifyDataSetChanged();
+
         listView.setVisibility(View.VISIBLE);
-        progressBar.setVisibility(View.INVISIBLE);
+        progressBar.setVisibility(View.GONE);
+        loadingStateRSS.setVisibility(View.GONE);
         swipeRefreshLayout.setRefreshing(false);
 
+
+        try{
+            String preloadSetting = ThemeUtils.sharedPreferences.getString("appPreloadPref","wifi");
+
+            if ((preloadSetting.equalsIgnoreCase("wifi") && checkWifiOnAndConnected()) || preloadSetting.equalsIgnoreCase("always")){
+                preload();
+            } else {
+                loadingStateArticle.setVisibility(View.GONE);
+                progressBarArticle.setVisibility(View.GONE);
+            }
+        } catch (Exception ex) {
+            Log.d("MAIN_ACTIVITY",ex.toString());
+        }
     }
+
+    public void preload(){
+        final ProgressBar bar = findViewById(R.id.articlePreloadProgress);
+        final TextView loadingStateArtikel = findViewById(R.id.loadingStateArticle);
+
+
+        GolemArticle.ArticleFullyLoadedHandler loadHandler = new GolemArticle.ArticleFullyLoadedHandler() {
+            int loadedArticles = 0;
+
+            @Override
+            public void onArticleLoaded() {
+                loadedArticles++;
+
+                if (android.os.Build.VERSION.SDK_INT >= 24) {
+                    bar.setProgress(loadedArticles,true);
+                } else {
+                    bar.setProgress(loadedArticles);
+                }
+
+                loadingStateArtikel.setText("Lade Artikel herunter (" + loadedArticles + "/" + feed.getFeedItems().size() + ") ..");
+                if (loadedArticles == feed.getFeedItems().size()){
+                    bar.setVisibility(View.GONE);
+                    loadingStateArtikel.setVisibility(View.GONE);
+                } else {
+                    feed.getFeedItems().get(loadedArticles).getArticle().loadAll(this);
+                }
+            }
+        };
+        bar.setMax(feed.getFeedItems().size());
+        bar.setVisibility(View.VISIBLE);
+        loadingStateArtikel.setVisibility(View.VISIBLE);
+
+        loadingStateArtikel.setText("Lade Artikel herunter (0/" + feed.getFeedItems().size() + ") ..");
+        feed.getFeedItems().get(0).getArticle().loadAll(loadHandler);
+    }
+
 
     @Override
     public void FeedPreviewImageLoaded(GolemFeedItem sender, Bitmap image) {
@@ -183,6 +252,18 @@ public class MainActivity extends AppCompatActivity implements IFeedLoadHandler,
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         if (key.equals("appThemePref")) {
             recreate();
+        }
+    }
+
+
+    private boolean checkWifiOnAndConnected() {
+        try {
+            ConnectivityManager cm = (ConnectivityManager)this.getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+
+            return activeNetwork != null && activeNetwork.isConnectedOrConnecting() &&  activeNetwork.getType() == ConnectivityManager.TYPE_WIFI;
+        } catch (Exception ex) {
+            return false;
         }
     }
 

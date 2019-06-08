@@ -11,4 +11,18 @@
         <item>Dunkel</item>
         <item>Hell</item>
     </string-array>
+
+
+    <string-array name="preloadOptions">
+        <item>never</item>
+        <item>wifi</item>
+        <item>always</item>
+    </string-array>
+
+    <string-array name="preloadOptionValues">
+        <item>Niemals</item>
+        <item>Nur bei WLAN (Standard)</item>
+        <item>Immer</item>
+    </string-array>
+
 </resources>
