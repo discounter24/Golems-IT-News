@@ -6,4 +6,6 @@
     <string name="appThemeSummury">Ändere das Design der App</string>
     <string name="link">Link</string>
     <string name="share">Teilen</string>
+    <string name="nextSite">Nächste Seite &gt;</string>
+    <string name="previousSite">&lt; Zurück</string>
 </resources>

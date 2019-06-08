@@ -10,7 +10,7 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.Locale;
 
-public class GolemFeedItem implements IFeedArticleLoadHandler {
+public class GolemFeedItem implements IPageHandler {
 
     private IFeedLoadHandler feedLoadHandler;
 
@@ -25,20 +25,16 @@ public class GolemFeedItem implements IFeedArticleLoadHandler {
     private String guid;
     private GolemArticle article;
 
+    //private final LinkedList<String> videos = new LinkedList<>();
 
-
-    private final LinkedList<String> videos = new LinkedList<>();
-
-    private final LinkedList<IFeedArticleLoadHandler> waitingImageHandlers = new LinkedList<>();
-    private final LinkedList<IFeedArticleLoadHandler> waitingTextHandlers = new LinkedList<>();
-    private final LinkedList<IFeedArticleLoadHandler> waitingVideoHandlers = new LinkedList<>();
+    //private final LinkedList<IPageHandler> waitingImageHandlers = new LinkedList<>();
+    //private final LinkedList<IPageHandler> waitingTextHandlers = new LinkedList<>();
+    //private final LinkedList<IPageHandler> waitingVideoHandlers = new LinkedList<>();
 
 
     public Bitmap getPreviewImage() {
         return previewImage;
     }
-
-    public LinkedList<String> getVideos() {  return videos;  }
 
     public String getTitle() {
         return title;
@@ -99,70 +95,11 @@ public class GolemFeedItem implements IFeedArticleLoadHandler {
         this.guid = guid;
     }
 
-    public void getArticle(IFeedArticleLoadHandler articleHandler) {
-
-
-
-        if (article == null || article.getText().isEmpty() || article.getPreviewImage() == null) {
-
-            if (waitingImageHandlers.size() == 0 ) {
-                waitingImageHandlers.add(articleHandler);
-                waitingTextHandlers.add(articleHandler);
-                waitingVideoHandlers.add(articleHandler);
-
-                GolemArticle tmp = new GolemArticle(this, this);
-                tmp.get();
-                this.article = tmp;
-
-            } else {
-                waitingImageHandlers.add(articleHandler);
-                waitingTextHandlers.add(articleHandler);
-                waitingVideoHandlers.add(articleHandler);
-            }
-
-        } else {
-            if (articleHandler!= null) {
-                articleHandler.ArticleImagesLoaded(this, article.getImages());
-                articleHandler.ArticleTextReceived(this, article.getText());
-
-                for (String video : videos){
-                    articleHandler.ArticleVideoFound(this, video);
-                }
-            }
+    public GolemArticle getArticle(){
+        if (article == null){
+            article = new GolemArticle(this);
         }
-    }
-
-
-
-    @Override
-    public void ArticleTextReceived(GolemFeedItem item, String text) {
-        for(IFeedArticleLoadHandler articleHandler : waitingTextHandlers){
-            if (articleHandler != null){
-                articleHandler.ArticleTextReceived(this,article.getText());
-            }
-        }
-        waitingTextHandlers.clear();
-    }
-
-    @Override
-    public void ArticleImagesLoaded(GolemFeedItem item, LinkedList<GolemArticle.GolemImage> images) {
-        for(IFeedArticleLoadHandler articleHandler : waitingImageHandlers){
-            if (articleHandler != null){
-                articleHandler.ArticleImagesLoaded(this,images);
-            }
-        }
-        waitingImageHandlers.clear();
-    }
-
-    @Override
-    public void ArticleVideoFound(GolemFeedItem sender, String embedUrl) {
-        videos.add(embedUrl);
-        for(IFeedArticleLoadHandler articleHandler : waitingVideoHandlers){
-            if (articleHandler != null){
-                articleHandler.ArticleVideoFound(this,embedUrl);
-            }
-        }
-        waitingVideoHandlers.clear();
+        return article;
     }
 
 
@@ -196,4 +133,18 @@ public class GolemFeedItem implements IFeedArticleLoadHandler {
     }
 
 
+    @Override
+    public void onTextReceived(GolemArticlePage sender, String text) {
+
+    }
+
+    @Override
+    public void onImagesReceived(GolemArticlePage sender, LinkedList<GolemImage> images) {
+
+    }
+
+    @Override
+    public void onVideosReceived(GolemArticlePage sender, LinkedList<String> videos) {
+
+    }
 }

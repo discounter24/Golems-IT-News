@@ -1,273 +1,199 @@
 package dtss.golemnews;
 
-import org.jsoup.*;
+import android.os.AsyncTask;
+
+import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import android.graphics.Bitmap;
-import android.os.AsyncTask;
-
 import java.io.IOException;
 import java.util.LinkedList;
-
-import dtss.golemnews.utils.ImageUtil;
+import java.util.function.Predicate;
 
 class GolemArticle{
-
-
     private final GolemFeedItem item;
-    private final IFeedArticleLoadHandler articleHandler;
 
+    private boolean pagesSearchCompleted;
 
+    public LinkedList<GolemArticlePage> pages;
+    private String html;
 
-    public void setHtml(String html) {  this.html = html; }
-
-    private String html = "";
-
-
-    private LinkedList<String> chapter = new LinkedList<>();
-
-    public LinkedList<String> getVideos() { return videos; }
-
-    private LinkedList<String> videos = new LinkedList<>();
-
-    public LinkedList<GolemImage> getImages() {
-        return Images;
-    }
-
-    private  LinkedList<GolemImage> Images = new LinkedList<>();
-
-
-
-    public GolemArticle(GolemFeedItem item, IFeedArticleLoadHandler articleHandler) {
+    public GolemArticle(GolemFeedItem item) {
         this.item = item;
-        this.articleHandler = articleHandler;
+        this.pages = new LinkedList<>();
+        this.pages.add(new GolemArticlePage(item.getLink()));
+        this.html = "";
+        this.pagesSearchCompleted = false;
     }
 
-    public String getHtml() { return html; }
-    public LinkedList<String> getChapter() { return chapter; }
 
-    public String getText(){
-        String text = "";
-        for(String chapter : getChapter()){
-            text += chapter + "\n\n";
-        }
-        return text;
+
+    public LinkedList<GolemArticlePage> getPages(){
+        return pages;
     }
 
-    public GolemImage getPreviewImage(){
-        if (!Images.isEmpty()){
-            return Images.get(0);
-        }
-        return null;
+    public String getMainLink(){
+        return item.getLink();
     }
 
-    public void get(){
-        new ArticleParseHeroImagesTask(articleHandler).execute(this);
-        new ArticleParseTextTask(articleHandler).execute(this);
-        new ArticleParseVideosTask(articleHandler).execute(this);
+    public String getHtml(){
+        return html;
     }
 
-    private class ArticleParseHeroImagesTask extends AsyncTask<GolemArticle, Void, Void> {
+    private void setHtml(String html){
+        this.html = html;
+    }
 
-        private final IFeedArticleLoadHandler articleHandler;
-        private GolemArticle article;
+    public void loadAll(final ArticleFullyLoadedHandler handler){
+        searchArticlePages(new IArticlePageFound() {
 
-        ArticleParseHeroImagesTask(IFeedArticleLoadHandler articleHandler){
-            this.articleHandler = articleHandler;
-        }
+            @Override
+            public void onArticlePageFound(GolemArticlePage page) {
 
-        protected Void doInBackground(GolemArticle... articles) {
-            this.article = articles[0];
-            try {
-                Document d;
-                if (article.getHtml().isEmpty()){
-                    d = Jsoup.connect(article.item.getLink()).get();
-                    html = d.html();
-                } else {
-                    d = Jsoup.parse(article.getHtml());
-                }
+            }
 
-                Elements heroes = d.getElementsByClass("hero");
-                Element hero = heroes.first();
-                if (hero != null){
-                    Elements images = hero.getElementsByTag("img");
-                    Element imageElement = images.first();
-                    if (imageElement != null){
-                        String imageLink = imageElement.attr("src");
+            @Override
+            public void onPageSearchComplete() {
 
-                        Bitmap image = ImageUtil.loadImage(imageLink);
-                        String description = imageElement.attr("alt");
-                        String author = "";
-                        for(Element authorElement : hero.getElementsByClass("big-image-lic")){
-                            author = authorElement.text();
+                waitFor = 3 * getPages().size();
+                for (GolemArticlePage page : getPages()) {
+                    IPageHandler handler = new IPageHandler() {
+                        @Override
+                        public void onTextReceived(GolemArticlePage sender, String text) {
+                            loadComplete();
                         }
 
-                        GolemImage gi = new GolemImage(imageLink,author,description,image);
-                        article.getImages().add(gi);
-                    }
+                        @Override
+                        public void onImagesReceived(GolemArticlePage sender, LinkedList<GolemImage> images) {
+                            loadComplete();
+                        }
+
+                        @Override
+                        public void onVideosReceived(GolemArticlePage sender, LinkedList<String> videos) {
+                            loadComplete();
+                        }
+                    };
+
+                    page.requestVideos(handler);
+                    page.requestText(handler);
+                    page.requestImages(handler);
                 }
 
-            } catch (IOException ex) {
-                //NoInternet
-            } catch (Exception ex) {
-                //Unknown
             }
-            return null;
-        }
 
-        protected void onPostExecute(Void v) {
-            if (articleHandler != null){
-                if (!getImages().isEmpty()){
-                    articleHandler.ArticleImagesLoaded(article.item,article.getImages());
+            int waitFor;
+            private void loadComplete(){
+                waitFor--;
+                if (waitFor == 0){
+                    handler.onArticleLoaded();
                 }
             }
+        });
+    }
+
+
+
+    public void searchArticlePages(final IArticlePageFound pageFindHandler){
+        if (!pagesSearchCompleted){
+            ResolveArticlePagesTask task = new ResolveArticlePagesTask(new IArticlePageFound() {
+                @Override
+                public void onArticlePageFound(GolemArticlePage page) {
+                    pages.add(page);
+                    pageFindHandler.onArticlePageFound(page);
+                }
+
+                @Override
+                public void onPageSearchComplete() {
+                    pagesSearchCompleted=true;
+                    pageFindHandler.onPageSearchComplete();
+                }
+            });
+            task.execute(this);
+        } else {
+            pageFindHandler.onPageSearchComplete();
         }
     }
 
-    private class ArticleParseTextTask extends AsyncTask<GolemArticle, Void, String> {
 
-        private final IFeedArticleLoadHandler articleHandler;
-        private GolemArticle article;
-
-        ArticleParseTextTask(IFeedArticleLoadHandler articleHandler){
-            this.articleHandler = articleHandler;
-        }
-
-        protected String doInBackground(GolemArticle... articles) {
-
-            this.article = articles[0];
-            article.chapter.clear();
-            String text = "";
-
-            try {
-                Document d;
-                if (article.getHtml().isEmpty()){
-                    d = Jsoup.connect(article.item.getLink()).get();
-                    html = d.html();
-                } else {
-                    d = Jsoup.parse(article.getHtml());
-                }
-
-                int part  = 1;
-                Element element = d.getElementById("gpar" + part);
-
-
-                while(element != null){
-
-                    chapter.add(element.text());
-
-                    part++;
-                    element = d.getElementById("gpar" + part);
-                }
-
-            } catch (IOException ex) {
-                text = "Can't connect to golem.de\n\n";
-                text += ex.toString();
-            } catch (Exception ex) {
-                text = "UNKNOWN_ERROR\n";
-                text += ex.toString();
-            }
-
-            return text;
-        }
-
-        protected void onPostExecute(String result) {
-            if (articleHandler != null) {
-                articleHandler.ArticleTextReceived(article.item,result);
-            }
-        }
+    public interface ArticleFullyLoadedHandler{
+        void onArticleLoaded();
     }
 
-    private class ArticleParseVideosTask extends AsyncTask<GolemArticle, Void, Void> {
+    public interface IArticlePageFound{
+        void onArticlePageFound(GolemArticlePage page);
+        void onPageSearchComplete();
+    }
 
-        private final IFeedArticleLoadHandler articleHandler;
+
+
+
+    private class ResolveArticlePagesTask extends AsyncTask<GolemArticle, Void, Void> {
+
+        private final IArticlePageFound articlePageFound;
         private GolemArticle article;
 
-        ArticleParseVideosTask(IFeedArticleLoadHandler articleHandler){
-            this.articleHandler = articleHandler;
+
+        public ResolveArticlePagesTask(IArticlePageFound articleHandler){
+            this.articlePageFound = articleHandler;
         }
 
         protected Void doInBackground(GolemArticle... articles) {
-
             this.article = articles[0];
 
             try {
                 Document d;
                 if (article.getHtml().isEmpty()){
-                    d = Jsoup.connect(article.item.getLink()).get();
-                    html = d.html();
+                    d = Jsoup.connect(article.getMainLink()).get();
+                    article.setHtml(d.html());
                 } else {
                     d = Jsoup.parse(article.getHtml());
                 }
 
 
-                Elements elements = d.getElementsByClass("gvideofig");
+                Element element = d.getElementById("list-jtoc");
 
-                for (Element videoElement : elements){
-                    try{
-                        String id = videoElement.id().substring(7);
-                        article.videos.add("https://video.golem.de/amp-iframe.php?fileid=" + id);
-                    } catch (Exception ex){
-                        //Invalid video tag
+                while(element != null){
+                    if (element.hasClass("list-pages")){
+                        Elements listPages = element.getElementsByTag("a");
+
+                        for(Element elem : listPages){
+                            if (elem.tagName().equalsIgnoreCase("a")){
+                                String link = "https://www.golem.de" + elem.attr("href");
+                                boolean exists = false;
+                                for (GolemArticlePage existing : article.getPages()){
+                                    if (existing.getLink().equalsIgnoreCase(link)){
+                                        exists = true;
+                                        break;
+                                    }
+                                }
+                                if (!exists){
+                                    GolemArticlePage page = new GolemArticlePage(link);
+                                    articlePageFound.onArticlePageFound(page);
+                                }
+
+                            }
+                        }
+                        break;
                     }
                 }
+
             } catch (IOException ex) {
-                //Internet failure
+
             } catch (Exception ex) {
-                //Unexpected failure
+
             }
+
+
             return null;
-
-
         }
 
-
-        protected void onPostExecute(Void v) {
-            if (articleHandler != null) {
-                for(String video : article.videos){
-                    articleHandler.ArticleVideoFound(article.item,video);
-                }
-            }
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            articlePageFound.onPageSearchComplete();
         }
-
-
-
     }
 
-
-    public class GolemImage {
-        private String link;
-        private String author;
-        private String description;
-        private Bitmap image;
-
-        public GolemImage(String link, String author, String description, Bitmap image){
-            this.link = link;
-            this.author = author;
-            this.description = description;
-            this.image = image;
-        }
-
-        public String getLink() {
-            return link;
-        }
-
-        public String getAuthor() {
-            return author;
-        }
-
-        public String getDescription() {
-            return description;
-        }
-
-        public Bitmap getImage() {
-            return image;
-        }
-
-
-    }
 
 
 }

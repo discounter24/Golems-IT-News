@@ -46,10 +46,6 @@ public class MainActivity extends AppCompatActivity implements IFeedLoadHandler,
         ThemeUtils.sharedPreferences.registerOnSharedPreferenceChangeListener(this);
 
 
-        ThemeUtils.updateTheme(this);
-        ThemeUtils.sharedPreferences.registerOnSharedPreferenceChangeListener(this);
-
-
         ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
         actionBar.setLogo(R.mipmap.ic_launcher_round);
