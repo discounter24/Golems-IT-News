@@ -39,7 +39,7 @@ class GolemArticlePage {
     }
 
 
-    public void requestText(IPageHandler handler){
+    public void requestText(final IPageHandler handler){
         if (chaptersLoaded){
             StringBuilder text = new StringBuilder();
             for(String chapter : getChapers()){
@@ -47,19 +47,70 @@ class GolemArticlePage {
             }
             handler.onTextReceived(this, text.toString());
         } else {
-            GolemArticlePageTextLoadTask task = new GolemArticlePageTextLoadTask(handler);
-            task.execute(this);
-            chaptersLoaded = true;
+
+
+            DiskCache.getInstance().requestText(link, new DiskCache.ICacheAnswerHandler() {
+                @Override
+                public void onCacheGImageAnswer(String identifier, GolemImage image, boolean found) {
+
+                }
+
+                @Override
+                public void onCacheGImageListAnswer(String identifier, LinkedList<GolemImage> image, boolean found) {
+
+                }
+
+                @Override
+                public void onCacheChaptersAnswer(String identifier, LinkedList<String> chapters, boolean found) {
+                    if (found){
+                        GolemArticlePage.this.chapters.addAll(chapters);
+                        chaptersLoaded = true;
+                        requestText(handler);
+                    } else {
+                        GolemArticlePageTextLoadTask task = new GolemArticlePageTextLoadTask(handler);
+                        task.execute(GolemArticlePage.this);
+                        chaptersLoaded=true;
+                    }
+
+                }
+            });
+
         }
     }
 
-    public void requestImages(IPageHandler handler) {
+    public void requestImages(final IPageHandler handler) {
         if (imagesLoaded){
             handler.onImagesReceived(this, images);
         } else {
-            GolemArticlePageImageLoadTask task = new GolemArticlePageImageLoadTask(handler);
-            task.execute(this);
-            imagesLoaded = true;
+            DiskCache.getInstance().requestImage(link, new DiskCache.ICacheAnswerHandler() {
+                @Override
+                public void onCacheGImageAnswer(String identifier, GolemImage image, boolean found) {
+
+                }
+
+                @Override
+                public void onCacheGImageListAnswer(String identifier, LinkedList<GolemImage> image, boolean found) {
+                    if (found){
+                        GolemArticlePage.this.images.addAll(image);
+                        imagesLoaded = true;
+                        requestImages(handler);
+                    } else {
+                        GolemArticlePageImageLoadTask task = new GolemArticlePageImageLoadTask(handler);
+                        task.execute(GolemArticlePage.this);
+                        imagesLoaded = true;
+                    }
+
+
+                }
+
+                @Override
+                public void onCacheChaptersAnswer(String identifier, LinkedList<String> chapters, boolean found) {
+
+                }
+            });
+
+
+
         }
     }
 
@@ -99,11 +150,9 @@ class GolemArticlePage {
         this.html = html;
     }
 
-    private LinkedList<String> getChapers(){
+    public LinkedList<String> getChapers(){
         return chapters;
     }
-
-
 
 
     private static class GolemArticlePageImageLoadTask extends AsyncTask<GolemArticlePage, Void, Void> {
@@ -119,6 +168,8 @@ class GolemArticlePage {
         }
 
         protected Void doInBackground(GolemArticlePage... articles) {
+
+
             this.page = articles[0];
             try {
                 Document d;

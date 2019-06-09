@@ -31,8 +31,6 @@ public class GolemFeed {
             if (!existing){
                 this.Items.add(newItem);
             }
-            //Preload:
-            //newItem.getArticle(null);
         }
     }
 

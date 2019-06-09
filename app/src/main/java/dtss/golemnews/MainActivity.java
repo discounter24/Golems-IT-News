@@ -46,7 +46,6 @@ public class MainActivity extends AppCompatActivity implements IFeedLoadHandler,
 
 
 
-
         if (ThemeUtils.sharedPreferences == null){
             ThemeUtils.sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         }
@@ -56,6 +55,9 @@ public class MainActivity extends AppCompatActivity implements IFeedLoadHandler,
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+        DiskCache.openCache(this);
 
         ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
@@ -249,6 +251,7 @@ public class MainActivity extends AppCompatActivity implements IFeedLoadHandler,
                     loadingStateArtikel.setVisibility(View.GONE);
                 } else {
                     feed.getFeedItems().get(loadedArticles).getArticle().loadAll(this);
+
                 }
             }
         };

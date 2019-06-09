@@ -109,9 +109,15 @@ class GolemArticle{
                         if (waitFor == 0){
                             fullyLoaded = true;
                             loading = false;
+
+
+
                             for(ArticleFullyLoadedHandler h : waitingForLoaded){
                                 h.onArticleLoaded();
                             }
+
+                            DiskCache.getInstance().save(GolemArticle.this);
+
                         }
                     }
                 });
