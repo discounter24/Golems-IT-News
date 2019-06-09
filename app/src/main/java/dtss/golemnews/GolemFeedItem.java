@@ -12,7 +12,7 @@ import java.util.Locale;
 
 public class GolemFeedItem implements IPageHandler {
 
-    private IFeedLoadHandler feedLoadHandler;
+    private final IFeedLoadHandler feedLoadHandler;
 
     private String title;
     private String link;
@@ -60,7 +60,7 @@ public class GolemFeedItem implements IPageHandler {
         String search = "<a href=";
         if (description.contains(search)){
             this.description = description.substring(0, description.indexOf(search)-1);
-            this.description.trim();
+            this.description = this.description.trim();
         }
     }
 

@@ -17,8 +17,8 @@ class GolemArticle{
     private boolean loading;
     private boolean fullyLoaded;
 
-    public LinkedList<GolemArticlePage> pages;
-    public LinkedList<ArticleFullyLoadedHandler> waitingForLoaded;
+    private final LinkedList<GolemArticlePage> pages;
+    private final LinkedList<ArticleFullyLoadedHandler> waitingForLoaded;
 
     private String html;
 
@@ -39,11 +39,11 @@ class GolemArticle{
         return pages;
     }
 
-    public String getMainLink(){
+    private String getMainLink(){
         return item.getLink();
     }
 
-    public String getHtml(){
+    private String getHtml(){
         return html;
     }
 
@@ -126,7 +126,7 @@ class GolemArticle{
 
 
 
-    public void searchArticlePages(final IArticlePageFound pageFindHandler){
+    private void searchArticlePages(final IArticlePageFound pageFindHandler){
         if (!pagesSearchCompleted){
             ResolveArticlePagesTask task = new ResolveArticlePagesTask(new IArticlePageFound() {
                 @Override
@@ -152,7 +152,7 @@ class GolemArticle{
         void onArticleLoaded();
     }
 
-    public interface IArticlePageFound{
+    interface IArticlePageFound{
         void onArticlePageFound(GolemArticlePage page);
         void onPageSearchComplete();
     }
@@ -166,7 +166,7 @@ class GolemArticle{
         private GolemArticle article;
 
 
-        public ResolveArticlePagesTask(IArticlePageFound articleHandler){
+        ResolveArticlePagesTask(IArticlePageFound articleHandler){
             this.articlePageFound = articleHandler;
         }
 
@@ -185,7 +185,8 @@ class GolemArticle{
 
                 Element element = d.getElementById("list-jtoc");
 
-                while(element != null){
+                if(element != null){
+
                     if (element.hasClass("list-pages")){
                         Elements listPages = element.getElementsByTag("a");
 
@@ -206,14 +207,13 @@ class GolemArticle{
 
                             }
                         }
-                        break;
                     }
                 }
 
             } catch (IOException ex) {
-
+                return null;
             } catch (Exception ex) {
-
+                return null;
             }
 
 

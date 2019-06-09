@@ -68,7 +68,7 @@ public class GolemFeedLoadTask extends AsyncTask<GolemFeed, Void, HashMap<GolemF
             parser.setInput(new StringReader(rss));
 
             GolemFeedItem item = new GolemFeedItem(handler);
-            String tag = "";
+            String tag;
             String text = "";
 
             int event = parser.getEventType();

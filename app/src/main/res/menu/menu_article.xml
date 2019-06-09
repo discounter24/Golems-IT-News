@@ -8,13 +8,13 @@
         android:id="@+id/link"
         android:title="@string/link"
         android:icon="@drawable/ic_link"
-        app:showAsAction="always"
+        app:showAsAction="ifRoom"
         />
     <item
         android:id="@+id/share"
         android:title="@string/share"
         android:icon="@drawable/ic_share"
-        app:showAsAction="always"/>
+        app:showAsAction="ifRoom"/>
 
 
 

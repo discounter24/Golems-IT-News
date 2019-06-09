@@ -28,7 +28,7 @@ public class VideoEnabledWebChromeClient extends WebChromeClient implements Medi
 {
     public interface ToggledFullscreenCallback
     {
-        public void toggledFullscreen(boolean fullscreen);
+        void toggledFullscreen(boolean fullscreen);
     }
 
     private View activityNonVideoView;

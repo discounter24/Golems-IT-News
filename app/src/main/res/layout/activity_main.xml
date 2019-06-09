@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:background="?android:colorBackground">
 
     <ProgressBar
         android:id="@+id/AnimationLoader"
@@ -15,7 +16,8 @@
         android:layout_marginTop="303dp"
         android:indeterminate="false"
         tools:visibility="gone"
-        android:progressTint="?attr/colorAccent"
+        android:background="?android:colorBackground"
+        android:progressTint="?android:colorAccent"
         />
 
 
@@ -38,7 +40,10 @@
             android:id="@+id/loadingStateArticle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="" />
+            android:text=""
+            android:background="?android:colorBackground"
+            android:textColor="?android:textColorPrimary"
+            />
 
         <ProgressBar
             android:id="@+id/articlePreloadProgress"
@@ -46,7 +51,10 @@
             android:layout_width="match_parent"
             android:layout_height="15dp"
             android:max="100"
-            android:progress="0" />
+            android:progress="0"
+            android:background="?android:colorBackground"
+            android:progressTint="?android:colorAccent"
+            />
 
         <android.support.v4.widget.SwipeRefreshLayout
             android:id="@+id/swipeRefresh"

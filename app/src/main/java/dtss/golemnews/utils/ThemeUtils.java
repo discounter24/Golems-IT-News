@@ -3,7 +3,6 @@ package dtss.golemnews.utils;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.support.v7.app.AppCompatActivity;
 
 import dtss.golemnews.R;
 
@@ -19,7 +18,7 @@ public abstract class ThemeUtils {
         return sharedPreferences.getString("appThemePref", "system").equalsIgnoreCase("system");
     }
 
-    public static boolean isNightMode(Activity activity){
+    private static boolean isNightMode(Activity activity){
         if (sharedPreferences == null) return false;
         String appTheme = sharedPreferences.getString("appThemePref", "system");
         if (appTheme.equalsIgnoreCase("dark")){

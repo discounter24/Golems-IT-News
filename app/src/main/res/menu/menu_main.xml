@@ -5,13 +5,13 @@
 
     <item
         android:id="@+id/Settings"
-        android:title="Einstellungen"
+        android:title="@string/settings"
         android:icon="@drawable/ic_settings"
         app:showAsAction="withText"
         />
     <item
         android:id="@+id/Reload"
-        android:title="Neu laden"
+        android:title="@string/Reload"
         android:icon="@drawable/ic_settings"
         app:showAsAction="withText"
         />

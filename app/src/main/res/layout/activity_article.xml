@@ -2,7 +2,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/rootLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -17,7 +16,6 @@
         >
 
         <LinearLayout
-            android:id="@+id/mainLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -47,15 +45,13 @@
                 android:id="@+id/articleTitle"
                 android:layout_width="match_parent"
                 android:layout_height="64dp"
-                android:layout_alignTop="@+id/preview"
-                android:layout_alignParentEnd="true"
                 android:layout_marginLeft="2dp"
                 android:layout_marginRight="2dp"
                 android:autoSizeTextType="uniform"
                 android:ellipsize="end"
                 android:maxLines="2"
                 android:padding="5dp"
-                android:text="Title"
+                android:text="@string/title"
                 android:textAlignment="viewStart"
                 android:textAppearance="@style/TextAppearance.AppCompat.Title"
                 android:textColor="?android:textColorPrimary"
@@ -71,7 +67,7 @@
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
                 android:paddingBottom="5dp"
-                android:text="Description"
+                android:text="@string/description"
                 android:textColor="?android:textColorPrimary"
                 android:textSize="16sp"
                 android:textStyle="italic"
@@ -137,7 +133,7 @@
                 android:id="@+id/videoList"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"></LinearLayout>
+                android:orientation="vertical" />
 
 
             <!-- View where the video will be shown when video goes fullscreen -->

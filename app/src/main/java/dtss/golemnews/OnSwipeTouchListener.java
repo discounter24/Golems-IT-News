@@ -7,15 +7,14 @@ import android.view.View;
 import android.view.View.OnTouchListener;
 import android.widget.ListView;
 
-public class OnSwipeTouchListener implements OnTouchListener {
+public abstract class OnSwipeTouchListener implements OnTouchListener {
 
     private final GestureDetector gestureDetector;
-    private final GestureListener gestureListener;
 
 
     public OnSwipeTouchListener(Context ctx){
 
-        gestureListener = new GestureListener();
+        GestureListener gestureListener = new GestureListener();
         gestureDetector = new GestureDetector(ctx, gestureListener);
     }
 
@@ -94,16 +93,11 @@ public class OnSwipeTouchListener implements OnTouchListener {
 
 
 
-    public void onSwipeRight(MotionEvent e1, MotionEvent e2) {
+    abstract void onSwipeRight(MotionEvent e1, MotionEvent e2);
 
-    }
+    abstract void onSwipeLeft(MotionEvent e1, MotionEvent e2);
 
-    public void onSwipeLeft(MotionEvent e1, MotionEvent e2) {
-    }
+    abstract void onSwipeTop(MotionEvent e1, MotionEvent e2);
 
-    public void onSwipeTop(MotionEvent e1, MotionEvent e2) {
-    }
-
-    public void onSwipeBottom(MotionEvent e1, MotionEvent e2) {
-    }
+    abstract void onSwipeBottom(MotionEvent e1, MotionEvent e2);
 }

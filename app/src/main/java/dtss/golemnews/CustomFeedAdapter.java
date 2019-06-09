@@ -2,28 +2,24 @@ package dtss.golemnews;
 
 import android.content.Context;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-
 import java.text.SimpleDateFormat;
 
 class CustomFeedAdapter extends BaseAdapter {
 
 
-    final Context context;
     public GolemFeedItem[] data;
     private  static LayoutInflater inflater = null;
-    public View.OnTouchListener touchListener;
 
 
     public CustomFeedAdapter(Context context, GolemFeedItem[] data, View.OnTouchListener touchListener){
-        this.touchListener = touchListener;
-        this.context=context;
+        View.OnTouchListener touchListener1 = touchListener;
+        Context context1 = context;
         this.data=data;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }

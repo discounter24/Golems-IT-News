@@ -13,7 +13,7 @@ import java.util.Map;
 
 public class VideoEnabledWebView extends WebView
 {
-    public class JavascriptInterface
+    class JavascriptInterface
     {
         @android.webkit.JavascriptInterface @SuppressWarnings("unused")
         public void notifyVideoEnd() // Must match Javascript interface method of VideoEnabledWebChromeClient

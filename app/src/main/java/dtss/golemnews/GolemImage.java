@@ -1,14 +1,11 @@
 package dtss.golemnews;
 
 import android.graphics.Bitmap;
-import android.os.AsyncTask;
 
-import dtss.golemnews.utils.ImageUtil;
-
-public class GolemImage {
-    private String link;
-    private String author;
-    private String description;
+class GolemImage {
+    private final String link;
+    private final String author;
+    private final String description;
     private Bitmap image;
 
 

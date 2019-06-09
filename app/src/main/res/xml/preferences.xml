@@ -6,7 +6,6 @@
         android:title="@string/generalSettings">
 
         <ListPreference
-            android:id="@+id/appThemePrefList"
             android:key="appThemePref"
             android:title="@string/appTheme"
             android:summary="@string/appThemeSummury"
@@ -16,7 +15,6 @@
             />
 
         <ListPreference
-            android:id="@+id/appPreloadPref"
             android:key="appPreloadPref"
             android:title="Artikel preloading"
             android:summary="Artikel bereits beim Öffnen der App herunterladen"

@@ -8,11 +8,11 @@ import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,6 +22,8 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import java.util.Objects;
 
 import dtss.golemnews.utils.ThemeUtils;
 
@@ -43,8 +45,7 @@ public class MainActivity extends AppCompatActivity implements IFeedLoadHandler,
     protected void onCreate(Bundle savedInstanceState) {
 
 
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+
 
         if (ThemeUtils.sharedPreferences == null){
             ThemeUtils.sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -53,6 +54,8 @@ public class MainActivity extends AppCompatActivity implements IFeedLoadHandler,
         ThemeUtils.updateTheme(this);
         ThemeUtils.sharedPreferences.registerOnSharedPreferenceChangeListener(this);
 
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
         ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
@@ -117,7 +120,22 @@ public class MainActivity extends AppCompatActivity implements IFeedLoadHandler,
                     }
                 }
 
-                touchedView.callOnClick();
+                Objects.requireNonNull(touchedView).callOnClick();
+
+            }
+
+            @Override
+            void onSwipeLeft(MotionEvent e1, MotionEvent e2) {
+
+            }
+
+            @Override
+            void onSwipeTop(MotionEvent e1, MotionEvent e2) {
+
+            }
+
+            @Override
+            void onSwipeBottom(MotionEvent e1, MotionEvent e2) {
 
             }
 
@@ -183,7 +201,7 @@ public class MainActivity extends AppCompatActivity implements IFeedLoadHandler,
 
     @Override
     public void FeedItemListLoaded(GolemFeedLoadTask.GolemFeedLoadTaskResult result, final GolemFeed feed) {
-        adapter.data = feed.getFeedItems().toArray(new GolemFeedItem[feed.getFeedItems().size()]);
+        adapter.data = feed.getFeedItems().toArray(new GolemFeedItem[0]);
         adapter.notifyDataSetChanged();
 
         listView.setVisibility(View.VISIBLE);
@@ -206,7 +224,7 @@ public class MainActivity extends AppCompatActivity implements IFeedLoadHandler,
         }
     }
 
-    public void preload(){
+    private void preload(){
         final ProgressBar bar = findViewById(R.id.articlePreloadProgress);
         final TextView loadingStateArtikel = findViewById(R.id.loadingStateArticle);
 
@@ -259,7 +277,7 @@ public class MainActivity extends AppCompatActivity implements IFeedLoadHandler,
     private boolean checkWifiOnAndConnected() {
         try {
             ConnectivityManager cm = (ConnectivityManager)this.getSystemService(Context.CONNECTIVITY_SERVICE);
-            NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+            NetworkInfo activeNetwork = Objects.requireNonNull(cm).getActiveNetworkInfo();
 
             return activeNetwork != null && activeNetwork.isConnectedOrConnecting() &&  activeNetwork.getType() == ConnectivityManager.TYPE_WIFI;
         } catch (Exception ex) {

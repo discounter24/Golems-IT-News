@@ -22,6 +22,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+
 import java.util.LinkedList;
 import java.util.Objects;
 
@@ -32,9 +33,9 @@ import dtss.golemnews.utils.VideoEnabledWebView;
 
 public class ArticleActivity extends AppCompatActivity implements IPageHandler, SharedPreferences.OnSharedPreferenceChangeListener {
 
-    TextView articleDesc;
-    TextView articleTitle;
-    TextView articleText;
+    private TextView articleDesc;
+    private TextView articleTitle;
+    private TextView articleText;
 
 
     private GolemFeedItem item;
@@ -129,7 +130,7 @@ public class ArticleActivity extends AppCompatActivity implements IPageHandler, 
 
     }
 
-    public void loadPage(int pageID){
+    private void loadPage(int pageID){
         ProgressBar bar = findViewById(R.id.progressBar);
         bar.setVisibility(View.VISIBLE);
 
@@ -161,21 +162,21 @@ public class ArticleActivity extends AppCompatActivity implements IPageHandler, 
         updateSiteNavigator();
     }
 
-    public boolean hasNextPage(){
+    private boolean hasNextPage(){
         return currentPageIndex < item.getArticle().getPages().size()-1;
     }
 
-    public  boolean hasPreviousPage(){
+    private boolean hasPreviousPage(){
         return currentPageIndex > 0;
     }
 
-    public void nextPage(){
+    private void nextPage(){
         if (hasNextPage()){
             loadPage(currentPageIndex +1);
         }
     }
 
-    public void previousPage(){
+    private void previousPage(){
         if (hasPreviousPage()){
             loadPage(currentPageIndex -1);
         }
@@ -270,32 +271,26 @@ public class ArticleActivity extends AppCompatActivity implements IPageHandler, 
                     // Your code to handle the full-screen change, for example showing and hiding the title bar. Example:
                     if (fullscreen)
                     {
-                        getSupportActionBar().hide();
+                        Objects.requireNonNull(getSupportActionBar()).hide();
                         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_USER);
 
                         WindowManager.LayoutParams attrs = getWindow().getAttributes();
                         attrs.flags |= WindowManager.LayoutParams.FLAG_FULLSCREEN;
                         attrs.flags |= WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON;
                         getWindow().setAttributes(attrs);
-                        if (android.os.Build.VERSION.SDK_INT >= 14)
-                        {
-                            //noinspection all
-                            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
-                        }
+                        //noinspection all
+                        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE);
                     }
                     else
                     {
-                        getSupportActionBar().show();
+                        Objects.requireNonNull(getSupportActionBar()).show();
                         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
                         WindowManager.LayoutParams attrs = getWindow().getAttributes();
                         attrs.flags &= ~WindowManager.LayoutParams.FLAG_FULLSCREEN;
                         attrs.flags &= ~WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON;
                         getWindow().setAttributes(attrs);
-                        if (android.os.Build.VERSION.SDK_INT >= 14)
-                        {
-                            //noinspection all
-                            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
-                        }
+                        //noinspection all
+                        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
                     }
 
                 }

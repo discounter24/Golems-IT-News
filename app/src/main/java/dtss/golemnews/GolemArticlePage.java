@@ -13,7 +13,7 @@ import java.util.LinkedList;
 
 import dtss.golemnews.utils.ImageUtil;
 
-public class GolemArticlePage {
+class GolemArticlePage {
     private final String link;
 
     private boolean chaptersLoaded;
@@ -22,9 +22,9 @@ public class GolemArticlePage {
 
     private String html;
 
-    private LinkedList<String> chapters;
-    private LinkedList<String> videos;
-    private LinkedList<GolemImage> images;
+    private final LinkedList<String> chapters;
+    private final LinkedList<String> videos;
+    private final LinkedList<GolemImage> images;
 
 
     public GolemArticlePage(String link){
@@ -78,42 +78,42 @@ public class GolemArticlePage {
     public String getLink(){ return link; }
 
 
-    public void addImage(GolemImage image){
+    private void addImage(GolemImage image){
         this.images.add(image);
     }
 
-    public void addChapter(String chapter){
+    private void addChapter(String chapter){
         this.chapters.add(chapter);
     }
 
-    public void addVideo(String videoLink){
+    private void addVideo(String videoLink){
         this.videos.add(videoLink);
     }
 
 
-    public String getHtml(){
+    private String getHtml(){
         return html;
     }
 
-    public void setHtml(String html){
+    private void setHtml(String html){
         this.html = html;
     }
 
-    public LinkedList<String> getChapers(){
+    private LinkedList<String> getChapers(){
         return chapters;
     }
 
 
 
 
-    private class GolemArticlePageImageLoadTask extends AsyncTask<GolemArticlePage, Void, Void> {
+    private static class GolemArticlePageImageLoadTask extends AsyncTask<GolemArticlePage, Void, Void> {
 
         private final IPageHandler articleHandler;
         private GolemArticlePage page;
-        private LinkedList<GolemImage> images;
+        private final LinkedList<GolemImage> images;
 
 
-        public GolemArticlePageImageLoadTask(IPageHandler articleHandler){
+        GolemArticlePageImageLoadTask(IPageHandler articleHandler){
             this.articleHandler = articleHandler;
             images = new LinkedList<>();
         }
@@ -167,14 +167,14 @@ public class GolemArticlePage {
         }
     }
 
-    private class GolemArticlePageTextLoadTask extends AsyncTask<GolemArticlePage, Void, String> {
+    private static class GolemArticlePageTextLoadTask extends AsyncTask<GolemArticlePage, Void, String> {
 
         private final IPageHandler articleHandler;
         private GolemArticlePage page;
-        private LinkedList<String> chapters;
+        private final LinkedList<String> chapters;
 
 
-        public GolemArticlePageTextLoadTask(IPageHandler articleHandler){
+        GolemArticlePageTextLoadTask(IPageHandler articleHandler){
             this.articleHandler = articleHandler;
             chapters = new LinkedList<>();
         }
@@ -188,7 +188,7 @@ public class GolemArticlePage {
                 Document d;
                 if (page.getHtml().isEmpty()){
                     d = Jsoup.connect(page.getLink()).get();
-                    html = d.html();
+                    page.setHtml(d.html());
                 } else {
                     d = Jsoup.parse(page.getHtml());
                 }
@@ -229,13 +229,13 @@ public class GolemArticlePage {
         }
     }
 
-    private class GolemArticlePageVideoLoadTask extends AsyncTask<GolemArticlePage, Void, Void> {
+    private static class GolemArticlePageVideoLoadTask extends AsyncTask<GolemArticlePage, Void, Void> {
 
         private final IPageHandler articleHandler;
         private GolemArticlePage page;
-        private LinkedList<String> videos;
+        private final LinkedList<String> videos;
 
-        public GolemArticlePageVideoLoadTask(IPageHandler articleHandler){
+        GolemArticlePageVideoLoadTask(IPageHandler articleHandler){
             this.articleHandler = articleHandler;
             videos = new LinkedList<>();
         }
@@ -248,7 +248,7 @@ public class GolemArticlePage {
                 Document d;
                 if (page.getHtml().isEmpty()){
                     d = Jsoup.connect(page.getLink()).get();
-                    html = d.html();
+                    page.setHtml(d.html());
                 } else {
                     d = Jsoup.parse(page.getHtml());
                 }

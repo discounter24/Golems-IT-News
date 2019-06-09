@@ -1,11 +1,12 @@
 package dtss.golemnews;
 
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
+import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
-import android.content.res.Configuration;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
@@ -14,7 +15,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.preference.PreferenceActivity;
 
 import dtss.golemnews.utils.ThemeUtils;
 
@@ -59,6 +59,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
     public void setSupportActionBar(@Nullable Toolbar toolbar) {
         getDelegate().setSupportActionBar(toolbar);
     }
+
     @Override
     public MenuInflater getMenuInflater() {
         return getDelegate().getMenuInflater();
