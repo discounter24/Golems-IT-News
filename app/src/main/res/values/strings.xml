@@ -1,16 +1,27 @@
 <resources>
     <string name="app_name">Golem IT-News</string>
+
+
+
     <string name="generalSettings">General</string>
     <string name="appTheme">App Theme</string>
     <string name="appThemeSummury">Ändere das Design der App</string>
+
+    <string name="settings">Einstellungen</string>
+    <string name="title">Titel</string>
+    <string name="description">Beschreibung</string>
+    <string name="date">Datum</string>
+
     <string name="link">Link</string>
     <string name="share">Teilen</string>
     <string name="nextSite">Nächste Seite &gt;</string>
     <string name="previousSite">&lt; Zurück</string>
-    <string name="title">Titel</string>
-    <string name="description">Beschreibung</string>
-    <string name="date">Datum</string>
-    <string name="settings">Einstellungen</string>
-    <string name="Reload">Neu laden</string>
-    <string name="LoadVideo">Lade video..</string>
+
+
+    <string name="reload">Neu laden</string>
+    <string name="loadVideo">Lade video..</string>
+    <string name="loadRSS">Lade RSS feed..</string>
+    <string name="loadArticles">Lade Artikel herunter (%d/%d) ..</string>
+    <string name="videosOfArticle">Videos zum aktuellen Artikel:</string>
+    <string name="loadArticle">Lade Artikel..</string>
 </resources>

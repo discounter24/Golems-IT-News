@@ -37,8 +37,7 @@ public class GolemFeed {
     }
 
     public String getFeedUrl(){
-        String feedUrl = "https://rss.golem.de/rss.php?feed=RSS2.0";
-        return feedUrl;
+        return "https://rss.golem.de/rss.php?feed=RSS2.0";
     }
 
 

@@ -165,7 +165,8 @@ public class MainActivity extends AppCompatActivity implements IFeedLoadHandler,
         listView.setVisibility(View.INVISIBLE);
         progressBar.setVisibility(View.VISIBLE);
         loadingStateRSS.setVisibility(View.VISIBLE);
-        loadingStateRSS.setText("Lade RSS feed..");
+
+        loadingStateRSS.setText(R.string.loadRSS);
 
         feed.updateListItems();
     }
@@ -242,7 +243,7 @@ public class MainActivity extends AppCompatActivity implements IFeedLoadHandler,
                     bar.setProgress(loadedArticles);
                 }
 
-                loadingStateArtikel.setText("Lade Artikel herunter (" + loadedArticles + "/" + feed.getFeedItems().size() + ") ..");
+                loadingStateArtikel.setText(String.format(getResources().getString(R.string.loadArticles),loadedArticles,feed.getFeedItems().size()));
                 if (loadedArticles == feed.getFeedItems().size()){
                     bar.setVisibility(View.GONE);
                     loadingStateArtikel.setVisibility(View.GONE);
@@ -255,7 +256,7 @@ public class MainActivity extends AppCompatActivity implements IFeedLoadHandler,
         bar.setVisibility(View.VISIBLE);
         loadingStateArtikel.setVisibility(View.VISIBLE);
 
-        loadingStateArtikel.setText("Lade Artikel herunter (0/" + feed.getFeedItems().size() + ") ..");
+        loadingStateArtikel.setText(String.format(getResources().getString(R.string.loadArticles),0,feed.getFeedItems().size()));
         feed.getFeedItems().get(0).getArticle().loadAll(loadHandler);
     }
 

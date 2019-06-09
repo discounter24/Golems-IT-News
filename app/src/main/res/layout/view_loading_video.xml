@@ -23,7 +23,7 @@
             android:layout_marginBottom="24dp"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="#a3a3a3"
-            android:text="@string/LoadVideo" />
+            android:text="@string/loadVideo" />
 
     </LinearLayout>
 

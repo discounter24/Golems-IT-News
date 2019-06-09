@@ -11,7 +11,7 @@
         />
     <item
         android:id="@+id/Reload"
-        android:title="@string/Reload"
+        android:title="@string/reload"
         android:icon="@drawable/ic_settings"
         app:showAsAction="withText"
         />

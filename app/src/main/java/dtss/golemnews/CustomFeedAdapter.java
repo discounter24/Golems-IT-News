@@ -18,8 +18,6 @@ class CustomFeedAdapter extends BaseAdapter {
 
 
     public CustomFeedAdapter(Context context, GolemFeedItem[] data, View.OnTouchListener touchListener){
-        View.OnTouchListener touchListener1 = touchListener;
-        Context context1 = context;
         this.data=data;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }

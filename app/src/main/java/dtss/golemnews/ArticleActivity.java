@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -36,6 +37,7 @@ public class ArticleActivity extends AppCompatActivity implements IPageHandler, 
     private TextView articleDesc;
     private TextView articleTitle;
     private TextView articleText;
+
 
 
     private GolemFeedItem item;
@@ -132,7 +134,11 @@ public class ArticleActivity extends AppCompatActivity implements IPageHandler, 
 
     private void loadPage(int pageID){
         ProgressBar bar = findViewById(R.id.progressBar);
+        TextView articleLoad = findViewById(R.id.articleLoadView);
+
+        articleLoad.setVisibility(View.VISIBLE);
         bar.setVisibility(View.VISIBLE);
+
 
         currentPageIndex = pageID;
 
@@ -216,6 +222,8 @@ public class ArticleActivity extends AppCompatActivity implements IPageHandler, 
         articleText.setText(text);
         ProgressBar bar = findViewById(R.id.progressBar);
         bar.setVisibility(View.GONE);
+        TextView articleLoad = findViewById(R.id.articleLoadView);
+        articleLoad.setVisibility(View.GONE);
     }
 
     @Override
@@ -227,7 +235,7 @@ public class ArticleActivity extends AppCompatActivity implements IPageHandler, 
             articlePictureView.setVisibility(View.VISIBLE);
             TextView subtitle = findViewById(R.id.previewImageSubtitle);
             subtitle.setTextSize(12);
-            subtitle.setText(previewImage.getDescription() + " " + previewImage.getAuthor());
+            subtitle.setText(String.format("%s %s",previewImage.getDescription(),previewImage.getAuthor()));
             subtitle.setVisibility(View.VISIBLE);
         }
     }
@@ -245,7 +253,7 @@ public class ArticleActivity extends AppCompatActivity implements IPageHandler, 
         TextView textView = new TextView(this);
         textView.setTextSize(17);
         textView.setPadding(5,0,5,2);
-        textView.setText("Videos zum aktuellen Artikel:");
+        textView.setText(R.string.videosOfArticle);
 
 
         layout.addView(textView);
@@ -254,7 +262,11 @@ public class ArticleActivity extends AppCompatActivity implements IPageHandler, 
         for(String video : videos){
 
             VideoEnabledWebView videoView = new VideoEnabledWebView(this);
-            int height = (int)(getWindowManager().getDefaultDisplay().getWidth() * (9f/16));
+
+            DisplayMetrics metrics = new DisplayMetrics();
+            getWindowManager().getDefaultDisplay().getMetrics(metrics);
+
+            int height = (int)(metrics.widthPixels * (9f/16));
             LinearLayout.LayoutParams webViewParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height);
             webViewParams.bottomMargin = 20;
 

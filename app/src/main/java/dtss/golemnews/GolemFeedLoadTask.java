@@ -34,10 +34,8 @@ public class GolemFeedLoadTask extends AsyncTask<GolemFeed, Void, HashMap<GolemF
 
             try {
                 String rss = getRSS(feed.getFeedUrl());
-                if (rss != null) {
-                    LinkedList<GolemFeedItem> items = getItemsFromRSS(rss);
-                    feed.addItems(items);
-                }
+                LinkedList<GolemFeedItem> items = getItemsFromRSS(rss);
+                feed.addItems(items);
                 result = GolemFeedLoadTaskResult.OK;
             } catch (IOException ex) {
                 result = GolemFeedLoadTaskResult.InternetError;
@@ -119,17 +117,17 @@ public class GolemFeedLoadTask extends AsyncTask<GolemFeed, Void, HashMap<GolemF
         InputStream stream = feed_url.openStream();
         InputStreamReader streamReader = new InputStreamReader(stream, StandardCharsets.ISO_8859_1);
         BufferedReader reader = new BufferedReader(streamReader);
-        String rss = "";
+        StringBuilder rss = new StringBuilder();
         String line = "";
         do {
             try {
                 line = reader.readLine();
-                if (line != null) rss += line + "\n";
+                if (line != null) rss.append(line).append("\n");
             } catch (IOException ex) {
                 Log.e("Feed loading error", ex.toString());
             }
         } while (line != null);
-        return rss;
+        return rss.toString();
     }
 
 

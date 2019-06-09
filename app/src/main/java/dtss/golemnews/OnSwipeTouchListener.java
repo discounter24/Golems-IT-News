@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.View.OnTouchListener;
 import android.widget.ListView;
 
-public abstract class OnSwipeTouchListener implements OnTouchListener {
+abstract class OnSwipeTouchListener implements OnTouchListener {
 
     private final GestureDetector gestureDetector;
 

@@ -25,20 +25,14 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
     protected void onCreate(Bundle savedInstanceState) {
 
         ThemeUtils.updateTheme(this);
+
         ThemeUtils.sharedPreferences.registerOnSharedPreferenceChangeListener(this);
-
-        Preference pref = findPreference("appThemePref");
-
-        if (pref instanceof ListPreference) {
-            ListPreference listPref = (ListPreference) pref;
-            pref.setSummary(listPref.getEntry());
-        }
 
         getDelegate().installViewFactory();
         getDelegate().onCreate(savedInstanceState);
 
         super.onCreate(savedInstanceState);
-        setTitle("Einstellungen");
+        setTitle(R.string.settings);
 
         getFragmentManager().beginTransaction().replace(android.R.id.content, new MainSettingsFragment()).commit();
 
@@ -119,10 +113,35 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
     }
 
 
-    public  static  class MainSettingsFragment extends PreferenceFragment{
+    public  static  class MainSettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
         public void onCreate(Bundle savedInstanceState){
             super.onCreate(savedInstanceState);
+
+
+            ThemeUtils.sharedPreferences.registerOnSharedPreferenceChangeListener(this);
+
+            Preference pref = findPreference("appThemePref");
+
+            if (pref instanceof ListPreference) {
+                ListPreference listPref = (ListPreference) pref;
+                pref.setSummary(listPref.getEntry());
+            }
+
             addPreferencesFromResource(R.xml.preferences);
+
+
+        }
+
+        @Override
+        public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+            if (key.equals("appThemePref")) {
+                Preference pref = findPreference(key);
+
+                if (pref instanceof ListPreference) {
+                    ListPreference listPref = (ListPreference) pref;
+                    pref.setSummary(listPref.getEntry());
+                }
+            }
         }
     }
 
@@ -131,12 +150,6 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         if (key.equals("appThemePref")) {
             recreate();
-            Preference pref = findPreference(key);
-
-            if (pref instanceof ListPreference) {
-                ListPreference listPref = (ListPreference) pref;
-                pref.setSummary(listPref.getEntry());
-            }
         }
     }
 

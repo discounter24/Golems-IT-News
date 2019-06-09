@@ -41,11 +41,11 @@ class GolemArticlePage {
 
     public void requestText(IPageHandler handler){
         if (chaptersLoaded){
-            String text = "";
+            StringBuilder text = new StringBuilder();
             for(String chapter : getChapers()){
-                text += chapter + "\n\n";
+                text.append(chapter).append("\n\n");
             }
-            handler.onTextReceived(this,text);
+            handler.onTextReceived(this, text.toString());
         } else {
             GolemArticlePageTextLoadTask task = new GolemArticlePageTextLoadTask(handler);
             task.execute(this);
@@ -218,13 +218,13 @@ class GolemArticlePage {
 
         protected void onPostExecute(String result) {
             if (articleHandler != null){
-                String text = "";
+                StringBuilder text = new StringBuilder();
                 for (String  c : chapters) {
                     page.addChapter(c);
-                    text += c + "\n\n";
+                    text.append(c).append("\n\n");
                 }
 
-                articleHandler.onTextReceived(page, text);
+                articleHandler.onTextReceived(page, text.toString());
             }
         }
     }
