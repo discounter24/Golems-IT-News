@@ -29,6 +29,8 @@ import dtss.golemnews.utils.ThemeUtils;
 
 public class MainActivity extends AppCompatActivity implements IFeedLoadHandler, SharedPreferences.OnSharedPreferenceChangeListener {
 
+    public final boolean PRELOAD_BACKGROUND = true;
+
     private CustomFeedAdapter adapter;
     public static GolemFeed feed;
 
@@ -227,40 +229,49 @@ public class MainActivity extends AppCompatActivity implements IFeedLoadHandler,
         }
     }
 
+
+
     private void preload(){
-        final ProgressBar bar = findViewById(R.id.articlePreloadProgress);
-        final TextView loadingStateArtikel = findViewById(R.id.loadingStateArticle);
+
+            final ProgressBar bar = findViewById(R.id.articlePreloadProgress);
+            final TextView loadingStateArtikel = findViewById(R.id.loadingStateArticle);
 
 
-        GolemArticle.ArticleFullyLoadedHandler loadHandler = new GolemArticle.ArticleFullyLoadedHandler() {
-            int loadedArticles = 0;
+            GolemArticle.ArticleFullyLoadedHandler loadHandler = new GolemArticle.ArticleFullyLoadedHandler() {
+                int loadedArticles = 0;
 
-            @Override
-            public void onArticleLoaded() {
-                loadedArticles++;
+                @Override
+                public void onArticleLoaded() {
+                    loadedArticles++;
 
-                if (android.os.Build.VERSION.SDK_INT >= 24) {
-                    bar.setProgress(loadedArticles,true);
-                } else {
-                    bar.setProgress(loadedArticles);
+                    if (android.os.Build.VERSION.SDK_INT >= 24) {
+                        bar.setProgress(loadedArticles,true);
+                    } else {
+                        bar.setProgress(loadedArticles);
+                    }
+
+                    loadingStateArtikel.setText(String.format(getResources().getString(R.string.loadArticles),loadedArticles,feed.getFeedItems().size()));
+                    if (loadedArticles == feed.getFeedItems().size()){
+                        bar.setVisibility(View.GONE);
+                        loadingStateArtikel.setVisibility(View.GONE);
+                    } else {
+                        feed.getFeedItems().get(loadedArticles).getArticle().loadAll(this);
+                    }
                 }
+            };
+            bar.setMax(feed.getFeedItems().size());
 
-                loadingStateArtikel.setText(String.format(getResources().getString(R.string.loadArticles),loadedArticles,feed.getFeedItems().size()));
-                if (loadedArticles == feed.getFeedItems().size()){
-                    bar.setVisibility(View.GONE);
-                    loadingStateArtikel.setVisibility(View.GONE);
-                } else {
-                    feed.getFeedItems().get(loadedArticles).getArticle().loadAll(this);
-
-                }
+            if (!PRELOAD_BACKGROUND){
+                bar.setVisibility(View.VISIBLE);
+                loadingStateArtikel.setVisibility(View.VISIBLE);
             }
-        };
-        bar.setMax(feed.getFeedItems().size());
-        bar.setVisibility(View.VISIBLE);
-        loadingStateArtikel.setVisibility(View.VISIBLE);
 
-        loadingStateArtikel.setText(String.format(getResources().getString(R.string.loadArticles),0,feed.getFeedItems().size()));
-        feed.getFeedItems().get(0).getArticle().loadAll(loadHandler);
+
+            loadingStateArtikel.setText(String.format(getResources().getString(R.string.loadArticles),0,feed.getFeedItems().size()));
+            feed.getFeedItems().get(0).getArticle().loadAll(loadHandler);
+
+
+
     }
 
 

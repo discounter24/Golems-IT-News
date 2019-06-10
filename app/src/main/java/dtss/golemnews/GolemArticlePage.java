@@ -10,6 +10,7 @@ import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.util.LinkedList;
+import java.util.concurrent.Semaphore;
 
 import dtss.golemnews.utils.ImageUtil;
 
@@ -51,28 +52,23 @@ class GolemArticlePage {
 
             DiskCache.getInstance().requestText(link, new DiskCache.ICacheAnswerHandler() {
                 @Override
-                public void onCacheGImageAnswer(String identifier, GolemImage image, boolean found) {
-
-                }
-
-                @Override
-                public void onCacheGImageListAnswer(String identifier, LinkedList<GolemImage> image, boolean found) {
-
-                }
-
-                @Override
-                public void onCacheChaptersAnswer(String identifier, LinkedList<String> chapters, boolean found) {
+                public void onCacheAnswer(Object cacheObject, boolean found) {
                     if (found){
-                        GolemArticlePage.this.chapters.addAll(chapters);
-                        chaptersLoaded = true;
-                        requestText(handler);
+                        if (cacheObject instanceof LinkedList){
+                            LinkedList<String> chapters = (LinkedList<String>) cacheObject;
+                            GolemArticlePage.this.chapters.addAll(chapters);
+                            chaptersLoaded = true;
+                            requestText(handler);
+                        }
+
                     } else {
                         GolemArticlePageTextLoadTask task = new GolemArticlePageTextLoadTask(handler);
                         task.execute(GolemArticlePage.this);
                         chaptersLoaded=true;
                     }
-
                 }
+
+
             });
 
         }
@@ -84,29 +80,23 @@ class GolemArticlePage {
         } else {
             DiskCache.getInstance().requestImage(link, new DiskCache.ICacheAnswerHandler() {
                 @Override
-                public void onCacheGImageAnswer(String identifier, GolemImage image, boolean found) {
+                public void onCacheAnswer(Object cacheObject, boolean found) {
 
-                }
-
-                @Override
-                public void onCacheGImageListAnswer(String identifier, LinkedList<GolemImage> image, boolean found) {
                     if (found){
-                        GolemArticlePage.this.images.addAll(image);
-                        imagesLoaded = true;
-                        requestImages(handler);
+                        if (cacheObject instanceof LinkedList){
+                            LinkedList<GolemImage> images = (LinkedList<GolemImage>)cacheObject;
+                            GolemArticlePage.this.images.addAll(images);
+                            imagesLoaded = true;
+                            requestImages(handler);
+                        }
+
                     } else {
                         GolemArticlePageImageLoadTask task = new GolemArticlePageImageLoadTask(handler);
                         task.execute(GolemArticlePage.this);
                         imagesLoaded = true;
                     }
-
-
                 }
 
-                @Override
-                public void onCacheChaptersAnswer(String identifier, LinkedList<String> chapters, boolean found) {
-
-                }
             });
 
 
@@ -114,13 +104,29 @@ class GolemArticlePage {
         }
     }
 
-    public void requestVideos(IPageHandler handler)  {
+    public void requestVideos(final IPageHandler handler)  {
         if (videosLoaded){
             handler.onVideosReceived(this, videos);
         } else {
-            GolemArticlePageVideoLoadTask task = new GolemArticlePageVideoLoadTask(handler);
-            task.execute(this);
-            videosLoaded = true;
+            DiskCache.getInstance().requestVideo(link, new DiskCache.ICacheAnswerHandler() {
+                @Override
+                public void onCacheAnswer(Object cacheObject, boolean found) {
+                    if (found){
+                        if (cacheObject instanceof LinkedList){
+                            LinkedList<String> videos = (LinkedList<String>)cacheObject;
+                            GolemArticlePage.this.videos.addAll(videos);
+                            videosLoaded = true;
+                            requestVideos(handler);
+                        }
+                    } else {
+                        GolemArticlePageVideoLoadTask task = new GolemArticlePageVideoLoadTask(handler);
+                        task.execute(GolemArticlePage.this);
+                        videosLoaded = true;
+                    }
+                }
+            });
+
+
         }
 
     }
@@ -154,6 +160,48 @@ class GolemArticlePage {
         return chapters;
     }
 
+    private static Document getDocument(final GolemArticlePage page) throws IOException {
+        Document d;
+        if (page.getHtml().isEmpty()){
+
+            /*
+            final Semaphore waitForCacheAnswer = new Semaphore(1);
+
+            try {
+                waitForCacheAnswer.acquire();
+                DiskCache.getInstance().requestHtml(page.getLink(), new DiskCache.ICacheAnswerHandler() {
+                    @Override
+                    public void onCacheAnswer(Object cacheObject, boolean found) {
+                        if (found){
+                            page.setHtml((String)cacheObject);
+                        }
+                        waitForCacheAnswer.release();
+                    }
+                });
+
+                waitForCacheAnswer.wait();
+            } catch (InterruptedException e) { }
+
+
+            if (page.getHtml().isEmpty()){
+                d = Jsoup.connect(page.getLink()).get();
+                page.setHtml(d.html());
+            } else {
+                d = Jsoup.parse(page.getHtml());
+            }
+
+            */
+
+            d = Jsoup.connect(page.getLink()).get();
+            page.setHtml(d.html());
+
+        } else {
+            d = Jsoup.parse(page.getHtml());
+        }
+
+        return d;
+    }
+
 
     private static class GolemArticlePageImageLoadTask extends AsyncTask<GolemArticlePage, Void, Void> {
 
@@ -172,13 +220,7 @@ class GolemArticlePage {
 
             this.page = articles[0];
             try {
-                Document d;
-                if (page.getHtml().isEmpty()){
-                    d = Jsoup.connect(page.getLink()).get();
-                    page.setHtml(d.html());
-                } else {
-                    d = Jsoup.parse(page.getHtml());
-                }
+                Document d = getDocument(page);
 
                 Elements heroes = d.getElementsByClass("hero");
                 Element hero = heroes.first();
@@ -218,6 +260,8 @@ class GolemArticlePage {
         }
     }
 
+
+
     private static class GolemArticlePageTextLoadTask extends AsyncTask<GolemArticlePage, Void, String> {
 
         private final IPageHandler articleHandler;
@@ -236,13 +280,7 @@ class GolemArticlePage {
             String text = "";
 
             try {
-                Document d;
-                if (page.getHtml().isEmpty()){
-                    d = Jsoup.connect(page.getLink()).get();
-                    page.setHtml(d.html());
-                } else {
-                    d = Jsoup.parse(page.getHtml());
-                }
+                Document d = getDocument(page);
 
                 int part  = 1;
                 Element element = d.getElementById("gpar" + part);
@@ -296,14 +334,7 @@ class GolemArticlePage {
             this.page = articles[0];
 
             try {
-                Document d;
-                if (page.getHtml().isEmpty()){
-                    d = Jsoup.connect(page.getLink()).get();
-                    page.setHtml(d.html());
-                } else {
-                    d = Jsoup.parse(page.getHtml());
-                }
-
+                Document d = getDocument(page);
 
                 Elements elements = d.getElementsByClass("gvideofig");
 

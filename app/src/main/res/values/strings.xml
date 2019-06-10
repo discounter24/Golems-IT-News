@@ -21,7 +21,7 @@
     <string name="reload">Neu laden</string>
     <string name="loadVideo">Lade video..</string>
     <string name="loadRSS">Lade RSS feed..</string>
-    <string name="loadArticles">Lade Artikel herunter (%d/%d) ..</string>
+    <string name="loadArticles">Lade Artikel (%d/%d) ..</string>
     <string name="videosOfArticle">Videos zum aktuellen Artikel:</string>
     <string name="loadArticle">Lade Artikel..</string>
 </resources>

@@ -110,8 +110,6 @@ class GolemArticle{
                             fullyLoaded = true;
                             loading = false;
 
-
-
                             for(ArticleFullyLoadedHandler h : waitingForLoaded){
                                 h.onArticleLoaded();
                             }
@@ -129,8 +127,6 @@ class GolemArticle{
 
 
     }
-
-
 
     private void searchArticlePages(final IArticlePageFound pageFindHandler){
         if (!pagesSearchCompleted){
