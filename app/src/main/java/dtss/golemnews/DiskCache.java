@@ -17,6 +17,7 @@ import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.LinkedList;
+import java.util.Objects;
 
 public class DiskCache implements IPageHandler {
     private static DiskCache ourInstance;
@@ -168,6 +169,7 @@ public class DiskCache implements IPageHandler {
     }
 
 
+    @SuppressWarnings("unchecked")
     public class ReadTask extends AsyncTask<Void,Void,Void>{
 
         private final File cacheFolder;
@@ -178,11 +180,11 @@ public class DiskCache implements IPageHandler {
         private Object result;
 
         private boolean list;
-        private Class<? extends  Object> type;
+        private Class<?> type;
 
         private boolean found;
 
-        public ReadTask(File cacheFolder, String id, Class<? extends  Object> type, boolean list, ICacheAnswerHandler handler){
+        public ReadTask(File cacheFolder, String id, Class<?> type, boolean list, ICacheAnswerHandler handler){
             this.cacheFolder = cacheFolder;
             this.id = id;
             this.handler = handler;
@@ -358,9 +360,8 @@ public class DiskCache implements IPageHandler {
             e.printStackTrace();
         }
 
-        m.update(s.getBytes(),0,s.length());
-        String hash = new BigInteger(1, m.digest()).toString(16);
-        return hash;
+        Objects.requireNonNull(m).update(s.getBytes(),0,s.length());
+        return new BigInteger(1, m.digest()).toString(16);
     }
 
 }

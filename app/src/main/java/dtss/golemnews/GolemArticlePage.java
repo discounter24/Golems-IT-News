@@ -10,7 +10,6 @@ import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.util.LinkedList;
-import java.util.concurrent.Semaphore;
 
 import dtss.golemnews.utils.ImageUtil;
 
@@ -55,7 +54,7 @@ class GolemArticlePage {
                 public void onCacheAnswer(Object cacheObject, boolean found) {
                     if (found){
                         if (cacheObject instanceof LinkedList){
-                            LinkedList<String> chapters = (LinkedList<String>) cacheObject;
+                            @SuppressWarnings("unchecked") LinkedList<String> chapters = (LinkedList<String>) cacheObject;
                             GolemArticlePage.this.chapters.addAll(chapters);
                             chaptersLoaded = true;
                             requestText(handler);
@@ -84,7 +83,7 @@ class GolemArticlePage {
 
                     if (found){
                         if (cacheObject instanceof LinkedList){
-                            LinkedList<GolemImage> images = (LinkedList<GolemImage>)cacheObject;
+                            @SuppressWarnings("unchecked") LinkedList<GolemImage> images = (LinkedList<GolemImage>)cacheObject;
                             GolemArticlePage.this.images.addAll(images);
                             imagesLoaded = true;
                             requestImages(handler);
@@ -113,7 +112,7 @@ class GolemArticlePage {
                 public void onCacheAnswer(Object cacheObject, boolean found) {
                     if (found){
                         if (cacheObject instanceof LinkedList){
-                            LinkedList<String> videos = (LinkedList<String>)cacheObject;
+                            @SuppressWarnings("unchecked") LinkedList<String> videos = (LinkedList<String>)cacheObject;
                             GolemArticlePage.this.videos.addAll(videos);
                             videosLoaded = true;
                             requestVideos(handler);
