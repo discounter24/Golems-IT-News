@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -97,6 +98,55 @@ public class DiskCache implements IPageHandler {
     }
 
 
+    public void clearCache(GolemFeed keep){
+        LinkedList<String> pagesToKeep = new LinkedList<>();
+        for(GolemFeedItem item : keep.getFeedItems()){
+            pagesToKeep.add(getStorageID(item.getLink()));
+        }
+        clearCache(pagesToKeep);
+    }
+
+
+    public void clearCache(LinkedList<String> keep){
+        new DeleteTask(cacheDir, keep).execute();
+    }
+
+    public void clearCache(){
+        clearCache(new LinkedList<String>());
+    }
+
+
+    public class DeleteTask extends  AsyncTask<Void,Void,Void>{
+
+        private final LinkedList<String> keep;
+        private final File cacheFolder;
+
+        public DeleteTask(File cacheFolder, LinkedList<String> keep){
+            this.keep = keep;
+            this.cacheFolder = cacheFolder;
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            for(File cacheFile : cacheFolder.listFiles()){
+                if (!keep.contains(cacheFile.getName())){
+                    try{
+                        if (cacheFile.delete()){
+                            Log.d("CacheClear","Deleted:" + cacheFile.getName());
+                        } else {
+                            Log.d("CacheClear","Can't delete:" + cacheFile.getName());
+                            cacheFile.deleteOnExit();
+                        }
+                    } catch (Exception ex){
+                       continue;
+                    }
+                } else {
+                    continue;
+                }
+            }
+            return null;
+        }
+    }
 
 
     public class WriteTask<T> extends AsyncTask<Void,Void,Void>{
@@ -210,13 +260,6 @@ public class DiskCache implements IPageHandler {
 
                     LinkedList list = new LinkedList();
 
-                    /*
-                    if (type==GolemImage.class){
-                        list = new LinkedList<GolemImage>();
-                    } else if (type==String.class) {
-                        list = new LinkedList<String>();
-                    }
-                    */
 
                     for(int i=0;i<length;i++){
                         if (type == GolemImage.class && strTypeFound.equalsIgnoreCase("gimage")){

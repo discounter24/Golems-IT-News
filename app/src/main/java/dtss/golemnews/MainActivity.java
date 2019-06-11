@@ -156,13 +156,11 @@ public class MainActivity extends AppCompatActivity implements IFeedLoadHandler,
     @Override
     public void onResume() {
         super.onResume();
-        //sharedPreferences.registerOnSharedPreferenceChangeListener(this);
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        //sharedPreferences.unregisterOnSharedPreferenceChangeListener(this);
     }
 
     private void reload(){
@@ -206,6 +204,9 @@ public class MainActivity extends AppCompatActivity implements IFeedLoadHandler,
 
     @Override
     public void FeedItemListLoaded(GolemFeedLoadTask.GolemFeedLoadTaskResult result, final GolemFeed feed) {
+        DiskCache.getInstance().clearCache(feed);
+        //DiskCache.getInstance().clearCache();
+
         adapter.data = feed.getFeedItems().toArray(new GolemFeedItem[0]);
         adapter.notifyDataSetChanged();
 
