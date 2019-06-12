@@ -245,11 +245,18 @@ public class MainActivity extends AppCompatActivity implements IFeedLoadHandler,
                 public void onArticleLoaded() {
                     loadedArticles++;
 
-                    if (android.os.Build.VERSION.SDK_INT >= 24) {
-                        bar.setProgress(loadedArticles,true);
-                    } else {
-                        bar.setProgress(loadedArticles);
+                    try{
+                        if (android.os.Build.VERSION.SDK_INT >= 24) {
+                            bar.setMax(feed.getFeedItems().size());
+                            bar.setProgress(loadedArticles,true);
+                        } else {
+                            bar.setMax(feed.getFeedItems().size());
+                            bar.setProgress(loadedArticles);
+                        }
+                    } catch (Exception ex){
+                        Log.d("ProgressBar",ex.toString());
                     }
+
 
                     loadingStateArtikel.setText(String.format(getResources().getString(R.string.loadArticles),loadedArticles,feed.getFeedItems().size()));
                     if (loadedArticles == feed.getFeedItems().size()){
