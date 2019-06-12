@@ -131,7 +131,7 @@ public class DiskCache implements IPageHandler {
             for(File cacheFile : cacheFolder.listFiles()){
                 if (!keep.contains(cacheFile.getName())){
                     try{
-                        if (cacheFile.delete()){
+                        if (deleteDir(cacheFile)){
                             Log.d("CacheClear","Deleted:" + cacheFile.getName());
                         } else {
                             Log.d("CacheClear","Can't delete:" + cacheFile.getName());
@@ -146,6 +146,22 @@ public class DiskCache implements IPageHandler {
             }
             return null;
         }
+    }
+
+
+    private boolean deleteDir(File dir) {
+        if (dir != null && dir.isDirectory()) {
+            String[] children = dir.list();
+            for (int i = 0; i < children.length; i++) {
+                boolean success = deleteDir(new File(dir, children[i]));
+                if (!success) {
+                    return false;
+                }
+            }
+        }
+
+        // The directory is now empty so delete it
+        return dir.delete();
     }
 
 
