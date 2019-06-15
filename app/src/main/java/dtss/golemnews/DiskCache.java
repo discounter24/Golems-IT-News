@@ -341,14 +341,26 @@ public class DiskCache implements IPageHandler {
     }
 
     private void simpleWrite(File cacheFolder, String id, GolemImage image) throws IOException {
+        if (image==null) return;
         File dataFile = new File(cacheFolder,id + ".bmp");
         File linkFile = new File(cacheFolder,id + ".link");
         File authorFile = new File(cacheFolder,id + ".author");
         File descriptionFile = new File(cacheFolder, id + ".desc");
-        simpleWrite(linkFile,image.getLink());
-        simpleWrite(authorFile,image.getAuthor());
-        simpleWrite(descriptionFile,image.getDescription());
-        simpleWrite(dataFile,image.getImage());
+
+        if (image.getLink() != null){
+            simpleWrite(linkFile,image.getLink());
+        }
+        if (image.getAuthor() != null){
+            simpleWrite(authorFile,image.getAuthor());
+        }
+        if (image.getDescription() != null){
+            simpleWrite(descriptionFile, image.getDescription());
+        }
+
+        if (image.getImage() != null){
+            simpleWrite(dataFile,image.getImage());
+        }
+
     }
 
 
@@ -383,8 +395,12 @@ public class DiskCache implements IPageHandler {
         file.createNewFile();
 
         FileOutputStream stream = new FileOutputStream(file);
-        content.compress(Bitmap.CompressFormat.PNG,100,stream);
-        stream.flush();
+        try{
+            content.compress(Bitmap.CompressFormat.PNG,100,stream);
+            stream.flush();
+        } catch (Exception ex){
+            Log.d("SimepleWrite_Image",ex.toString());
+        }
         stream.close();
     }
 

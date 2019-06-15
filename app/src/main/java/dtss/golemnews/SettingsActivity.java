@@ -1,5 +1,7 @@
 package dtss.golemnews;
 
+import android.app.TaskStackBuilder;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -139,6 +141,8 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
                     ListPreference listPref = (ListPreference) pref;
                     pref.setSummary(listPref.getEntry());
                 }
+
+
             }
         }
     }

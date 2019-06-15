@@ -155,11 +155,13 @@ public class MainActivity extends AppCompatActivity implements IFeedLoadHandler,
 
     @Override
     public void onResume() {
+        //ThemeUtils.sharedPreferences.registerOnSharedPreferenceChangeListener(this);
         super.onResume();
     }
 
     @Override
     public void onPause() {
+        //ThemeUtils.sharedPreferences.unregisterOnSharedPreferenceChangeListener(this);
         super.onPause();
     }
 
@@ -199,6 +201,7 @@ public class MainActivity extends AppCompatActivity implements IFeedLoadHandler,
         super.onConfigurationChanged(configuration);
         if (ThemeUtils.isSystemControlled()){
             recreate();
+
         }
     }
 
@@ -263,7 +266,12 @@ public class MainActivity extends AppCompatActivity implements IFeedLoadHandler,
                         bar.setVisibility(View.GONE);
                         loadingStateArtikel.setVisibility(View.GONE);
                     } else {
-                        feed.getFeedItems().get(loadedArticles).getArticle().loadAll(this);
+                        try{
+                            feed.getFeedItems().get(loadedArticles).getArticle().loadAll(this);
+                        } catch (Exception ex){
+                            Log.d("Preload","Cant't load next article.\n" + ex.toString());
+                        }
+
                     }
                 }
             };
@@ -295,6 +303,7 @@ public class MainActivity extends AppCompatActivity implements IFeedLoadHandler,
             recreate();
         }
     }
+
 
 
     private boolean checkWifiOnAndConnected() {

@@ -3,6 +3,7 @@ package dtss.golemnews.utils;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.view.View;
 
 import dtss.golemnews.R;
 
@@ -35,9 +36,9 @@ public abstract class ThemeUtils {
             }
         }
         return false;
-
-
     }
+
+
 
 
     public static void updateTheme(Activity activity){

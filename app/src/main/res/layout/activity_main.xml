@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
-    android:background="?android:colorBackground">
+    android:background="?android:colorBackground"
+    tools:context=".MainActivity">
 
     <ProgressBar
         android:id="@+id/AnimationLoader"
@@ -14,22 +15,20 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="303dp"
-        android:indeterminate="false"
-        tools:visibility="gone"
         android:background="?android:colorBackground"
+        android:indeterminate="false"
         android:progressTint="?android:colorAccent"
-        />
+        tools:visibility="gone" />
 
 
     <TextView
         android:id="@+id/loadingStateRSS"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text=""
         android:layout_below="@id/AnimationLoader"
         android:layout_centerHorizontal="true"
-        android:visibility="gone"
-        />
+        android:text=""
+        android:visibility="gone" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -40,21 +39,19 @@
             android:id="@+id/loadingStateArticle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text=""
             android:background="?android:colorBackground"
-            android:textColor="?android:textColorPrimary"
-            />
+            android:text=""
+            android:textColor="?android:textColorPrimary" />
 
         <ProgressBar
             android:id="@+id/articlePreloadProgress"
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="match_parent"
             android:layout_height="15dp"
+            android:background="?android:colorBackground"
             android:max="100"
             android:progress="0"
-            android:background="?android:colorBackground"
-            android:progressTint="?android:colorAccent"
-            />
+            android:progressTint="?android:colorAccent" />
 
         <android.support.v4.widget.SwipeRefreshLayout
             android:id="@+id/swipeRefresh"
