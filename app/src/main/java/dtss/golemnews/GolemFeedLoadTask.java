@@ -97,7 +97,12 @@ public class GolemFeedLoadTask extends AsyncTask<GolemFeed, Void, HashMap<GolemF
                         } else if (tag.equalsIgnoreCase("guid")) {
                             item.setGuid(text);
                         } else if (tag.equalsIgnoreCase("encoded")) {
-                            item.setPreviewImageLink(text.substring(text.indexOf("src='") + 11, text.indexOf("jpg") + 3));
+                            try {
+                                item.setPreviewImageLink(text.substring(text.indexOf("src='") + 11, text.indexOf("jpg") + 3));
+                            } catch (Exception ex) {
+                                Log.e("FeedLoad:","PreviewImageLinkLoadError",ex);
+                            }
+
                         }
 
                         break;
