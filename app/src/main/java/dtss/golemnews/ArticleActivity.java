@@ -6,6 +6,7 @@ import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
@@ -45,6 +46,10 @@ public class ArticleActivity extends AppCompatActivity implements IPageHandler, 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        if (ThemeUtils.sharedPreferences == null){
+            ThemeUtils.sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        }
 
         ThemeUtils.updateTheme(this);
         ThemeUtils.sharedPreferences.registerOnSharedPreferenceChangeListener(this);
