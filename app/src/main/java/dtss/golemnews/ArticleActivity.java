@@ -64,7 +64,12 @@ public class ArticleActivity extends AppCompatActivity implements IPageHandler, 
         Bundle b = getIntent().getExtras();
 
         if (b != null){
-            item = MainActivity.feed.getItemByGuid((String) b.get("guid"));
+            try{
+
+                item = MainActivity.feed.getItemByGuid((String) b.get("guid"));
+            } catch (NullPointerException ex){
+                finish();
+            }
         } else {
             finish();
         }
