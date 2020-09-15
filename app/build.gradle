@@ -6,9 +6,9 @@ android {
         applicationId "pascal.golemnews"
         minSdkVersion 23
         targetSdkVersion 28
-        versionName '1.8.4'
+        versionName '1.8.5'
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        versionCode 14
+        versionCode 16
     }
     buildTypes {
         release {
