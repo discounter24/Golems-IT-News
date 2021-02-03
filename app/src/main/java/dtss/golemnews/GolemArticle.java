@@ -8,7 +8,9 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 
 class GolemArticle{
     private final GolemFeedItem item;
@@ -178,8 +180,24 @@ class GolemArticle{
             try {
                 Document d;
                 if (article.getHtml().isEmpty()){
-                    d = Jsoup.connect(article.getMainLink()).get();
+                    //d = Jsoup.connect(article.getMainLink()).get();
+                    //article.setHtml(d.html());
+
+
+                    Map<String,String> cookies = new HashMap<>();
+                    cookies.put("golem-cookie-accept","true");
+                    cookies.put("consentUUID","a5f51e94-905f-48b7-be17-5bda37723f06");
+                    cookies.put("golem_consent20","cmp|200801");
+                    cookies.put("golem_first_popup","true");
+                    cookies.put("golem_lp","fjn2907dlq2pj7hthqxed9wnvopocb6j");
+                    cookies.put("euconsent-v2","CPA2VciPA2VciAGABCENBLCgAP_AAAAAAAYgHQhd5DrNTWFAUXxZStFgGYgUxsQUAmQCCACBAyAFAAGQ8IQCk0ACsASABAAAAQAAoxABAAAEHAEEAAAAAAAEAAAAAAQAgAAIIAAEABEBAAIQAAoIAAAAAAAAAAABCAAAmACQA8bCBGAAAIAwQAAAgAAACIAAAgAAAQGQBwAVABMAC5APsA_ACOAJiAXmMABgFiANkAk4RAGABUAFwAfgCGwEXgJ2CQKQAEAALAAqABkADgAIAARAAqABoADyAIgAigBMACeAFwAN4AcwBCQCIAIkASwApQBbgDDAGqAPaAfYB");
+                    cookies.put("xdefcc","G4230519220fa936057c08e907f8891270");
+                    cookies.put("Golem_rngnaf","true");
+
+
+                    d = Jsoup.connect(article.getMainLink()).cookies(cookies).get();
                     article.setHtml(d.html());
+
                 } else {
                     d = Jsoup.parse(article.getHtml());
                 }

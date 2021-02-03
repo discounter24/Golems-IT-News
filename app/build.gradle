@@ -5,10 +5,10 @@ android {
     defaultConfig {
         applicationId "pascal.golemnews"
         minSdkVersion 23
-        targetSdkVersion 28
-        versionName '1.9.2'
+        targetSdkVersion 29
+        versionName '1.9.3'
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        versionCode 19
+        versionCode 21
     }
     buildTypes {
         release {
