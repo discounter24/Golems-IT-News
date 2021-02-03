@@ -167,14 +167,26 @@ class GolemArticlePage {
 
 
             Map<String,String> cookies = new HashMap<>();
-            cookies.put("golem-cookie-accept","true");
-            cookies.put("consentUUID","a5f51e94-905f-48b7-be17-5bda37723f06");
-            cookies.put("golem_consent20","cmp|200801");
-            cookies.put("golem_first_popup","true");
-            cookies.put("golem_lp","fjn2907dlq2pj7hthqxed9wnvopocb6j");
-            cookies.put("euconsent-v2","CPA2VciPA2VciAGABCENBLCgAP_AAAAAAAYgHQhd5DrNTWFAUXxZStFgGYgUxsQUAmQCCACBAyAFAAGQ8IQCk0ACsASABAAAAQAAoxABAAAEHAEEAAAAAAAEAAAAAAQAgAAIIAAEABEBAAIQAAoIAAAAAAAAAAABCAAAmACQA8bCBGAAAIAwQAAAgAAACIAAAgAAAQGQBwAVABMAC5APsA_ACOAJiAXmMABgFiANkAk4RAGABUAFwAfgCGwEXgJ2CQKQAEAALAAqABkADgAIAARAAqABoADyAIgAigBMACeAFwAN4AcwBCQCIAIkASwApQBbgDDAGqAPaAfYB");
-            cookies.put("xdefcc","G4230519220fa936057c08e907f8891270");
+            cookies.put("_sp_enable_dfp_personalized_ads","false");
+            cookies.put("_sp_v1_consent","1!1:1:-1:-1:-1:-1");
+            cookies.put("_sp_v1_csv","null");
+            cookies.put("_sp_v1_data","2:274572:1612386409:0:3:0:3:0:0:_:-1");
+            cookies.put("_sp_v1_lt","1:");
+            cookies.put("_sp_v1_opt","1:login|true:last_id|11:");
+            cookies.put("_sp_v1_ss","1:H4sIAAAAAAAAAItWqo5RKimOUbKKBjLyQAyD2lidGKVUEDOvNCcHyC4BK6iurVWKBQAW54XRMAAAAA%3D%3D");
+            cookies.put("_sp_v1_uid","1:449:622e9028-5093-4c08-90b4-4c9bd3ba2ad1");
+            cookies.put("a2a_consumerId","94c17a8e-cb0b-40bc-9f3f-906d7329db24");
+            cookies.put("golem_c20date","1612386411");
+            cookies.put("golem_consent20","cmp|210127");
+            cookies.put("golem_lp","wzijmip4xsag4n14n4q1jkxq57mk4qtg");
+            cookies.put("golem_referer","https%3A%2F%2Fwww.google.com%2F");
             cookies.put("Golem_rngnaf","true");
+            cookies.put("golem_testcookie","1");
+            //cookies.put("golem_viewauto","desktop%3Afirefox_84_0");
+            cookies.put("ima_data_8caf03772d2e0ce26fd3cd41a1358210dca9a6a8","Vl%2BGhIYxw%2BVZRv5DGaTJ5w%3D%3DogHFGMCG0Zc4ZkIB0AsgNjqRWHO2oMH9LG46RbpU4azbYKvykFLDJLP5sHro3FpRHmhsMjHj%2B4JURrt1O8CV5inWAYqrFUe98X%2FXqIkr1L7BbHM7PwOfUKqxcubMEizt%2FNC2KRxW4NQCLeSwBMjC5NxL8EhujQ1PJeQwV6ZjbQ81EWPLUUMzz4zdw4bEgRjWrAFXUyN9Op8wmD5%2FB5LJjy3YkneGHYrCwXEpXjUbMqpgN1TC31nVxpAyu293sMDcB%2B7EME6IXoyiUsvTdMAX26%2FemKDbxjIUWDUM2RizMndpbHABQvHP90qAAkgfCZpW2Tr%2BfiKgsLCbB22hXKFf4uDMztlKdp%2FOoJvNZXLmeWyYgOj4QbtUMEKnQr%2BOOAE5ce1EV%2FqqANC%2F97MzluEAXw%3D%3D");
+            cookies.put("ima_data_checksum_8caf03772d2e0ce26fd3cd41a1358210dca9a6a8","124c67bb1119a019808b750b4330ed5892b63610");
+            cookies.put("xdefccpm","no");
+            cookies.put("xdefcc","G421224b019a87bd1c854e42f56d6ce4c3");
 
 
             d = Jsoup.connect(page.getLink()).cookies(cookies).get();

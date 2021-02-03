@@ -9,8 +9,8 @@
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
         <option name="modules">
           <set>
-            <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/app" />
+            <option value="/media/pascal/Data/Linux/home/pascal/Dokumente/Golems-IT-News" />
+            <option value="/media/pascal/Data/Linux/home/pascal/Dokumente/Golems-IT-News/app" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />
