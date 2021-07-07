@@ -9,12 +9,11 @@
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
         <option name="modules">
           <set>
-            <option value="/media/pascal/Data/Linux/home/pascal/Dokumente/Golems-IT-News" />
-            <option value="/media/pascal/Data/Linux/home/pascal/Dokumente/Golems-IT-News/app" />
+            <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/app" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />
-        <option name="useQualifiedModuleNames" value="true" />
       </GradleProjectSettings>
     </option>
   </component>

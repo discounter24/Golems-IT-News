@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <PreferenceCategory
         android:key="theme_category"
@@ -14,14 +15,17 @@
             android:entryValues="@array/darkModeOptions"
             />
 
-        <ListPreference
-            android:key="appPreloadPref"
-            android:title="Artikel preloading"
-            android:summary="Artikel bereits beim Öffnen der App herunterladen"
-            android:defaultValue="wifi"
+
+
+<!--        <ListPreference
+            android:defaultValue="never"
             android:entries="@array/preloadOptionValues"
             android:entryValues="@array/preloadOptions"
-            />
+            android:key="appPreloadPref"
+            android:summary="Artikel bereits beim Öffnen der App herunterladen"
+            android:title="Artikel preloading"
+            android:visibility="invisible"
+            tools:visibility="invisible" />-->
 
     </PreferenceCategory>
 

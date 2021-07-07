@@ -20,8 +20,8 @@
     </string-array>
 
     <string-array name="preloadOptionValues">
-        <item>Niemals</item>
-        <item>Nur bei WLAN (Standard)</item>
+        <item>Niemals (Standard)</item>
+        <item>Nur bei WLAN</item>
         <item>Immer</item>
     </string-array>
 

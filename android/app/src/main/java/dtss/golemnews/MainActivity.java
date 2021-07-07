@@ -4,11 +4,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
@@ -57,7 +59,6 @@ public class MainActivity extends AppCompatActivity implements IFeedLoadHandler,
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
 
         DiskCache.openCache(this);
 
@@ -225,7 +226,7 @@ public class MainActivity extends AppCompatActivity implements IFeedLoadHandler,
 
 
         try{
-            String preloadSetting = ThemeUtils.sharedPreferences.getString("appPreloadPref","wifi");
+            String preloadSetting = "never"; //ThemeUtils.sharedPreferences.getString("appPreloadPref","wifi");
 
             if ((preloadSetting.equalsIgnoreCase("wifi") && checkWifiOnAndConnected()) || preloadSetting.equalsIgnoreCase("always")){
                 preload();
