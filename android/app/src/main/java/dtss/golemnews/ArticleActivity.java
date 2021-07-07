@@ -1,15 +1,20 @@
 package dtss.golemnews;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -25,25 +30,29 @@ import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicReference;
 
 import dtss.golemnews.utils.ThemeUtils;
 import dtss.golemnews.utils.VideoEnabledWebChromeClient;
 import dtss.golemnews.utils.VideoEnabledWebView;
 
 
-public class ArticleActivity extends AppCompatActivity implements IPageHandler, SharedPreferences.OnSharedPreferenceChangeListener {
+public class ArticleActivity extends AppCompatActivity implements IGolemScriptHandler, IPageHandler, SharedPreferences.OnSharedPreferenceChangeListener {
 
     private TextView articleDesc;
     private TextView articleTitle;
     private TextView articleText;
 
-
-
     private GolemFeedItem item;
+    private GolemScript script;
+
     private int currentPageIndex;
 
+    @SuppressLint("StaticFieldLeak")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -106,12 +115,10 @@ public class ArticleActivity extends AppCompatActivity implements IPageHandler, 
 
 
 
-        item.getArticle().loadAll(new GolemArticle.ArticleFullyLoadedHandler() {
-            @Override
-            public void onArticleLoaded() {
-                loadPage(0);
-            }
-        });
+        this.script = new GolemScript(MainActivity.context,item.getLink());
+
+        script.waitForCache(this);
+
     }
 
 
@@ -146,7 +153,7 @@ public class ArticleActivity extends AppCompatActivity implements IPageHandler, 
 
     }
 
-    private void loadPage(int pageID){
+    private void loadPage(int pageID) {
         ProgressBar bar = findViewById(R.id.progressBar);
         TextView articleLoad = findViewById(R.id.articleLoadView);
 
@@ -164,9 +171,9 @@ public class ArticleActivity extends AppCompatActivity implements IPageHandler, 
         scrollView.fullScroll(ScrollView.FOCUS_UP);
 
         if (pageID == 0){
-            articleTitle.setText(item.getTitle());
-            setTitle(item.getTitle());
-            articleDesc.setText(item.getDescription());
+            articleTitle.setText(script.getTitle());
+            setTitle(script.getTitle());
+            articleDesc.setText(script.getDescription());
 
             articleTitle.setVisibility(View.VISIBLE);
             articleDesc.setVisibility(View.VISIBLE);
@@ -175,15 +182,37 @@ public class ArticleActivity extends AppCompatActivity implements IPageHandler, 
         }
 
 
-        item.getArticle().getPages().get(pageID).requestText(this);
-        item.getArticle().getPages().get(pageID).requestVideos(this);
+        //item.getArticle().getPages().get(pageID).requestText(this);
+        //item.getArticle().getPages().get(pageID).requestVideos(this);
+
+
+
+        try{
+            script.requestAsync(GolemScript.GolemScriptDataType.DESCRIPTION,this);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        try{
+            script.requestAsync(GolemScript.GolemScriptDataType.CHAPTERS,this);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+
+        try{
+            script.requestAsync(GolemScript.GolemScriptDataType.VIDEO_LINKS,this);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
 
         updateSiteNavigator();
     }
 
     private boolean hasNextPage(){
-        return currentPageIndex < item.getArticle().getPages().size()-1;
+        ArrayList<GolemScript> pages = (ArrayList<GolemScript>) script.request(GolemScript.GolemScriptDataType.PAGES);
+        return currentPageIndex < pages.size()-1;
     }
 
     private boolean hasPreviousPage(){
@@ -192,13 +221,13 @@ public class ArticleActivity extends AppCompatActivity implements IPageHandler, 
 
     private void nextPage(){
         if (hasNextPage()){
-            loadPage(currentPageIndex +1);
+            loadPage(currentPageIndex + 1);
         }
     }
 
     private void previousPage(){
         if (hasPreviousPage()){
-            loadPage(currentPageIndex -1);
+            loadPage(currentPageIndex - 1);
         }
     }
 
@@ -231,13 +260,13 @@ public class ArticleActivity extends AppCompatActivity implements IPageHandler, 
 
 
     @Override
+    public void onHtmlReceived(GolemArticlePage sender, String text) {
+        throw new java.lang.UnsupportedOperationException();
+    }
+
+    @Override
     public void onTextReceived(GolemArticlePage sender, String text) {
-        articleText.setVisibility(View.VISIBLE);
-        articleText.setText(text);
-        ProgressBar bar = findViewById(R.id.progressBar);
-        bar.setVisibility(View.GONE);
-        TextView articleLoad = findViewById(R.id.articleLoadView);
-        articleLoad.setVisibility(View.GONE);
+        throw new java.lang.UnsupportedOperationException();
     }
 
     @Override
@@ -256,6 +285,10 @@ public class ArticleActivity extends AppCompatActivity implements IPageHandler, 
 
     @Override
     public void onVideosReceived(GolemArticlePage sender, LinkedList<String> videos) {
+        throw new java.lang.UnsupportedOperationException();
+    }
+
+    public void setVideos(LinkedList<String> videos){
         final LinearLayout layout = findViewById(R.id.videoList);
         final ViewGroup videoLayout = findViewById(R.id.videoLayout);
         final ViewGroup nonVideoLayout = findViewById(R.id.articleLayout);
@@ -339,6 +372,56 @@ public class ArticleActivity extends AppCompatActivity implements IPageHandler, 
             layout.addView(videoView,webViewParams);
 
         }
+    }
+
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    @Override
+    public void dataReceived(final GolemScript.GolemScriptDataType type, final Object data) {
+        this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                switch (type) {
+
+                    case CHAPTERS:
+                        articleText.setVisibility(View.VISIBLE);
+                        articleText.setText(script.getText());
+                        ProgressBar bar = findViewById(R.id.progressBar);
+                        bar.setVisibility(View.GONE);
+                        TextView articleLoad = findViewById(R.id.articleLoadView);
+                        articleLoad.setVisibility(View.GONE);
+                        break;
+                    case DESCRIPTION:
+                        articleDesc.setText((String) data);
+                        articleDesc.setVisibility(View.VISIBLE);
+
+                    case IMAGES:
+                        break;
+                    case VIDEO_LINKS:
+                        setVideos(script.getLinks());
+                        break;
+                    case PAGES:
+                        updateSiteNavigator();
+                    default:
+                        break;
+                }
+            }
+        });
+    }
+
+    @Override
+    public void cacheLoaded(GolemScript sender) {
+        this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                item.getArticle().loadAll(new GolemArticle.ArticleFullyLoadedHandler() {
+                    @Override
+                    public void onArticleLoaded() {
+                        loadPage(0);
+                    }
+                });
+            }
+        });
 
     }
 

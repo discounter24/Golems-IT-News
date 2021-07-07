@@ -5,6 +5,9 @@ import android.support.v4.widget.TextViewCompat;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
+import java.util.Collection;
+import java.util.LinkedList;
 
 import static org.junit.Assert.*;
 
@@ -20,12 +23,4 @@ public class ExampleUnitTest {
     }
 
 
-    @Test
-    public  void checkFullTextRss() throws IOException {
-
-        String rss = GolemFullTextParser.getFullRss();
-
-        System.out.println(GolemFullTextParser.getItemsFromRSS(rss).toString());
-
-    }
 }

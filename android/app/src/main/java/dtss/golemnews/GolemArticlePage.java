@@ -22,6 +22,7 @@ class GolemArticlePage {
     private boolean chaptersLoaded;
     private boolean videosLoaded;
     private boolean imagesLoaded;
+    private boolean htmlLoaded;
 
     private String html;
 
@@ -36,11 +37,23 @@ class GolemArticlePage {
         videos = new LinkedList<>();
         images = new LinkedList<>();
         html = "";
+        htmlLoaded = false;
         imagesLoaded = false;
         videosLoaded = false;
         chaptersLoaded = false;
     }
 
+    public void requestHtml(final IPageHandler handler){
+        if (htmlLoaded){
+            handler.onHtmlReceived(this, html);
+        } else {
+
+            GolemArticlePageTextLoadTask task = new GolemArticlePageTextLoadTask(handler);
+            task.execute(GolemArticlePage.this);
+            chaptersLoaded=true;
+
+        }
+    }
 
     public void requestText(final IPageHandler handler){
         if (chaptersLoaded){
@@ -51,27 +64,10 @@ class GolemArticlePage {
             handler.onTextReceived(this, text.toString());
         } else {
 
+            GolemArticlePageTextLoadTask task = new GolemArticlePageTextLoadTask(handler);
+            task.execute(GolemArticlePage.this);
+            chaptersLoaded=true;
 
-            DiskCache.getInstance().requestText(link, new DiskCache.ICacheAnswerHandler() {
-                @Override
-                public void onCacheAnswer(Object cacheObject, boolean found) {
-                    if (found){
-                        if (cacheObject instanceof LinkedList){
-                            @SuppressWarnings("unchecked") LinkedList<String> chapters = (LinkedList<String>) cacheObject;
-                            GolemArticlePage.this.chapters.addAll(chapters);
-                            chaptersLoaded = true;
-                            requestText(handler);
-                        }
-
-                    } else {
-                        GolemArticlePageTextLoadTask task = new GolemArticlePageTextLoadTask(handler);
-                        task.execute(GolemArticlePage.this);
-                        chaptersLoaded=true;
-                    }
-                }
-
-
-            });
 
         }
     }
@@ -80,29 +76,9 @@ class GolemArticlePage {
         if (imagesLoaded){
             handler.onImagesReceived(this, images);
         } else {
-            DiskCache.getInstance().requestImage(link, new DiskCache.ICacheAnswerHandler() {
-                @Override
-                public void onCacheAnswer(Object cacheObject, boolean found) {
-
-                    if (found){
-                        if (cacheObject instanceof LinkedList){
-                            @SuppressWarnings("unchecked") LinkedList<GolemImage> images = (LinkedList<GolemImage>)cacheObject;
-                            GolemArticlePage.this.images.addAll(images);
-                            imagesLoaded = true;
-                            requestImages(handler);
-                        }
-
-                    } else {
-                        GolemArticlePageImageLoadTask task = new GolemArticlePageImageLoadTask(handler);
-                        task.execute(GolemArticlePage.this);
-                        imagesLoaded = true;
-                    }
-                }
-
-            });
-
-
-
+            GolemArticlePageImageLoadTask task = new GolemArticlePageImageLoadTask(handler);
+            task.execute(GolemArticlePage.this);
+            imagesLoaded = true;
         }
     }
 
@@ -110,25 +86,9 @@ class GolemArticlePage {
         if (videosLoaded){
             handler.onVideosReceived(this, videos);
         } else {
-            DiskCache.getInstance().requestVideo(link, new DiskCache.ICacheAnswerHandler() {
-                @Override
-                public void onCacheAnswer(Object cacheObject, boolean found) {
-                    if (found){
-                        if (cacheObject instanceof LinkedList){
-                            @SuppressWarnings("unchecked") LinkedList<String> videos = (LinkedList<String>)cacheObject;
-                            GolemArticlePage.this.videos.addAll(videos);
-                            videosLoaded = true;
-                            requestVideos(handler);
-                        }
-                    } else {
-                        GolemArticlePageVideoLoadTask task = new GolemArticlePageVideoLoadTask(handler);
-                        task.execute(GolemArticlePage.this);
-                        videosLoaded = true;
-                    }
-                }
-            });
-
-
+            GolemArticlePageVideoLoadTask task = new GolemArticlePageVideoLoadTask(handler);
+            task.execute(GolemArticlePage.this);
+            videosLoaded = true;
         }
 
     }
@@ -164,8 +124,8 @@ class GolemArticlePage {
 
     private static Document getDocument(final GolemArticlePage page) throws IOException {
         Document d;
-        if (page.getHtml().isEmpty()){
 
+        if (page.getHtml().isEmpty()){
 
             d = Jsoup.connect(AWSUtil.acceptCookieLink(page.getLink())).get();
             page.setHtml(d.html());

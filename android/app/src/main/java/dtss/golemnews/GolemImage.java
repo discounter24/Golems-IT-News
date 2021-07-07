@@ -2,7 +2,7 @@ package dtss.golemnews;
 
 import android.graphics.Bitmap;
 
-class GolemImage {
+public class GolemImage {
     private final String link;
     private final String author;
     private final String description;

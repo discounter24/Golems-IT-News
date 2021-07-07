@@ -10,7 +10,7 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.Locale;
 
-public class GolemFeedItem implements IPageHandler {
+public class GolemFeedItem  {
 
     private final IFeedLoadHandler feedLoadHandler;
 
@@ -130,21 +130,5 @@ public class GolemFeedItem implements IPageHandler {
 
     public GolemFeedItem(IFeedLoadHandler feedLoadHandler){
         this.feedLoadHandler = feedLoadHandler;
-    }
-
-
-    @Override
-    public void onTextReceived(GolemArticlePage sender, String text) {
-
-    }
-
-    @Override
-    public void onImagesReceived(GolemArticlePage sender, LinkedList<GolemImage> images) {
-
-    }
-
-    @Override
-    public void onVideosReceived(GolemArticlePage sender, LinkedList<String> videos) {
-
     }
 }

@@ -14,8 +14,10 @@ import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Locale;
 
 public class GolemFeedLoadTask extends AsyncTask<GolemFeed, Void, HashMap<GolemFeed, GolemFeedLoadTask.GolemFeedLoadTaskResult>> {
     private final IFeedLoadHandler handler;
@@ -65,6 +67,8 @@ public class GolemFeedLoadTask extends AsyncTask<GolemFeed, Void, HashMap<GolemF
             XmlPullParser parser = factory.newPullParser();
             parser.setInput(new StringReader(rss));
 
+
+            GolemScript script = new GolemScript(MainActivity.context,null);;
             GolemFeedItem item = new GolemFeedItem(handler);
             String tag;
             String text = "";
@@ -78,6 +82,7 @@ public class GolemFeedLoadTask extends AsyncTask<GolemFeed, Void, HashMap<GolemF
                     case XmlPullParser.START_TAG:
                         if (tag.equalsIgnoreCase("item")) {
                             item = new GolemFeedItem(handler);
+                            script = new GolemScript(MainActivity.context,null);
                         }
                         break;
                     case XmlPullParser.TEXT:
@@ -86,19 +91,26 @@ public class GolemFeedLoadTask extends AsyncTask<GolemFeed, Void, HashMap<GolemF
                     case XmlPullParser.END_TAG:
                         if (tag.equalsIgnoreCase("item")) {
                             Items.add(item);
+                            script.save();
                         } else if (tag.equalsIgnoreCase("title")) {
                             item.setTitle(text);
+                            script.setTitle(text);
                         } else if (tag.equalsIgnoreCase("link")) {
                             item.setLink(text);
+                            script.setUrl(text);
                         } else if (tag.equalsIgnoreCase("description")) {
                             item.setDescription(text);
+                            script.setDescription(text);
                         } else if (tag.equalsIgnoreCase("pubDate")) {
                             item.setPubDate(text);
+                            script.setDate(text);
                         } else if (tag.equalsIgnoreCase("guid")) {
                             item.setGuid(text);
                         } else if (tag.equalsIgnoreCase("encoded")) {
                             try {
-                                item.setPreviewImageLink(text.substring(text.indexOf("src='") + 11, text.indexOf("jpg") + 3));
+                                String link = text.substring(text.indexOf("src='") + 11, text.indexOf("jpg") + 3);
+                                item.setPreviewImageLink(link);
+                                script.setPreviewImageLink(link);
                             } catch (Exception ex) {
                                 Log.e("FeedLoad:","PreviewImageLinkLoadError",ex);
                             }
@@ -114,6 +126,8 @@ public class GolemFeedLoadTask extends AsyncTask<GolemFeed, Void, HashMap<GolemF
         } catch (XmlPullParserException ex) {
             Log.e("Feed loading error", ex.toString());
         }
+
+
         return Items;
     }
 

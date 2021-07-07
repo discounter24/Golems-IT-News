@@ -43,11 +43,11 @@ public class MainActivity extends AppCompatActivity implements IFeedLoadHandler,
     private TextView loadingStateRSS;
     private TextView loadingStateArticle;
 
+
+    public static Context context;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-
-
         if (ThemeUtils.sharedPreferences == null){
             ThemeUtils.sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         }
@@ -58,8 +58,6 @@ public class MainActivity extends AppCompatActivity implements IFeedLoadHandler,
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-        DiskCache.openCache(this);
 
         ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
@@ -97,8 +95,6 @@ public class MainActivity extends AppCompatActivity implements IFeedLoadHandler,
                 startActivity(intent);
             }
         });
-
-
 
 
 
@@ -151,6 +147,8 @@ public class MainActivity extends AppCompatActivity implements IFeedLoadHandler,
 
 
         reload();
+
+        MainActivity.context = getApplicationContext();
 
         // new GolemFullTextParser().execute();
     }
@@ -212,8 +210,6 @@ public class MainActivity extends AppCompatActivity implements IFeedLoadHandler,
 
     @Override
     public void FeedItemListLoaded(GolemFeedLoadTask.GolemFeedLoadTaskResult result, final GolemFeed feed) {
-        DiskCache.getInstance().clearCache(feed);
-        //DiskCache.getInstance().clearCache();
 
         adapter.data = feed.getFeedItems().toArray(new GolemFeedItem[0]);
         adapter.notifyDataSetChanged();

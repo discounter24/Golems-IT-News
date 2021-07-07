@@ -6,6 +6,7 @@
     </shared>
   </component>
   <component name="AndroidLogFilters">
+    <option name="TOOL_WINDOW_LOG_LEVEL" value="debug" />
     <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="Show only selected application" />
   </component>
   <component name="BranchesTreeState">
@@ -34,37 +35,40 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7ab9a879-58a4-4a51-b801-1b989002ebdf" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/dtss/golemnews/GolemFullTextParser.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/dtss/golemnews/utils/AWSUtil.java" afterDir="false" />
-      <change afterPath="/media/pascal/Data/Linux/home/pascal/Dokumente/Golems-IT-News/app/src/main/java/dtss/golemnews/GolemFullTextParser.java" afterDir="false" />
-      <change afterPath="/media/pascal/Data/Linux/home/pascal/Dokumente/Golems-IT-News/app/src/main/java/dtss/golemnews/utils/AWSUtil.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle____app_libs_jsoup_1_11_3_jar.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/caches/build_file_checksums.ser" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/caches/build_file_checksums.ser" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle___________________media_pascal_Data_Linux_home_pascal_Dokumente_Golems_IT_News_android_app_libs_jsoup_1_11_3_jar.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/app/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/release/app-release.aab" beforeDir="false" afterPath="$PROJECT_DIR$/app/release/app-release.aab" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/dtss/golemnews/ArticleActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/dtss/golemnews/ArticleActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/dtss/golemnews/GolemArticle.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/dtss/golemnews/GolemArticle.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/dtss/golemnews/GolemArticlePage.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/dtss/golemnews/GolemArticlePage.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/dtss/golemnews/MainActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/dtss/golemnews/MainActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/test/java/dtss/golemnews/ExampleUnitTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/test/java/dtss/golemnews/ExampleUnitTest.java" afterDir="false" />
-      <change beforePath="/media/pascal/Data/Linux/home/pascal/Dokumente/Golems-IT-News/.idea/caches/build_file_checksums.ser" beforeDir="false" afterPath="/media/pascal/Data/Linux/home/pascal/Dokumente/Golems-IT-News/.idea/caches/build_file_checksums.ser" afterDir="false" />
-      <change beforePath="/media/pascal/Data/Linux/home/pascal/Dokumente/Golems-IT-News/app/build.gradle" beforeDir="false" afterPath="/media/pascal/Data/Linux/home/pascal/Dokumente/Golems-IT-News/app/build.gradle" afterDir="false" />
-      <change beforePath="/media/pascal/Data/Linux/home/pascal/Dokumente/Golems-IT-News/app/release/app-release.aab" beforeDir="false" afterPath="/media/pascal/Data/Linux/home/pascal/Dokumente/Golems-IT-News/app/release/app-release.aab" afterDir="false" />
-      <change beforePath="/media/pascal/Data/Linux/home/pascal/Dokumente/Golems-IT-News/app/src/main/java/dtss/golemnews/ArticleActivity.java" beforeDir="false" afterPath="/media/pascal/Data/Linux/home/pascal/Dokumente/Golems-IT-News/app/src/main/java/dtss/golemnews/ArticleActivity.java" afterDir="false" />
-      <change beforePath="/media/pascal/Data/Linux/home/pascal/Dokumente/Golems-IT-News/app/src/main/java/dtss/golemnews/GolemArticle.java" beforeDir="false" afterPath="/media/pascal/Data/Linux/home/pascal/Dokumente/Golems-IT-News/app/src/main/java/dtss/golemnews/GolemArticle.java" afterDir="false" />
-      <change beforePath="/media/pascal/Data/Linux/home/pascal/Dokumente/Golems-IT-News/app/src/main/java/dtss/golemnews/GolemArticlePage.java" beforeDir="false" afterPath="/media/pascal/Data/Linux/home/pascal/Dokumente/Golems-IT-News/app/src/main/java/dtss/golemnews/GolemArticlePage.java" afterDir="false" />
-      <change beforePath="/media/pascal/Data/Linux/home/pascal/Dokumente/Golems-IT-News/app/src/main/java/dtss/golemnews/MainActivity.java" beforeDir="false" afterPath="/media/pascal/Data/Linux/home/pascal/Dokumente/Golems-IT-News/app/src/main/java/dtss/golemnews/MainActivity.java" afterDir="false" />
-      <change beforePath="/media/pascal/Data/Linux/home/pascal/Dokumente/Golems-IT-News/app/src/test/java/dtss/golemnews/ExampleUnitTest.java" beforeDir="false" afterPath="/media/pascal/Data/Linux/home/pascal/Dokumente/Golems-IT-News/app/src/test/java/dtss/golemnews/ExampleUnitTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/dtss/golemnews/GolemScript.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/dtss/golemnews/GolemScript.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/dtss/golemnews/IGolemScriptHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/dtss/golemnews/IGolemScriptHandler.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[Pixel_2_XL_API_30]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[Pixel_3a_API_30_x86]" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
     </projectState>
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <projects_view>
+          <tree_state>
+            <expand />
+            <select />
+          </tree_state>
+        </projects_view>
+      </state>
+    </system>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -79,9 +83,10 @@
     <option name="KEY_ALIAS" value="key0" />
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="/media/pascal/Data/Linux/home/pascal/Dokumente/Golems-IT-News" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
   <component name="ProjectId" id="1nzGptcRp6yylmrBvYIP3zCimqj" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -93,8 +98,11 @@
     <property name="ExportApk.BuildVariants" value="release" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="last_opened_file_path" value="$USER_HOME$/Downloads/golemnews(1).jks" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="android-custom-view/media/pascal/Data/Linux/home/pascal/Dokumente/Golems-IT-News/android/app/src/main/java/dtss/golemnews/utils/VideoEnabledWebView.java_SELECTED" value="VideoEnabledWebView" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="memory.settings.postsync.last.time.stamp" value="1612385756150" />
+    <property name="multi-representation-preview/media/pascal/Data/Linux/home/pascal/Dokumente/Golems-IT-News/android/app/src/main/java/dtss/golemnews/utils/VideoEnabledWebView.java_selected" value="Custom views" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.17" />
     <property name="project.structure.side.proportion" value="0.2" />
@@ -103,7 +111,7 @@
     <option name="MODULE_TAB" value="Default Config" />
     <option name="LAST_EDITED_BUILD_TYPE" value="release" />
   </component>
-  <component name="RunManager" selected="Android App.app">
+  <component name="RunManager" selected="Android App.Golems-IT-News.android.app">
     <configuration name="ExampleUnitTest" type="AndroidJUnit" factoryName="Android JUnit" temporary="true" nameIsGenerated="true">
       <module name="Golems-IT-News.app" />
       <extension name="coverage">
@@ -137,6 +145,23 @@
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
       </method>
     </configuration>
+    <configuration name="ExampleUnitTest.test" type="AndroidJUnit" factoryName="Android JUnit" temporary="true" nameIsGenerated="true">
+      <module name="android.app" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="dtss.golemnews.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="dtss.golemnews" />
+      <option name="MAIN_CLASS_NAME" value="dtss.golemnews.ExampleUnitTest" />
+      <option name="METHOD_NAME" value="test" />
+      <option name="TEST_OBJECT" value="method" />
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <method v="2">
+        <option name="Android.Gradle.BeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
     <configuration default="true" type="AndroidJUnit" factoryName="Android JUnit">
       <option name="TEST_OBJECT" value="class" />
       <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
@@ -144,8 +169,65 @@
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
       </method>
     </configuration>
+    <configuration name="Golems-IT-News.android.app" type="AndroidRunConfigurationType" factoryName="Android App" activateToolWindowBeforeRun="false">
+      <module name="Golems-IT-News.android.app" />
+      <option name="DEPLOY" value="true" />
+      <option name="DEPLOY_APK_FROM_BUNDLE" value="false" />
+      <option name="DEPLOY_AS_INSTANT" value="false" />
+      <option name="ARTIFACT_NAME" value="" />
+      <option name="PM_INSTALL_OPTIONS" value="" />
+      <option name="ALL_USERS" value="false" />
+      <option name="DYNAMIC_FEATURES_DISABLED_LIST" value="" />
+      <option name="ACTIVITY_EXTRA_FLAGS" value="" />
+      <option name="MODE" value="default_activity" />
+      <option name="CLEAR_LOGCAT" value="false" />
+      <option name="SHOW_LOGCAT_AUTOMATICALLY" value="false" />
+      <option name="SKIP_NOOP_APK_INSTALLATIONS" value="true" />
+      <option name="FORCE_STOP_RUNNING_APP" value="true" />
+      <option name="TARGET_SELECTION_MODE" value="DEVICE_AND_SNAPSHOT_COMBO_BOX" />
+      <option name="SELECTED_CLOUD_MATRIX_CONFIGURATION_ID" value="-1" />
+      <option name="SELECTED_CLOUD_MATRIX_PROJECT_ID" value="" />
+      <option name="DEBUGGER_TYPE" value="Auto" />
+      <Auto>
+        <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
+        <option name="SHOW_STATIC_VARS" value="true" />
+        <option name="WORKING_DIR" value="" />
+        <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
+        <option name="SHOW_OPTIMIZED_WARNING" value="true" />
+      </Auto>
+      <Hybrid>
+        <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
+        <option name="SHOW_STATIC_VARS" value="true" />
+        <option name="WORKING_DIR" value="" />
+        <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
+        <option name="SHOW_OPTIMIZED_WARNING" value="true" />
+      </Hybrid>
+      <Java />
+      <Native>
+        <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
+        <option name="SHOW_STATIC_VARS" value="true" />
+        <option name="WORKING_DIR" value="" />
+        <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
+        <option name="SHOW_OPTIMIZED_WARNING" value="true" />
+      </Native>
+      <Profilers>
+        <option name="ADVANCED_PROFILING_ENABLED" value="false" />
+        <option name="STARTUP_PROFILING_ENABLED" value="false" />
+        <option name="STARTUP_CPU_PROFILING_ENABLED" value="false" />
+        <option name="STARTUP_CPU_PROFILING_CONFIGURATION_NAME" value="Sample Java Methods" />
+        <option name="STARTUP_NATIVE_MEMORY_PROFILING_ENABLED" value="false" />
+        <option name="NATIVE_MEMORY_SAMPLE_RATE_BYTES" value="2048" />
+      </Profilers>
+      <option name="DEEP_LINK" value="" />
+      <option name="ACTIVITY_CLASS" value="" />
+      <option name="SEARCH_ACTIVITY_IN_GLOBAL_SCOPE" value="false" />
+      <option name="SKIP_ACTIVITY_VALIDATION" value="false" />
+      <method v="2">
+        <option name="Android.Gradle.BeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="app" type="AndroidRunConfigurationType" factoryName="Android App" activateToolWindowBeforeRun="false">
-      <module name="Golems-IT-News.app" />
+      <module name="android.app" />
       <option name="DEPLOY" value="true" />
       <option name="DEPLOY_APK_FROM_BUNDLE" value="false" />
       <option name="DEPLOY_AS_INSTANT" value="false" />
@@ -203,6 +285,7 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Android JUnit.ExampleUnitTest.test" />
         <item itemvalue="Android JUnit.ExampleUnitTest.checkFullTextRss" />
         <item itemvalue="Android JUnit.ExampleUnitTest" />
       </list>
@@ -246,22 +329,36 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="197" y="154" width="1114" height="681" key="#Notifications" timestamp="1612387351458">
-      <screen x="0" y="27" width="1920" height="1053" />
+    <state x="197" y="155" width="1114" height="681" key="#Notifications" timestamp="1616614840769">
+      <screen x="0" y="28" width="1920" height="1052" />
     </state>
     <state x="197" y="154" width="1114" height="681" key="#Notifications/0.27.1920.1053@0.27.1920.1053" timestamp="1612387351458" />
-    <state x="480" y="288" width="950" height="537" key="#PSD" timestamp="1612443364778">
+    <state x="197" y="155" key="#Notifications/0.28.1920.1052@0.28.1920.1052" timestamp="1616614840769" />
+    <state x="480" y="288" width="950" height="537" key="#PSD" timestamp="1612649715155">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
-    <state x="480" y="288" width="950" height="537" key="#PSD/0.27.1920.1053@0.27.1920.1053" timestamp="1612443364778" />
-    <state x="768" y="262" width="374" height="590" key="#com.intellij.ide.util.MemberChooser" timestamp="1612391145283">
+    <state x="480" y="288" width="950" height="537" key="#PSD/0.27.1920.1053@0.27.1920.1053" timestamp="1612649715155" />
+    <state x="768" y="263" width="374" height="589" key="#com.intellij.ide.util.MemberChooser" timestamp="1616622076235">
+      <screen x="0" y="28" width="1920" height="1052" />
+    </state>
+    <state x="768" y="262" width="374" height="590" key="#com.intellij.ide.util.MemberChooser/0.27.1920.1053@0.27.1920.1053" timestamp="1612650785328" />
+    <state x="768" y="263" width="374" height="589" key="#com.intellij.ide.util.MemberChooser/0.28.1920.1052@0.28.1920.1052" timestamp="1616622076235" />
+    <state x="693" y="303" width="524" height="508" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1612473184374">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
-    <state x="768" y="262" width="374" height="590" key="#com.intellij.ide.util.MemberChooser/0.27.1920.1053@0.27.1920.1053" timestamp="1612391145283" />
+    <state x="693" y="303" width="524" height="508" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.27.1920.1053@0.27.1920.1053" timestamp="1612473184374" />
+    <state x="693" y="301" width="524" height="503" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog" timestamp="1616618620931">
+      <screen x="0" y="28" width="1920" height="1052" />
+    </state>
+    <state x="693" y="301" width="524" height="503" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.28.1920.1052@0.28.1920.1052" timestamp="1616618620931" />
     <state x="100" y="127" width="1720" height="853" key="AVDManager" timestamp="1612390376280">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
     <state x="100" y="127" width="1720" height="853" key="AVDManager/0.27.1920.1053@0.27.1920.1053" timestamp="1612390376280" />
+    <state x="514" y="302" width="433" height="510" key="AndroidProcessChooserDialog" timestamp="1612648304552">
+      <screen x="0" y="27" width="1920" height="1053" />
+    </state>
+    <state x="514" y="302" width="433" height="510" key="AndroidProcessChooserDialog/0.27.1920.1053@0.27.1920.1053" timestamp="1612648304552" />
     <state x="100" y="127" width="1720" height="853" key="DiffContextDialog" timestamp="1612395172054">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
@@ -270,38 +367,46 @@
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
     <state x="808" y="315" width="424" height="491" key="FileChooserDialogImpl/0.27.1920.1053@0.27.1920.1053" timestamp="1612388402223" />
-    <state width="1262" height="356" key="GridCell.Tab.0.bottom" timestamp="1612443673240">
-      <screen x="0" y="27" width="1920" height="1053" />
+    <state width="1870" height="276" key="GridCell.Tab.0.bottom" timestamp="1616622938496">
+      <screen x="0" y="28" width="1920" height="1052" />
     </state>
-    <state width="1262" height="356" key="GridCell.Tab.0.bottom/0.27.1920.1053@0.27.1920.1053" timestamp="1612443673240" />
-    <state width="1262" height="356" key="GridCell.Tab.0.center" timestamp="1612443673240">
-      <screen x="0" y="27" width="1920" height="1053" />
+    <state width="1876" height="225" key="GridCell.Tab.0.bottom/0.27.1920.1053@0.27.1920.1053" timestamp="1612725829875" />
+    <state width="1870" height="276" key="GridCell.Tab.0.bottom/0.28.1920.1052@0.28.1920.1052" timestamp="1616622938496" />
+    <state width="1870" height="276" key="GridCell.Tab.0.center" timestamp="1616622938495">
+      <screen x="0" y="28" width="1920" height="1052" />
     </state>
-    <state width="1262" height="356" key="GridCell.Tab.0.center/0.27.1920.1053@0.27.1920.1053" timestamp="1612443673240" />
-    <state width="1262" height="356" key="GridCell.Tab.0.left" timestamp="1612443673239">
-      <screen x="0" y="27" width="1920" height="1053" />
+    <state width="1876" height="225" key="GridCell.Tab.0.center/0.27.1920.1053@0.27.1920.1053" timestamp="1612725829875" />
+    <state width="1870" height="276" key="GridCell.Tab.0.center/0.28.1920.1052@0.28.1920.1052" timestamp="1616622938495" />
+    <state width="1870" height="276" key="GridCell.Tab.0.left" timestamp="1616622938495">
+      <screen x="0" y="28" width="1920" height="1052" />
     </state>
-    <state width="1262" height="356" key="GridCell.Tab.0.left/0.27.1920.1053@0.27.1920.1053" timestamp="1612443673239" />
-    <state width="1262" height="356" key="GridCell.Tab.0.right" timestamp="1612443673240">
-      <screen x="0" y="27" width="1920" height="1053" />
+    <state width="1876" height="225" key="GridCell.Tab.0.left/0.27.1920.1053@0.27.1920.1053" timestamp="1612725829875" />
+    <state width="1870" height="276" key="GridCell.Tab.0.left/0.28.1920.1052@0.28.1920.1052" timestamp="1616622938495" />
+    <state width="1870" height="276" key="GridCell.Tab.0.right" timestamp="1616622938495">
+      <screen x="0" y="28" width="1920" height="1052" />
     </state>
-    <state width="1262" height="356" key="GridCell.Tab.0.right/0.27.1920.1053@0.27.1920.1053" timestamp="1612443673240" />
-    <state width="1262" height="356" key="GridCell.Tab.1.bottom" timestamp="1612443673240">
-      <screen x="0" y="27" width="1920" height="1053" />
+    <state width="1876" height="225" key="GridCell.Tab.0.right/0.27.1920.1053@0.27.1920.1053" timestamp="1612725829875" />
+    <state width="1870" height="276" key="GridCell.Tab.0.right/0.28.1920.1052@0.28.1920.1052" timestamp="1616622938495" />
+    <state width="1870" height="276" key="GridCell.Tab.1.bottom" timestamp="1616622938496">
+      <screen x="0" y="28" width="1920" height="1052" />
     </state>
-    <state width="1262" height="356" key="GridCell.Tab.1.bottom/0.27.1920.1053@0.27.1920.1053" timestamp="1612443673240" />
-    <state width="1262" height="356" key="GridCell.Tab.1.center" timestamp="1612443673240">
-      <screen x="0" y="27" width="1920" height="1053" />
+    <state width="1876" height="400" key="GridCell.Tab.1.bottom/0.27.1920.1053@0.27.1920.1053" timestamp="1612725766259" />
+    <state width="1870" height="276" key="GridCell.Tab.1.bottom/0.28.1920.1052@0.28.1920.1052" timestamp="1616622938496" />
+    <state width="1870" height="276" key="GridCell.Tab.1.center" timestamp="1616622938496">
+      <screen x="0" y="28" width="1920" height="1052" />
     </state>
-    <state width="1262" height="356" key="GridCell.Tab.1.center/0.27.1920.1053@0.27.1920.1053" timestamp="1612443673240" />
-    <state width="1262" height="356" key="GridCell.Tab.1.left" timestamp="1612443673240">
-      <screen x="0" y="27" width="1920" height="1053" />
+    <state width="1876" height="400" key="GridCell.Tab.1.center/0.27.1920.1053@0.27.1920.1053" timestamp="1612725766258" />
+    <state width="1870" height="276" key="GridCell.Tab.1.center/0.28.1920.1052@0.28.1920.1052" timestamp="1616622938496" />
+    <state width="1870" height="276" key="GridCell.Tab.1.left" timestamp="1616622938496">
+      <screen x="0" y="28" width="1920" height="1052" />
     </state>
-    <state width="1262" height="356" key="GridCell.Tab.1.left/0.27.1920.1053@0.27.1920.1053" timestamp="1612443673240" />
-    <state width="1262" height="356" key="GridCell.Tab.1.right" timestamp="1612443673240">
-      <screen x="0" y="27" width="1920" height="1053" />
+    <state width="1876" height="400" key="GridCell.Tab.1.left/0.27.1920.1053@0.27.1920.1053" timestamp="1612725766258" />
+    <state width="1870" height="276" key="GridCell.Tab.1.left/0.28.1920.1052@0.28.1920.1052" timestamp="1616622938496" />
+    <state width="1870" height="276" key="GridCell.Tab.1.right" timestamp="1616622938496">
+      <screen x="0" y="28" width="1920" height="1052" />
     </state>
-    <state width="1262" height="356" key="GridCell.Tab.1.right/0.27.1920.1053@0.27.1920.1053" timestamp="1612443673240" />
+    <state width="1876" height="400" key="GridCell.Tab.1.right/0.27.1920.1053@0.27.1920.1053" timestamp="1612725766259" />
+    <state width="1870" height="276" key="GridCell.Tab.1.right/0.28.1920.1052@0.28.1920.1052" timestamp="1616622938496" />
     <state x="187" y="117" width="1536" height="879" key="MergeDialog" timestamp="1612395038526">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
@@ -314,10 +419,20 @@
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
     <state x="809" y="470" width="292" height="181" key="VCS.ChangelistChooser/0.27.1920.1053@0.27.1920.1053" timestamp="1612395014944" />
-    <state width="960" height="526" key="XDebugger.FullValuePopup" timestamp="1612394135144">
-      <screen x="0" y="27" width="1920" height="1053" />
+    <state width="960" height="526" key="XDebugger.FullValuePopup" timestamp="1616621296243">
+      <screen x="0" y="28" width="1920" height="1052" />
     </state>
-    <state width="960" height="526" key="XDebugger.FullValuePopup/0.27.1920.1053@0.27.1920.1053" timestamp="1612394135144" />
+    <state width="960" height="526" key="XDebugger.FullValuePopup/0.27.1920.1053@0.27.1920.1053" timestamp="1612476852873" />
+    <state width="960" height="526" key="XDebugger.FullValuePopup/0.28.1920.1052@0.28.1920.1052" timestamp="1616621296243" />
+    <state x="150" y="242" width="919" height="621" key="com.intellij.xdebugger.impl.breakpoints.ui.BreakpointsDialogFactory$2" timestamp="1616621109513">
+      <screen x="0" y="28" width="1920" height="1052" />
+    </state>
+    <state x="150" y="242" width="919" height="621" key="com.intellij.xdebugger.impl.breakpoints.ui.BreakpointsDialogFactory$2/0.28.1920.1052@0.28.1920.1052" timestamp="1616621109513" />
+    <state x="623" y="260" width="672" height="678" key="search.everywhere.popup" timestamp="1616615307874">
+      <screen x="0" y="28" width="1920" height="1052" />
+    </state>
+    <state x="623" y="259" width="672" height="678" key="search.everywhere.popup/0.27.1920.1053@0.27.1920.1053" timestamp="1612452611180" />
+    <state x="623" y="260" width="672" height="678" key="search.everywhere.popup/0.28.1920.1052@0.28.1920.1052" timestamp="1616615307874" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -326,6 +441,11 @@
           <url>file:///media/pascal/Data/Linux/home/pascal/Dokumente/Golems-IT-News/app/src/main/java/dtss/golemnews/GolemFullTextParser.java</url>
           <line>68</line>
           <option name="timeStamp" value="44" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/dtss/golemnews/ArticleActivity.java</url>
+          <line>400</line>
+          <option name="timeStamp" value="104" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

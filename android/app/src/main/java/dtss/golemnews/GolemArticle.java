@@ -77,6 +77,12 @@ class GolemArticle{
                             IPageHandler handler = new IPageHandler() {
 
                                 int waitFor = 3;
+
+                                @Override
+                                public void onHtmlReceived(GolemArticlePage sender, String text) {
+
+                                }
+
                                 @Override
                                 public void onTextReceived(GolemArticlePage sender, String text) {
                                     loaded();
@@ -118,7 +124,6 @@ class GolemArticle{
                                 h.onArticleLoaded();
                             }
 
-                            DiskCache.getInstance().save(GolemArticle.this);
 
                         }
                     }
