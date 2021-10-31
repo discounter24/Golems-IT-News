@@ -14,8 +14,8 @@ cookies["_sp_v1_opt"] = "1:login|true:last_id|11:"
 cookies["_sp_v1_ss"] = "1:H4sIAAAAAAAAAItWqo5RKimOUbKKBjLyQAyD2lidGKVUEDOvNCcHyC4BK6iurVWKBQAW54XRMAAAAA%3D%3D"
 cookies["_sp_v1_uid"] = "1:449:622e9028-5093-4c08-90b4-4c9bd3ba2ad1"
 cookies["a2a_consumerId"] = "94c17a8e-cb0b-40bc-9f3f-906d7329db24"
-cookies["golem_c20date"] = "1612386411"
-cookies["golem_consent20"] = "cmp|210127"
+cookies["golem_c20date"] = "1635672127"   # WICHTIG!
+cookies["golem_consent20"] = "cmp|211029"  # WICHTIG!
 cookies["golem_lp"] = "wzijmip4xsag4n14n4q1jkxq57mk4qtg"
 cookies["Golem_rngnaf"] = "true"
 cookies["golem_testcookie"] = "1"
@@ -74,7 +74,7 @@ def saveUrlToDatabase(url, html):
 
 def test():
     print(lambda_handler(
-        {"url": "https://www.golem.de/news/tesla-elon-musk-ist-wieder-in-der-produktionshoelle-2102-153907.html"}, None))
+        {"queryStringParameters": {"url": "https://www.golem.de/news/tesla-elon-musk-ist-wieder-in-der-produktionshoelle-2102-153907.html"}}, None))
 
 
 if __name__ == "__main__":
